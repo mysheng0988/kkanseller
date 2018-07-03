@@ -16,6 +16,7 @@ import com.mysheng.office.kkanseller.pickers.entity.TypeMin;
 import com.mysheng.office.kkanseller.pickers.listeners.OnItemPickListener;
 import com.mysheng.office.kkanseller.pickers.listeners.OnLinkageListener;
 import com.mysheng.office.kkanseller.pickers.listeners.OnMoreWheelListener;
+import com.mysheng.office.kkanseller.pickers.listeners.OnTypeLinkageListener;
 import com.mysheng.office.kkanseller.pickers.util.LogUtils;
 import com.mysheng.office.kkanseller.pickers.widget.WheelListView;
 import com.mysheng.office.kkanseller.pickers.widget.WheelView;
@@ -25,13 +26,14 @@ import java.util.List;
 
 
 /**
- * 地址选择器（包括大类、中类、小类），地址数据见示例项目assets目录下。
+ *
+ * 类型选择器（包括大类、中类、小类），地址数据见示例项目assets目录下。
  * @see Province
  * @see City
  * @see County
  */
 public class TypePicker extends LinkagePicker {
-    private OnLinkageListener onLinkageListener;
+    private OnTypeLinkageListener onTypeLinkageListener;
     private OnMoreWheelListener onMoreWheelListener;
     //只显示中类及小类
     private boolean hideTypeMax = false;
@@ -89,8 +91,8 @@ public class TypePicker extends LinkagePicker {
         this.onMoreWheelListener = onMoreWheelListener;
     }
 
-    public void setOnLinkageListener(OnLinkageListener listener) {
-        this.onLinkageListener = listener;
+    public void setOnLinkageListener(OnTypeLinkageListener listener) {
+        this.onTypeLinkageListener = listener;
     }
 
     @NonNull
@@ -335,14 +337,14 @@ public class TypePicker extends LinkagePicker {
 
     @Override
     public void onSubmit() {
-        if (onLinkageListener != null) {
+        if (onTypeLinkageListener != null) {
             TypeMax typeMax=getSelectedTypeMax();
             TypeMiddle typeMiddle=getSelectedTypeMiddle();
             TypeMin typeMin = null;
             if (!hideTypeMin) {
                 typeMin = getSelectedTypeMin();
             }
-            onLinkageListener.onTypePicked(typeMax, typeMiddle, typeMin);
+            onTypeLinkageListener.onTypePicked(typeMax, typeMiddle, typeMin);
         }
     }
 
@@ -396,12 +398,12 @@ public class TypePicker extends LinkagePicker {
                     xMiddles.add(typeMiddle.getAreaName());
                     List<TypeMin> typeMins = typeMiddle.getTypeMins();
                     ArrayList<String> yTypeMins = new ArrayList<>();
-                    int countySize = typeMins.size();
-                    //添加区县
-                    if (countySize == 0) {
+                    int typeMinSize = typeMins.size();
+                    //添加小类
+                    if (typeMinSize == 0) {
                         yTypeMins.add(typeMiddle.getAreaName());
                     } else {
-                        for (int z = 0; z < countySize; z++) {
+                        for (int z = 0; z < typeMinSize; z++) {
                             TypeMin min = typeMins.get(z);
                             min.setTypeMiddleId(typeMiddle.getAreaId());
                             yTypeMins.add(min.getAreaName());

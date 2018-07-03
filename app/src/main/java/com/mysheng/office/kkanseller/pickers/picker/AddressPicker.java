@@ -89,7 +89,7 @@ public class AddressPicker extends LinkagePicker {
         this.onMoreWheelListener = onMoreWheelListener;
     }
 
-    public void setOnLinkageListener(OnLinkageListener listener) {
+    public void setOnLinkageListener(OnLinkageListener  listener) {
         this.onLinkageListener = listener;
     }
 

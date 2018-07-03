@@ -41,11 +41,15 @@ public class IndexFragment extends Fragment {
         task.setHideProvince(false);
         task.setHideCounty(false);
         task.setCallback(new AddressPickTask.Callback() {
-            @Override
-            public void onAddressInitFailed() {
-                showToast("数据初始化失败");
-            }
 
+
+            /**
+             * 选择地址
+             *
+             * @param province the province
+             * @param city     the city
+             * @param county   the county ，if {@code hideCounty} is true，this is null
+             */
             @Override
             public void onAddressPicked(Province province, City city, County county) {
                 if (county == null) {
@@ -56,9 +60,12 @@ public class IndexFragment extends Fragment {
             }
 
             @Override
-            public void onTypePicked(TypeMax typeMax, TypeMiddle typeMiddle, TypeMin typeMin) {
-
+            public void onAddressInitFailed() {
+                  showToast("数据初始化失败");
             }
+
+
+
         });
         task.execute("陕西", "榆林", "定边");
     }
