@@ -9,4 +9,13 @@
     <color name="green">#10893E</color>
     <color name="background">#FFFFFFFF</color>
     <color name="blue">#28A3B3</color>
+
+    <!-- 描边颜色 -->
+    <color name="border_clo">#ccc</color>
+    <color name="text_clo">#333</color>
+    <color name="red">#f00</color>
+    <color name="black">#000000</color>
+    <color name="gray">#f7f7f7f7</color>
+    <color name="chatBg">#F5F5F5</color>
+    <color name="gray_dialog">#bfbfbf</color>
 </resources>

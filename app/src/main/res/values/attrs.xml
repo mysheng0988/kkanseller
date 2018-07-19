@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <!--三级联动选择器-->
     <declare-styleable name="LoopView">
         <attr name="view_gravity">
             <enum name="center" value="17"/>
@@ -55,5 +55,46 @@
         <!--the max length of hint content-->
         <attr name="npv_AlternativeHint" format="reference|string" />
     </declare-styleable>
-
+    <!--侧滑样式-->
+    <declare-styleable name="SlideLayout">
+        <!--是否可以拖拽-->
+        <attr name="canDrag" format="boolean" />
+        <!-- 滑动最小阀值 -->
+        <attr name="thresholdMoved" format="dimension|reference" />
+        <!--内容部分背景颜色-->
+        <attr name="contentBgColor" format="color|reference" />
+        <!--内容部分背景资源-->
+        <attr name="contentBgResId" format="reference" />
+        <!--item的内容-->
+        <attr name="contentResId" format="reference" />
+        <!--item的滑动操作选项-->
+        <attr name="optionsResId" format="reference" />
+        <!--item内容布局滑动方向-->
+        <attr name="slideDirection" format="enum">
+            <enum name="right" value="0" />
+            <enum name="left" value="1" />
+        </attr>
+        <!--item的options布局摆放位置-->
+        <attr name="optionsLayoutPosition" format="enum">
+            <enum name="follow" value="0" />
+            <enum name="fixed" value="1" />
+        </attr>
+    </declare-styleable>
+    <!-- 自定义星星属性 -->
+    <declare-styleable name="star">
+        <!--星星数量-->
+        <attr format="integer" name="starsNum"></attr>
+        <!--星星宽度-->
+        <attr format="dimension" name="starWidth"></attr>
+        <!--星星高度-->
+        <attr format="dimension" name="starHeight"></attr>
+        <!--//星星间距-->
+        <attr format="dimension" name="starDistance"></attr>
+        <!--//星星背景-->
+        <attr format="reference" name="starBackground"></attr>
+        <!--//星星变化背景-->
+        <attr format="reference" name="starDrawBackground"></attr>
+        <!--//控件是否可以点击-->
+        <attr format="boolean" name="starClickable"></attr>
+    </declare-styleable>
 </resources>

@@ -1,6 +1,4 @@
 package com.mysheng.office.kkanseller;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,10 +9,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-
 public class MainActivity extends FragmentActivity implements OnClickListener
 {
 	private LinearLayout mIndex;

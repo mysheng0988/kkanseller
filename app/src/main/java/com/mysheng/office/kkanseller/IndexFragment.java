@@ -7,13 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.mysheng.office.kkanseller.pickers.entity.City;
 import com.mysheng.office.kkanseller.pickers.entity.County;
 import com.mysheng.office.kkanseller.pickers.entity.Province;
-import com.mysheng.office.kkanseller.pickers.entity.TypeMax;
-import com.mysheng.office.kkanseller.pickers.entity.TypeMiddle;
-import com.mysheng.office.kkanseller.pickers.entity.TypeMin;
 import com.mysheng.office.kkanseller.util.AddressPickTask;
 
 /**
