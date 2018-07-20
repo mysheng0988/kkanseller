@@ -13,15 +13,18 @@ import android.widget.Toast;
 
 
 import com.mysheng.office.kkanseller.adpter.ChatListViewAdapter;
+import com.mysheng.office.kkanseller.entity.ChatListModel;
 import com.mysheng.office.kkanseller.holder.ViewLineDivider;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
 
 public class ChatListViewActivity extends Activity {
     private RecyclerView recyclerView;
     private TextView strTitle;
     private ChatListViewAdapter adapter;
-    private ArrayList<String> list = new ArrayList<>();
+    private ArrayList<ChatListModel> list = new ArrayList<>();
     private ImageButton btnBack;
 
     @Override
@@ -29,7 +32,7 @@ public class ChatListViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_list_view);
         initData();
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView =  findViewById(R.id.recycler_view);
         strTitle=findViewById(R.id.common_title);
         strTitle.setText("聊天聊表");
         adapter = new ChatListViewAdapter(list);
@@ -51,35 +54,50 @@ public class ChatListViewActivity extends Activity {
          */
         adapter.setOnDeleteViewClickListener(new ChatListViewAdapter.OnDeleteViewClickListener() {
             @Override
-            public void onChildClick(View view) {
-                String string = "";
-                if (view.getId() == R.id.chatListItem) {
-                   // TextView textView=view.findViewById(R.id.userName);
-                   // string = textView.getText().toString();
-                    adapter.notifyDataSetChanged();
-                    Intent intent = new Intent(ChatListViewActivity.this, ChatActivity.class);
-                    startActivity(intent);
-                } else if (view.getId() == R.id.options_root) {
-                    string = "操作菜单点击";
-                    Toast.makeText(ChatListViewActivity.this, string, Toast.LENGTH_SHORT).show();
-                } else if (view.getId() == R.id.tv_open) {
-                    TextView textView = (TextView) view;
-                    string = textView.getText().toString();
-                    Toast.makeText(ChatListViewActivity.this, string, Toast.LENGTH_SHORT).show();
-
-                } else if (view.getId() == R.id.tv_delete) {
-                    TextView textView = (TextView) view;
-                    string = textView.getText().toString();
-                    Toast.makeText(ChatListViewActivity.this, string, Toast.LENGTH_SHORT).show();
+            public void onChildClick(View view,int position) {
+                String string="";
+                switch (view.getId()){
+                    case R.id.chatListItem:
+                    case R.id.content:
+                        TextView textView=view.findViewById(R.id.userName);
+                        string = textView.getText().toString();
+//                    Toast.makeText(getActivity(), string, Toast.LENGTH_SHORT).show();
+                        adapter.notifyDataSetChanged();
+                        Intent intent = new Intent(ChatListViewActivity.this, ChatActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.options_root:
+                        string = "操作菜单点击";
+                        Toast.makeText(ChatListViewActivity.this, string, Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.tv_open:
+                        TextView textView0 = (TextView) view;
+                        string = textView0.getText().toString();
+                        Toast.makeText(ChatListViewActivity.this, string, Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.tv_delete:
+                        adapter.removeData(position);
+                        adapter.notifyItemRangeChanged(0, adapter.getItemCount());
+//                        TextView textView2 = (TextView) view;
+//                        string = textView2.getText().toString();
+//                        Toast.makeText(getActivity(), string, Toast.LENGTH_SHORT).show();
+                        break;
 
                 }
+                Toast.makeText(ChatListViewActivity.this, string, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void initData() {
-        for (int i = 0; i < 10; i++) {
-            list.add("测试" + i);
-        }
+        ChatListModel model=new ChatListModel();
+        model.setUserId("dm01");
+        model.setUserName("张三");
+        model.setLastMsgData(new Date());
+        model.setLastMsg("你在干嘛？");
+        Random random=new Random();
+        int num=random.nextInt(10);
+        model.setUnReadNum(Math.round(num));
+
     }
 }

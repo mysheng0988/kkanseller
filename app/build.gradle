@@ -29,6 +29,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
@@ -36,4 +37,5 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.1.56.android'
     implementation files('libs/library-1.0.19.jar')
     implementation 'com.getui:sdk:2.12.4.0'
+    implementation 'com.jph.takephoto:takephoto_library:4.0.3'
 }
