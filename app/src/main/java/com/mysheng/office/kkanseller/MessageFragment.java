@@ -57,9 +57,12 @@ public class MessageFragment extends Fragment {
                 switch (view.getId()){
                     case R.id.chatListItem:
                     case R.id.content:
-                        TextView textView=view.findViewById(R.id.userName);
-                        string = textView.getText().toString();
-//                    Toast.makeText(getActivity(), string, Toast.LENGTH_SHORT).show();
+                    case R.id.userImage:
+                    case R.id.userIcon:
+                    case R.id.userName:
+                    case R.id.lastMsg:
+                    case R.id.lastMsgData:
+                    //Toast.makeText(getActivity(), list.get(position).getUserName(), Toast.LENGTH_SHORT).show();
                         adapter.notifyDataSetChanged();
                         Intent intent = new Intent(getActivity(), ChatActivity.class);
                         startActivity(intent);
@@ -81,7 +84,6 @@ public class MessageFragment extends Fragment {
                         break;
 
                 }
-                Toast.makeText(getActivity(), string, Toast.LENGTH_SHORT).show();
             }
         });
         return view;

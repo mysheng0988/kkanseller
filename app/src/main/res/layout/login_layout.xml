@@ -85,15 +85,4 @@
             android:textStyle ="bold"
             android:text="注册" />
     </LinearLayout>
-    <com.mysheng.office.kkanshop.view.Star
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        app:starWidth ="40dp"
-        app:starHeight ="40dp"
-        app:starDistance ="10dp"
-        app:starsNum="5"
-        app:starBackground ="@drawable/s2"
-        app:starDrawBackground ="@drawable/s1"
-        app:starClickable ="false"/>
 </LinearLayout>
