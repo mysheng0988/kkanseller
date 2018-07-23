@@ -120,7 +120,9 @@ public class ChatActivity extends Activity implements View.OnClickListener{
     private void initView(){
         titleText=findViewById(R.id.common_title);
         keyboard=findViewById(R.id.keyboard);
-        titleText.setText("聊天页面");
+        Bundle bundle = this.getIntent().getExtras();
+        String sendUserName = bundle.getString("sendUserName");
+        titleText.setText(sendUserName);
         recyclerView=findViewById(R.id.recyclerView);
         backButton=findViewById(R.id.btn_back);
         audioText=findViewById(R.id.audio_text);
@@ -165,9 +167,6 @@ public class ChatActivity extends Activity implements View.OnClickListener{
             frontMseDate=new Date(timeDate);
             mDatas.add(chatModel);
         }
-//        Calendar mesDate = Calendar.getInstance();
-//        mesDate.add(Calendar.M,-5);
-
         for(int i=0;i<10;i++){
             int type=i%2+3;
             connect+=str+i;
@@ -227,6 +226,14 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         ChatModel chatModel=new ChatModel();
         chatModel.mesType=2;
         chatModel.content=audioText.getText().toString().trim();
+        chatModel.setMesDate(new Date());
+        if(isShowDate(chatModel.getMesDate())){
+            ChatModel chatModel2=new ChatModel();
+            chatModel2.mesType=7;
+            chatModel2.setMesDate(new Date());
+            chatAdapter.addModel(chatModel2);
+        }
+        frontMseDate=new Date();
         chatAdapter.addModel(chatModel);
         chatAdapter.notifyDataSetChanged();
         recyclerView.scrollToPosition(chatAdapter.getItemCount()-1);

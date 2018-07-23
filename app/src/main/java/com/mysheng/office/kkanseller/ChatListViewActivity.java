@@ -52,7 +52,7 @@ public class ChatListViewActivity extends Activity {
         /**
          * 传递出slidelayout中content和options两个布局所有view的点击事件，根据需要做判断
          */
-        adapter.setOnDeleteViewClickListener(new ChatListViewAdapter.OnDeleteViewClickListener() {
+        adapter.setOnDeleteViewClickListener(new ChatListViewAdapter.OnChatListViewClickListener() {
             @Override
             public void onChildClick(View view,int position) {
                 String string="";

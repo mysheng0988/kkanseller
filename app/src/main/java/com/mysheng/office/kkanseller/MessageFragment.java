@@ -1,6 +1,5 @@
 package com.mysheng.office.kkanseller;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +48,7 @@ public class MessageFragment extends Fragment {
         /**
          * 传递出slidelayout中content和options两个布局所有view的点击事件，根据需要做判断
          */
-        adapter.setOnDeleteViewClickListener(new ChatListViewAdapter.OnDeleteViewClickListener() {
+        adapter.setOnDeleteViewClickListener(new ChatListViewAdapter.OnChatListViewClickListener() {
             @Override
             public void onChildClick(View view,int position) {
                 String string="";
@@ -65,6 +63,10 @@ public class MessageFragment extends Fragment {
                     //Toast.makeText(getActivity(), list.get(position).getUserName(), Toast.LENGTH_SHORT).show();
                         adapter.notifyDataSetChanged();
                         Intent intent = new Intent(getActivity(), ChatActivity.class);
+                        Bundle bundle=new Bundle();
+                        //传递name参数为tinyphp
+                        bundle.putString("sendUserName", list.get(position).getUserName());
+                        intent.putExtras(bundle);
                         startActivity(intent);
                         break;
                     case R.id.options_root:

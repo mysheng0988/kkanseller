@@ -23,7 +23,9 @@ public class ChatModel {
     public  String IconPath;//  头像地址
     public  String content;//消息内容
     public String contentPath;//消息内容地址
+    public String sendUserId;//发送人id
     public String sendUser;//发送人
+    public String receiveUserId;//接收人id
     public String receiveUser;//接收人
     public String mesStatus;//消息状态
     public Date mesDate; //消息时间
@@ -38,6 +40,22 @@ public class ChatModel {
 
     public int getMesType() {
         return mesType;
+    }
+
+    public String getSendUserId() {
+        return sendUserId;
+    }
+
+    public void setSendUserId(String sendUserId) {
+        this.sendUserId = sendUserId;
+    }
+
+    public String getReceiveUserId() {
+        return receiveUserId;
+    }
+
+    public void setReceiveUserId(String receiveUserId) {
+        this.receiveUserId = receiveUserId;
     }
 
     public void setMesType(int mesType) {
@@ -107,4 +125,6 @@ public class ChatModel {
     public void setMesDate(Date mesDate) {
         this.mesDate = mesDate;
     }
+
+
 }

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class ChatListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<ChatListModel> lists = new ArrayList<>();
     public SlideLayout slideLayout;
-    private OnDeleteViewClickListener listener;
+    private OnChatListViewClickListener listener;
     public ChatListViewAdapter(ArrayList<ChatListModel> lists) {
         this.lists.clear();
         this.lists.addAll(lists);
@@ -62,10 +62,10 @@ public class ChatListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return lists.size();
     }
 
-    public void setOnDeleteViewClickListener(OnDeleteViewClickListener listener) {
+    public void setOnDeleteViewClickListener(OnChatListViewClickListener listener) {
         this.listener = listener;
     }
-    public interface OnDeleteViewClickListener {
+    public interface OnChatListViewClickListener {
         void onChildClick(View view,int position);
     }
 }

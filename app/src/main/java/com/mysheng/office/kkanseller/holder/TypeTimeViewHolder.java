@@ -22,7 +22,7 @@ public class TypeTimeViewHolder extends TypeAbstractViewHolder{
     public void bindHolder(Object model){
         if(model instanceof ChatModel){
             ChatModel chatModel= (ChatModel) model;
-            String strTime= UtilDate.showDate(chatModel.getMesDate(),"yyyy-MM-dd HH:mm:ss");
+            String strTime= UtilDate.showDateTime(chatModel.getMesDate(),"yyyy-MM-dd HH:mm:ss");
             showTime.setText(strTime);
 
         }
