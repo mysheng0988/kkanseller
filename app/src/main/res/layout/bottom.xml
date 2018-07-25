@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="55dp"
     android:background="#ffffff"
-    android:orientation="horizontal" >
-
+    android:clipChildren="false"
+    android:orientation="horizontal">
     <LinearLayout
         android:id="@+id/id_index"
         android:layout_width="0dp"
@@ -50,9 +50,8 @@
             android:text="消息"
             android:textColor="#000000" />
     </LinearLayout>
-
     <LinearLayout
-        android:id="@+id/id_maintain"
+        android:id="@+id/id_goods"
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="1"
@@ -60,17 +59,17 @@
         android:orientation="vertical" >
 
         <ImageButton
-            android:id="@+id/id_maintain_msg"
+            android:id="@+id/id_goods_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00000000"
             android:clickable="false"
-            android:src="@drawable/maintain_normal" />
+            android:src="@drawable/goods_normal" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="维护"
+            android:text="商品"
             android:textColor="#000000" />
     </LinearLayout>
 
@@ -93,7 +92,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="个人"
+            android:text="我的"
             android:textColor="#000000" />
     </LinearLayout>
 

@@ -80,7 +80,7 @@ public class LoginActivity extends Activity implements View.OnClickListener{
             hashMap.put("userId", "15701570988");
             hashMap.put("userPwd", "123456");
             JSONObject jsonParams = new JSONObject(hashMap);
-            String url = "http://192.168.1.22:9090/office/goods/addGoods";
+            String url = "http://192.168.1.22:9090/office/goods/addItem";
             VolleyRequest.JsonRequestPost(url,"json",jsonParams,new VolleyJsonInterface(LoginActivity.this, VolleyJsonInterface.mListener, VolleyJsonInterface.errorListener) {
                 @Override
                 public void onSuccess(JSONObject result) {

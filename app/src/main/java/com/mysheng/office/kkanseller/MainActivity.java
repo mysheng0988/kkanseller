@@ -13,12 +13,12 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 {
 	private LinearLayout mIndex;
 	private LinearLayout mMessage;
-	private LinearLayout mMaintain;
+	private LinearLayout mGoods;
 	private LinearLayout mPerson;
 
 	private ImageButton mImgIndex;
 	private ImageButton mImgMessage;
-	private ImageButton mImgMaintain;
+	private ImageButton mImgGoods;
 	private ImageButton mImgPerson;
 
 	private Fragment mTab01;
@@ -46,7 +46,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 	{
 		mIndex.setOnClickListener(this);
 		mMessage.setOnClickListener(this);
-		mMaintain.setOnClickListener(this);
+		mGoods.setOnClickListener(this);
 		mPerson.setOnClickListener(this);
 
 	}
@@ -55,12 +55,12 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 	{
 		mIndex =  findViewById(R.id.id_index);
 		mMessage =  findViewById(R.id.id_msg);
-		mMaintain =  findViewById(R.id.id_maintain);
+		mGoods =  findViewById(R.id.id_goods);
 		mPerson =  findViewById(R.id.id_person);
 
 		mImgIndex =  findViewById(R.id.id_index_img);
 		mImgMessage =  findViewById(R.id.id_msg_img);
-		mImgMaintain =  findViewById(R.id.id_maintain_msg);
+		mImgGoods =  findViewById(R.id.id_goods_msg);
 		mImgPerson =  findViewById(R.id.id_person_img);
 		//textView=findViewById(R.id.tab_title);
 	}
@@ -99,13 +99,13 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 		case 2:
 			if (mTab03 == null)
 			{
-				mTab03 = new MaintainFragment();
+				mTab03 = new GoodsFragment();
 				transaction.add(R.id.id_content, mTab03,"mTab03");
 			} else
 			{
 				transaction.show(mTab03);
 			}
-			mImgMaintain.setImageResource(R.drawable.maintain_pressed);
+			mImgGoods.setImageResource(R.drawable.goods_pressed);
 			break;
 		case 3:
 			if (mTab04 == null)
@@ -157,7 +157,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 		case R.id.id_msg:
 			setSelect(1);
 			break;
-		case R.id.id_maintain:
+		case R.id.id_goods:
 			setSelect(2);
 			break;
 		case R.id.id_person:
@@ -173,7 +173,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 	{
 		mImgIndex.setImageResource(R.drawable.index_normal);
 		mImgMessage.setImageResource(R.drawable.msg_normal);
-		mImgMaintain.setImageResource(R.drawable.maintain_normal);
+		mImgGoods.setImageResource(R.drawable.goods_normal);
 		mImgPerson.setImageResource(R.drawable.person_normal);
 	}
 
@@ -187,7 +187,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 		if(mTab02 == null &&fragment instanceof MessageFragment){
 			mTab02=fragment;
 		}
-		if(mTab03 == null &&fragment instanceof MaintainFragment){
+		if(mTab03 == null &&fragment instanceof GoodsFragment){
 			mTab03=fragment;
 		}
 		if(mTab04 == null &&fragment instanceof PersonFragment){
