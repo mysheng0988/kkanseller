@@ -21,7 +21,7 @@
                 android:layout_height="35dp"
                 android:gravity="center"
                 android:background="@drawable/index_left_select"
-                android:text="待办"
+                android:text="今日"
                 android:textColor="#48B7F5" />
             <TextView
                 android:id="@+id/quick"
@@ -30,7 +30,7 @@
                 android:layout_height="35dp"
                 android:gravity="center"
                 android:background="@drawable/index_right_unselect"
-                android:text="快捷"
+                android:text="历史"
                 android:textColor="#ffffff" />
 
         </LinearLayout>
@@ -60,6 +60,11 @@
                 android:textColor="#ffffff"/>
         </LinearLayout>
     </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/indexRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
