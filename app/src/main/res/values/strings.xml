@@ -4,4 +4,10 @@
     <string name="str_recorder_normal">按住说话</string>
     <string name="str_recorder_recording">按住说话</string>
     <string name="str_recorder_cancel">松开手指，取消发送</string>
+
+    <string name="picture_all_permission">获取系统相关权限被拒绝</string>
+    <string name="label_camera_all">轻按拍照，按住摄像</string>
+    <string name="label_camera_picture_only">轻按拍照</string>
+    <string name="label_camera_video_only">按住摄像</string>
+    <string name="msg_progressing">处理中</string>
 </resources>

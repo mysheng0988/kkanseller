@@ -59,5 +59,11 @@
             android:layout_gravity="center_vertical"
             android:src="@drawable/add_item"/>
     </LinearLayout>
-
+    <View style="@style/bg_line"/>
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:id="@+id/chatRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="180dp" />
 </LinearLayout>

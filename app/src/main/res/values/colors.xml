@@ -18,4 +18,19 @@
     <color name="gray">#f7f7f7f7</color>
     <color name="chatBg">#F5F5F5</color>
     <color name="gray_dialog">#bfbfbf</color>
+
+    <color name="title_bar_black">#4a4a4a</color>
+    <color name="tab_color_true">#FA632D</color>
+    <color name="color_fa">#FAFAFA</color>
+    <color name="bar_grey_90">#dd393a3e</color>
+    <color name="bar_grey">#393a3e</color>
+    <color name="color_orange">#E0FF6100</color>
+    <color name="camera_bg">#2c2c2c</color>
+    <color name="camera_progress_split">#005084</color>
+    <color name="camera_progress_delete">#f68b2b</color>
+    <color name="camera_progress_overflow">#1b5d89</color>
+    <color name="full_title_color">#41000000</color>
+    <color name="full_progress_color">#50000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="camera_progress_three">#24ff00</color>
 </resources>

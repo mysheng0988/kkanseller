@@ -3,6 +3,7 @@ import android.app.Activity;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 
 
 import com.mysheng.office.kkanseller.adpter.ChatAdapter;
+import com.mysheng.office.kkanseller.adpter.ChatGenreViewAdapter;
+import com.mysheng.office.kkanseller.entity.ChatGenreBean;
 import com.mysheng.office.kkanseller.entity.ChatModel;
 import com.mysheng.office.kkanseller.view.AudioRecorderButton;
 import com.mysheng.office.kkanseller.view.MediaManager;
@@ -30,18 +33,22 @@ import java.util.List;
 
 public class ChatActivity extends Activity implements View.OnClickListener{
     private RecyclerView recyclerView;
+    private RecyclerView genreView;
     private static boolean isKeyboard=false;//默认显示切换语音
     private TextView titleText;
     private ImageButton backButton;
     private ImageView keyboard;
     private ImageView sendOut;
     private ChatAdapter chatAdapter;
+    private ChatGenreViewAdapter genreViewAdapter;
     private EditText audioText;
     private List<ChatModel> mDatas = new ArrayList<>();
+    private List<ChatGenreBean> genreDatas = new ArrayList<>();
     private AudioRecorderButton mAudioRecorderButton;
     private View animView;
     private Date frontMseDate;
-
+    private int[] imageId={R.drawable.chat_images,R.drawable.camera,R.drawable.video,R.drawable.location,R.drawable.order_chat};
+    private String[] genreName={"相册","相机","摄像","定位","订单"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +71,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
                     }
             }
         });
+
         chatAdapter=new ChatAdapter(this);
         chatAdapter.setItemClickListener(new ChatAdapter.OnItemClickListener() {
             @Override
@@ -113,6 +121,10 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 
             }
         });
+        GridLayoutManager gridLayoutManager=new GridLayoutManager(this,4);
+        genreView.setLayoutManager(gridLayoutManager);
+        genreViewAdapter=new ChatGenreViewAdapter(this);
+        genreView.setAdapter(genreViewAdapter);
 
         initData();
 
@@ -124,6 +136,8 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         String sendUserName = bundle.getString("sendUserName");
         titleText.setText(sendUserName);
         recyclerView=findViewById(R.id.recyclerView);
+        genreView=findViewById(R.id.chatRecyclerView);
+
         backButton=findViewById(R.id.btn_back);
         audioText=findViewById(R.id.audio_text);
         sendOut=findViewById(R.id.send_out);
@@ -190,6 +204,13 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         chatAdapter.addList(mDatas);
         chatAdapter.notifyDataSetChanged();
         recyclerView.scrollToPosition(chatAdapter.getItemCount()-1);
+        for(int i=0;i<genreName.length;i++){
+            ChatGenreBean genreBean=new ChatGenreBean();
+            genreBean.setGenreImageId(imageId[i]);
+            genreBean.setGenreName(genreName[i]);
+            genreDatas.add(genreBean);
+        }
+        genreViewAdapter.addList(genreDatas);
     }
     private boolean isShowDate(Date strDate){
         long nowDate=strDate.getTime();//System.currentTimeMillis();

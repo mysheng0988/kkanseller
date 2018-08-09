@@ -17,12 +17,18 @@ android {
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
         }
+        packagingOptions {exclude 'META-INF/rxjava.properties'}
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets{
+        main{
+            jniLibs.srcDirs=['libs']
         }
     }
 }
@@ -38,4 +44,8 @@ dependencies {
     implementation files('libs/library-1.0.19.jar')
     implementation 'com.getui:sdk:2.12.4.0'
     implementation 'com.jph.takephoto:takephoto_library:4.0.3'
+    implementation files('libs/isoviewer-1.0-RC-27.jar')
+    implementation 'io.reactivex.rxjava2:rxjava:2.0.5'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
 }
