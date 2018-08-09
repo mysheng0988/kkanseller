@@ -1,11 +1,13 @@
 package com.mysheng.office.kkanseller;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -18,14 +20,22 @@ import android.widget.Toast;
 
 import com.mysheng.office.kkanseller.adpter.ChatAdapter;
 import com.mysheng.office.kkanseller.adpter.ChatGenreViewAdapter;
+import com.mysheng.office.kkanseller.customCamera.config.PictureConfig;
+import com.mysheng.office.kkanseller.customCamera.config.PictureMimeType;
+import com.mysheng.office.kkanseller.customCamera.config.PictureSelector;
+import com.mysheng.office.kkanseller.customCamera.entity.LocalMedia;
+import com.mysheng.office.kkanseller.customCamera.util.LogUtils;
+import com.mysheng.office.kkanseller.customCamera.util.StringUtils;
 import com.mysheng.office.kkanseller.entity.ChatGenreBean;
 import com.mysheng.office.kkanseller.entity.ChatModel;
 import com.mysheng.office.kkanseller.view.AudioRecorderButton;
 import com.mysheng.office.kkanseller.view.MediaManager;
-
+import com.mysheng.office.kkanseller.permissions.RxPermissions;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by myaheng on 2017/12/15.
@@ -35,6 +45,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
     private RecyclerView recyclerView;
     private RecyclerView genreView;
     private static boolean isKeyboard=false;//默认显示切换语音
+    private RxPermissions rxPermissions;
     private TextView titleText;
     private ImageButton backButton;
     private ImageView keyboard;
@@ -125,6 +136,17 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         genreView.setLayoutManager(gridLayoutManager);
         genreViewAdapter=new ChatGenreViewAdapter(this);
         genreView.setAdapter(genreViewAdapter);
+        genreViewAdapter.setItemClickListener(new ChatGenreViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, ChatGenreBean model) {
+                if(model.getPosition()==1){
+                    onTakePhoto(PictureMimeType.ofImage());
+                }else{
+                    onTakePhoto(PictureMimeType.ofVideo());
+                }
+                genreView.setVisibility(View.GONE);
+            }
+        });
 
         initData();
 
@@ -135,9 +157,10 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         Bundle bundle = this.getIntent().getExtras();
         String sendUserName = bundle.getString("sendUserName");
         titleText.setText(sendUserName);
+        rxPermissions = new RxPermissions(this);
         recyclerView=findViewById(R.id.recyclerView);
         genreView=findViewById(R.id.chatRecyclerView);
-
+        recyclerView.setOnClickListener(this);
         backButton=findViewById(R.id.btn_back);
         audioText=findViewById(R.id.audio_text);
         sendOut=findViewById(R.id.send_out);
@@ -206,6 +229,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         recyclerView.scrollToPosition(chatAdapter.getItemCount()-1);
         for(int i=0;i<genreName.length;i++){
             ChatGenreBean genreBean=new ChatGenreBean();
+            genreBean.setPosition(i);
             genreBean.setGenreImageId(imageId[i]);
             genreBean.setGenreName(genreName[i]);
             genreDatas.add(genreBean);
@@ -223,6 +247,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         }
         return false;
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -233,10 +258,84 @@ public class ChatActivity extends Activity implements View.OnClickListener{
                 switchToTextAndAudio();
                 break;
             case R.id.send_out:
-                sendOutText();
+                if(genreView.getVisibility()==View.VISIBLE){
+                    genreView.setVisibility(View.GONE);
+                }else{
+                    genreView.setVisibility(View.VISIBLE);
+                }
+                break;
+            default:
+                genreView.setVisibility(View.GONE);
                 break;
 
         }
+    }
+
+    public void onTakePhoto(final int chooseMode) {
+
+        //启动相机拍照,先判断手机是否有拍照、录音、写入权限
+        rxPermissions.request(android.Manifest.permission.CAMERA,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.RECORD_AUDIO)
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        if (aBoolean) {
+                            PictureSelector.create(ChatActivity.this)
+                                    .openCamera(chooseMode)
+                                    .compress(true)
+                                    .compressMode(PictureConfig.LUBAN_COMPRESS_MODE)
+                                    .forResult(PictureConfig.CHOOSE_REQUEST);
+                        } else {
+                            showToast(getString(R.string.picture_all_permission));
+
+                        }
+                    }
+                });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case PictureConfig.CHOOSE_REQUEST:
+                    // 图片选择,共用一个数据通道:返回时图片，可能为列表，视频只能有一个
+                    List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+                    for (int i = 0; i < selectList.size(); i++) {
+                        handleLocalMedia(selectList.get(i));
+                    }
+                    break;
+            }
+        }
+    }
+    private void handleLocalMedia(LocalMedia media) {
+        int pictureType = PictureMimeType.isPictureType(media.getPictureType());
+        switch (pictureType) {
+            case PictureConfig.TYPE_IMAGE:
+
+                LogUtils.e("TEST===> media path = " + media.getPath()
+                        + ",  compressPath = " + media.getCompressPath()
+                        + ", height = " + media.getHeight()
+                        + ", width = " + media.getWidth());
+                showToast(media.getPath());
+                break;
+            case PictureConfig.TYPE_VIDEO:
+                if (TextUtils.isEmpty(media.getPath())) return;
+                if (!StringUtils.fileIsExists(media.getPath())) {
+                    LogUtils.e("文件可能不存在了~");
+                    return;
+                }
+               LogUtils.e("TEST===> video path = " + media.getPath()
+                        + ",  compressPath = " + media.getCompressPath()
+                        + ", height = " + media.getHeight()
+                        + ", width = " + media.getWidth());
+
+                showToast(media.getPath());
+                break;
+        }
+    }
+    protected void showToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
     private void sendOutText(){
         String strText=audioText.getText().toString().trim();

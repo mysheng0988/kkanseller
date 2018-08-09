@@ -118,7 +118,7 @@ public class CameraActivity extends PictureBaseActivity {
 
 
     private void getIntentData() {
-       int type = getIntent().getIntExtra(Constant.TYPE_CAMERA, PictureConfig.TYPE_ALL);
+       int type =mimeType;
        // int type = 0;
 
         //init LocalMedia

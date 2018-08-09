@@ -5,8 +5,17 @@ package com.mysheng.office.kkanseller.entity;
  */
 
 public class ChatGenreBean {
+    private  int position;
     private int  genreImageId;
     private String genreName;
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
     public int getGenreImageId() {
         return genreImageId;

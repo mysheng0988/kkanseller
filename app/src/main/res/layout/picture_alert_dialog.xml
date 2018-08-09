@@ -9,7 +9,7 @@
     android:orientation="horizontal"
     android:padding="15dp">
 
-    <com.mysheng.office.smallvideo.dialog.PictureSpinView
+    <com.mysheng.office.kkanseller.customCamera.dialog.PictureSpinView
         android:layout_width="30dp"
         android:layout_height="30dp" />
 

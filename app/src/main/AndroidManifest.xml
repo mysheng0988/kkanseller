@@ -33,6 +33,8 @@
         </activity>
         <activity android:name="com.mysheng.office.kkanseller.LoginActivity">
         </activity>
+        <activity android:name="com.mysheng.office.kkanseller.CameraActivity">
+        </activity>
         <activity android:name="com.mysheng.office.kkanseller.RegisterActivity">
         </activity>
         <activity android:name="com.mysheng.office.kkanseller.ChatActivity">
