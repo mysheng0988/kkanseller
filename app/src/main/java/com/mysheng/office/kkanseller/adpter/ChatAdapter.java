@@ -66,7 +66,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 return new TypeLeftRecorderViewHolder(mLayoutInflater.inflate(R.layout.items_left_recorder,parent,false));
             case ChatModel.TYPE_SIX:
                 View view6=mLayoutInflater.inflate(R.layout.items_right_recorder,parent,false);
-                view6.setOnClickListener(this);
+               // view6.setOnClickListener(this);
                 RecyclerView.ViewHolder viewHolder6=new TypeRightRecorderViewHolder(view6);
                 return viewHolder6;
             case ChatModel.TYPE_TIME:
@@ -97,6 +97,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
          //holder.itemView.findViewById(R.id.id_recorder_length);
         holder.itemView.setTag(position);
+        holder.itemView.setOnClickListener(this);
 
     }
 

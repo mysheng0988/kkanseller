@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -49,7 +52,8 @@ public class ChatActivity extends Activity implements View.OnClickListener{
     private TextView titleText;
     private ImageButton backButton;
     private ImageView keyboard;
-    private ImageView sendOut;
+    private Button sendOut;
+    private ImageView addItem;
     private ChatAdapter chatAdapter;
     private ChatGenreViewAdapter genreViewAdapter;
     private EditText audioText;
@@ -87,6 +91,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         chatAdapter.setItemClickListener(new ChatAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, ChatModel model) {
+                genreView.setVisibility(View.GONE);
                 if(model.mesType==6){
                     //播放动画
                     if(animView != null) {
@@ -141,7 +146,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
             public void onItemClick(View view, ChatGenreBean model) {
                 if(model.getPosition()==1){
                     onTakePhoto(PictureMimeType.ofImage());
-                }else{
+                }else if(model.getPosition()==2){
                     onTakePhoto(PictureMimeType.ofVideo());
                 }
                 genreView.setVisibility(View.GONE);
@@ -164,20 +169,47 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         backButton=findViewById(R.id.btn_back);
         audioText=findViewById(R.id.audio_text);
         sendOut=findViewById(R.id.send_out);
+        addItem=findViewById(R.id.add_item);
         mAudioRecorderButton =  findViewById(R.id.id_recorder_button);
     }
     private void initEvent(){
         keyboard.setOnClickListener(this);
         sendOut.setOnClickListener(this);
+        addItem.setOnClickListener(this);
         audioText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(ChatActivity.this.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                }else{
+                    genreView.setVisibility(View.GONE);
                 }
             }
         });
+        audioText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if(audioText.getText().toString().trim().length()>0){
+                        addItem.setVisibility(View.GONE);
+                        sendOut.setVisibility(View.VISIBLE);
+                    }else {
+                        sendOut.setVisibility(View.GONE);
+                        addItem.setVisibility(View.VISIBLE);
+                    }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         backButton.setOnClickListener(this);
     }
     private void initData(){
@@ -257,12 +289,17 @@ public class ChatActivity extends Activity implements View.OnClickListener{
             case R.id.keyboard:
                 switchToTextAndAudio();
                 break;
-            case R.id.send_out:
+            case R.id.add_item:
                 if(genreView.getVisibility()==View.VISIBLE){
                     genreView.setVisibility(View.GONE);
                 }else{
                     genreView.setVisibility(View.VISIBLE);
                 }
+                isKeyboard=true;
+                audioText.clearFocus();
+                break;
+            case R.id.send_out:
+                sendOutText();
                 break;
             default:
                 genreView.setVisibility(View.GONE);

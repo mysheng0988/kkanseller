@@ -4,6 +4,7 @@ package com.mysheng.office.kkanseller.util;
  * Created by myaheng on 2018/7/26.
  */
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -30,9 +31,9 @@ public class CodeUtils {
     private Random mRandom = new Random();
 
     //Default Settings
-    private static final int DEFAULT_CODE_LENGTH = 6;//验证码的长度  这里是6位
+    private static final int DEFAULT_CODE_LENGTH = 4;//验证码的长度  这里是6位
     private static final int DEFAULT_FONT_SIZE = 60;//字体大小
-    private static final int DEFAULT_LINE_NUMBER = 3;//多少条干扰线
+    private static final int DEFAULT_LINE_NUMBER = 5;//多少条干扰线
     private static final int BASE_PADDING_LEFT = 20; //左边距
     private static final int RANGE_PADDING_LEFT = 30;//左边距范围值
     private static final int BASE_PADDING_TOP = 70;//上边距
@@ -51,6 +52,7 @@ public class CodeUtils {
     }
 
     //生成验证码图片
+    @SuppressLint("Range")
     public Bitmap createBitmap() {
         mPaddingLeft = 0; //每次生成验证码图片时初始化
         mPaddingTop = 0;
@@ -105,17 +107,10 @@ public class CodeUtils {
         int startY = mRandom.nextInt(DEFAULT_HEIGHT);
         int stopX = mRandom.nextInt(DEFAULT_WIDTH);
         int stopY = mRandom.nextInt(DEFAULT_HEIGHT);
-        paint.setStrokeWidth(1);
+        paint.setStrokeWidth(5);
         paint.setColor(color);
         canvas.drawLine(startX, startY, stopX, stopY, paint);
-        int color2 = randomColor();
-        int startX1 = mRandom.nextInt(DEFAULT_WIDTH);
-        int startY1 = mRandom.nextInt(DEFAULT_HEIGHT);
-        int stopX1 = mRandom.nextInt(DEFAULT_WIDTH);
-        int stopY1 = mRandom.nextInt(DEFAULT_HEIGHT);
-        paint.setStrokeWidth(1);
-        paint.setColor(color2);
-        canvas.drawLine(startX1, startY1, stopX1, stopY1, paint);
+
     }
 
     //随机颜色
