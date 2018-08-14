@@ -19,8 +19,10 @@ import com.mysheng.office.kkanseller.holder.TypeLeftImageViewHolder;
 import com.mysheng.office.kkanseller.holder.TypeLeftRecorderViewHolder;
 import com.mysheng.office.kkanseller.holder.TypeLeftTextViewHolder;
 import com.mysheng.office.kkanseller.holder.TypeRightImageViewHolder;
+import com.mysheng.office.kkanseller.holder.TypeRightLocationViewHolder;
 import com.mysheng.office.kkanseller.holder.TypeRightRecorderViewHolder;
 import com.mysheng.office.kkanseller.holder.TypeRightTextViewHolder;
+import com.mysheng.office.kkanseller.holder.TypeRightVideoViewHolder;
 import com.mysheng.office.kkanseller.holder.TypeTimeViewHolder;
 
 import java.util.ArrayList;
@@ -55,7 +57,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             return new TypeLeftTextViewHolder(mLayoutInflater.inflate(R.layout.items_left_text,parent,false));
             case ChatModel.TYPE_TWO:
                 View view1=mLayoutInflater.inflate(R.layout.items_right_text,parent,false);
-              //  view.setOnClickListener(this);
                 RecyclerView.ViewHolder viewHolder=new TypeRightTextViewHolder(view1);
                 return viewHolder;
             case ChatModel.TYPE_THREE:
@@ -66,13 +67,20 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 return new TypeLeftRecorderViewHolder(mLayoutInflater.inflate(R.layout.items_left_recorder,parent,false));
             case ChatModel.TYPE_SIX:
                 View view6=mLayoutInflater.inflate(R.layout.items_right_recorder,parent,false);
-               // view6.setOnClickListener(this);
                 RecyclerView.ViewHolder viewHolder6=new TypeRightRecorderViewHolder(view6);
                 return viewHolder6;
             case ChatModel.TYPE_TIME:
                 View view7=mLayoutInflater.inflate(R.layout.item_time_layout,parent,false);
                 RecyclerView.ViewHolder viewHolder7=new TypeTimeViewHolder(view7);
                 return viewHolder7;
+            case ChatModel.TYPE_LOCATION:
+                View view8=mLayoutInflater.inflate(R.layout.items_right_location,parent,false);
+                RecyclerView.ViewHolder viewHolder8=new TypeRightLocationViewHolder(view8);
+                return viewHolder8;
+            case ChatModel.SEND_VIDEO:
+                View view11=mLayoutInflater.inflate(R.layout.items_right_video,parent,false);
+                RecyclerView.ViewHolder viewHolder11=new TypeRightVideoViewHolder(view11);
+                return viewHolder11;
 
         }
         return null;
@@ -80,6 +88,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     public void addList(List<ChatModel> list){
         mList.addAll(list);
+
     }
     public void addModel(ChatModel model){
         mList.add(model);

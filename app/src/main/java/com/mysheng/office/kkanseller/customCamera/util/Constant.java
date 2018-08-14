@@ -39,4 +39,6 @@ public class Constant {
 
     //筛选视频裁剪 大小 3M = 3 * 1024 * 1024 = 3145728
     public static final int VIDEO_LENGTH_BYTE = 3 * 1024 * 1024;
+
+
 }

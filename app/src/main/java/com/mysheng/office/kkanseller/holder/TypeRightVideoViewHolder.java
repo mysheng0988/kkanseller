@@ -12,12 +12,12 @@ import com.mysheng.office.kkanseller.entity.ChatModel;
  * Created by myaheng on 2018/5/11.
  */
 
-public class TypeRightImageViewHolder extends TypeAbstractViewHolder{
+public class TypeRightVideoViewHolder extends TypeAbstractViewHolder{
     private ImageView mImageView;
-    private ImageView mContentImage;
-    public TypeRightImageViewHolder(View itemView) {
+    private ImageView mContentVideo;
+    public TypeRightVideoViewHolder(View itemView) {
         super(itemView);
-        mContentImage=itemView.findViewById(R.id.id_content_img);
+        mContentVideo=itemView.findViewById(R.id.id_content_video);
         mImageView=itemView.findViewById(R.id.id_useIcon);
     }
     @Override
@@ -25,9 +25,9 @@ public class TypeRightImageViewHolder extends TypeAbstractViewHolder{
         if(model instanceof ChatModel){
             ChatModel chatModel= (ChatModel) model;
             if(chatModel.getContentPath()==null){
-                mContentImage.setImageResource(R.drawable.bg);
+                mContentVideo.setImageResource(R.drawable.bg);
             }else {
-                Glide.with(mContentImage.getContext()).load("file://"+((ChatModel) model).getContentPath()).into(mContentImage);
+                Glide.with(mContentVideo.getContext()).load("file://"+((ChatModel) model).getContentPath()).into(mContentVideo);
             }
 
             mImageView.setImageResource(R.drawable.ynn);//图片应该加载当前用户的头像地址

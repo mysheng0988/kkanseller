@@ -20,6 +20,7 @@ android {
         packagingOptions {exclude 'META-INF/rxjava.properties'}
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -30,6 +31,9 @@ android {
         main{
             jniLibs.srcDirs=['libs']
         }
+    }
+    defaultConfig {
+        multiDexEnabled true
     }
 }
 
@@ -44,8 +48,13 @@ dependencies {
     implementation files('libs/library-1.0.19.jar')
     implementation 'com.getui:sdk:2.12.4.0'
     implementation 'com.jph.takephoto:takephoto_library:4.0.3'
+    implementation 'com.google.code.gson:gson:2.8.2'
     implementation files('libs/isoviewer-1.0-RC-27.jar')
     implementation 'io.reactivex.rxjava2:rxjava:2.0.5'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.amap.api:location:latest.integration'
+    implementation 'com.amap.api:navi-3dmap:latest.integration'
+    implementation 'com.amap.api:search:latest.integration'
+    implementation 'com.amap.api:map2d:latest.integration'
 
 }

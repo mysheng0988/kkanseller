@@ -1,5 +1,6 @@
 package com.mysheng.office.kkanseller;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.RelativeLayout;
 import com.mysheng.office.kkanseller.customCamera.camera.JCameraView;
 import com.mysheng.office.kkanseller.customCamera.camera.lisenter.JCameraLisenter;
 import com.mysheng.office.kkanseller.customCamera.config.PictureConfig;
+import com.mysheng.office.kkanseller.customCamera.config.PictureSelector;
 import com.mysheng.office.kkanseller.customCamera.entity.LocalMedia;
 import com.mysheng.office.kkanseller.customCamera.util.Constant;
 import com.mysheng.office.kkanseller.customCamera.util.DebugUtil;

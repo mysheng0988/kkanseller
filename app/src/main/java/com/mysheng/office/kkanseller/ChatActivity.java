@@ -1,7 +1,9 @@
 package com.mysheng.office.kkanseller;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,7 +22,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import com.amap.api.location.AMapLocation;
+import com.mysheng.office.kkanseller.RxTool.SaveBitmapToImage;
 import com.mysheng.office.kkanseller.adpter.ChatAdapter;
 import com.mysheng.office.kkanseller.adpter.ChatGenreViewAdapter;
 import com.mysheng.office.kkanseller.customCamera.config.PictureConfig;
@@ -31,6 +34,7 @@ import com.mysheng.office.kkanseller.customCamera.util.LogUtils;
 import com.mysheng.office.kkanseller.customCamera.util.StringUtils;
 import com.mysheng.office.kkanseller.entity.ChatGenreBean;
 import com.mysheng.office.kkanseller.entity.ChatModel;
+import com.mysheng.office.kkanseller.location.MapUtils;
 import com.mysheng.office.kkanseller.view.AudioRecorderButton;
 import com.mysheng.office.kkanseller.view.MediaManager;
 import com.mysheng.office.kkanseller.permissions.RxPermissions;
@@ -39,6 +43,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.reactivex.functions.Consumer;
+
 
 /**
  * Created by myaheng on 2017/12/15.
@@ -60,8 +65,12 @@ public class ChatActivity extends Activity implements View.OnClickListener{
     private List<ChatModel> mDatas = new ArrayList<>();
     private List<ChatGenreBean> genreDatas = new ArrayList<>();
     private AudioRecorderButton mAudioRecorderButton;
+    public  static  int SEND_LOCATION=0x110;
     private View animView;
     private Date frontMseDate;
+    private double longitude;
+    private double latitude;
+    private String cityCode;
     private int[] imageId={R.drawable.chat_images,R.drawable.camera,R.drawable.video,R.drawable.location,R.drawable.order_chat};
     private String[] genreName={"相册","相机","摄像","定位","订单"};
     @Override
@@ -70,8 +79,37 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.chat_layout);
         initView();
         initEvent();
+        //获取定位信息
+        MapUtils mapUtils = new MapUtils();
+        mapUtils.getLonLat(this, new MapUtils.LonLatListener() {
+            @Override
+            public void getLonLat(AMapLocation aMapLocation) {
+                if (aMapLocation != null) {
+                    if (aMapLocation.getErrorCode() == 0) {
+                        //定位成功回调信息，设置相关消息
+                        aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+                        latitude = aMapLocation.getLatitude();//获取纬度
+                        longitude = aMapLocation.getLongitude();//获取经度
+                        cityCode = aMapLocation.getCityCode();
+//                        tv_lat.setText("当前纬度：" + latitude);
+//                        tv_lon.setText("当前经度：" + longitude);
+//                        tv_location.setText("当前位置：" + amapLocation.getAddress());
+//                        tv_city.setText("当前城市：" + amapLocation.getProvince() + "-" + amapLocation.getCity() + "-" + amapLocation.getDistrict() + "-" + amapLocation.getStreet() + "-" + amapLocation.getStreetNum());
+//
+//                        tv_poi.setText("当前位置："+amapLocation.getAoiName());
+                        aMapLocation.getAccuracy();//获取精度信息
+                    } else {
+                        Log.e("AmapError", "location Error, ErrCode:"
+                                + aMapLocation.getErrorCode() + ", errInfo:"
+                                + aMapLocation.getErrorInfo());
 
+                        Toast.makeText(ChatActivity.this, "定位失败", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
@@ -148,6 +186,8 @@ public class ChatActivity extends Activity implements View.OnClickListener{
                     onTakePhoto(PictureMimeType.ofImage());
                 }else if(model.getPosition()==2){
                     onTakePhoto(PictureMimeType.ofVideo());
+                }else if(model.getPosition()==3){
+                    startLocation();
                 }
                 genreView.setVisibility(View.GONE);
             }
@@ -156,6 +196,15 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         initData();
 
     }
+
+    private void startLocation() {
+        Intent intent=new Intent(this,ShareLocationActivity.class);
+        intent.putExtra("longitude", longitude);
+        intent.putExtra("latitude", latitude);
+        intent.putExtra("cityCode", cityCode);
+       startActivityForResult(intent,SEND_LOCATION);
+    }
+
     private void initView(){
         titleText=findViewById(R.id.common_title);
         keyboard=findViewById(R.id.keyboard);
@@ -334,15 +383,29 @@ public class ChatActivity extends Activity implements View.OnClickListener{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case PictureConfig.CHOOSE_REQUEST:
-                    // 图片选择,共用一个数据通道:返回时图片，可能为列表，视频只能有一个
-                    List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+            if(requestCode==SEND_LOCATION){
+                ChatModel model= (ChatModel) data.getSerializableExtra("data");
+                sendLocation(model);
+               // Toast.makeText(ChatActivity.this, "发送：" + model.getTabTitle() + "  " + model.getAddress() + "  " + "纬度：" +model.getLatitude() + "  " + "经度：" + model.getLongitude(), Toast.LENGTH_SHORT).show();
+            }else if(requestCode==PictureConfig.CHOOSE_REQUEST){
+                List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
                     for (int i = 0; i < selectList.size(); i++) {
                         handleLocalMedia(selectList.get(i));
                     }
-                    break;
             }
+//            switch (requestCode) {
+//                case SEND_LOCATION:
+//                    showToast(getString(R.string.picture_all_permission));
+//                    break;
+//                case PictureConfig.CHOOSE_REQUEST:
+//                    // 图片选择,共用一个数据通道:返回时图片，可能为列表，视频只能有一个
+//                    List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+//                    for (int i = 0; i < selectList.size(); i++) {
+//                        handleLocalMedia(selectList.get(i));
+//                    }
+//                    break;
+//
+//            }
         }
     }
     private void handleLocalMedia(LocalMedia media) {
@@ -354,7 +417,8 @@ public class ChatActivity extends Activity implements View.OnClickListener{
                         + ",  compressPath = " + media.getCompressPath()
                         + ", height = " + media.getHeight()
                         + ", width = " + media.getWidth());
-                showToast(media.getPath());
+                //showToast(media.getPath());
+                sendCameraImage(media.getPath());
                 break;
             case PictureConfig.TYPE_VIDEO:
                 if (TextUtils.isEmpty(media.getPath())) return;
@@ -366,8 +430,13 @@ public class ChatActivity extends Activity implements View.OnClickListener{
                         + ",  compressPath = " + media.getCompressPath()
                         + ", height = " + media.getHeight()
                         + ", width = " + media.getWidth());
+                MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
+                metadataRetriever.setDataSource(media.getPath());
 
-                showToast(media.getPath());
+                Bitmap bitmap = metadataRetriever.getFrameAtTime();
+                String savePath= SaveBitmapToImage.saveBitmap(ChatActivity.this,bitmap);
+                sendCameraVideo(media.getPath(),savePath);
+                // showToast(media.getPath());
                 break;
         }
     }
@@ -397,6 +466,72 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         audioText.setText("");
     }
 
+    /**
+     * 发送拍照图片
+     */
+    private void sendCameraImage(String path){
+        ChatModel chatModel=new ChatModel();
+        chatModel.mesType=4;
+        chatModel.setContentPath(path);
+        chatModel.setMesDate(new Date());
+        if(isShowDate(chatModel.getMesDate())){
+            ChatModel chatModel2=new ChatModel();
+            chatModel2.mesType=7;
+            chatModel2.setMesDate(new Date());
+            chatAdapter.addModel(chatModel2);
+        }
+        frontMseDate=new Date();
+        chatAdapter.addModel(chatModel);
+        chatAdapter.notifyDataSetChanged();
+        recyclerView.scrollToPosition(chatAdapter.getItemCount()-1);
+    }
+
+    /**
+     * 发送相册图片
+     */
+    private void sendPhotoImage(String path){
+
+    }
+
+    /**
+     * 发送短视频
+     */
+    private void sendCameraVideo(String videoPath,String imagePath){
+        ChatModel chatModel=new ChatModel();
+        chatModel.mesType=11;
+        chatModel.setContentPath(imagePath);
+        chatModel.setVideoPath(videoPath);
+        chatModel.setMesDate(new Date());
+        if(isShowDate(chatModel.getMesDate())){
+            ChatModel chatModel2=new ChatModel();
+            chatModel2.mesType=7;
+            chatModel2.setMesDate(new Date());
+            chatAdapter.addModel(chatModel2);
+        }
+        frontMseDate=new Date();
+        chatAdapter.addModel(chatModel);
+        chatAdapter.notifyDataSetChanged();
+        recyclerView.scrollToPosition(chatAdapter.getItemCount()-1);
+    }
+
+    /**
+     * 发送定位
+     * @param chatModel
+     */
+    private void sendLocation( ChatModel chatModel){
+        chatModel.mesType=8;
+        chatModel.setMesDate(new Date());
+        if(isShowDate(chatModel.getMesDate())){
+            ChatModel chatModel2=new ChatModel();
+            chatModel2.mesType=7;
+            chatModel2.setMesDate(new Date());
+            chatAdapter.addModel(chatModel2);
+        }
+        frontMseDate=new Date();
+        chatAdapter.addModel(chatModel);
+        chatAdapter.notifyDataSetChanged();
+        recyclerView.scrollToPosition(chatAdapter.getItemCount()-1);
+    }
     private void switchToTextAndAudio(){
         if(isKeyboard){
             isKeyboard=false;
@@ -428,5 +563,6 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         super.onDestroy();
         MediaManager.release();
     }
+
 
 }

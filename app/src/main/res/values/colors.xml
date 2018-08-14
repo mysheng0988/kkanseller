@@ -33,4 +33,15 @@
     <color name="full_progress_color">#50000000</color>
     <color name="transparent">#00000000</color>
     <color name="camera_progress_three">#24ff00</color>
+    <color name="butten_green">#1AAC19</color>
+    <color name="check_butten_green">#19ad19</color>
+    <color name="title1">#4a4a4a</color>
+    <color name="title2">#a2a2a2</color>
+    <color name="line">#d1d1d1</color>
+
+    <color name="base_title_color">#464a4d</color>
+    <color name="gary">#898989</color>
+    <color name="gray_bg">#f5f5f5</color>
+    <color name="darkgrey"> #999999</color>
+    <color name="img_preesed_color">#4d5255</color>
 </resources>

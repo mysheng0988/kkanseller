@@ -34,7 +34,7 @@ public class IndexFragment extends Fragment {
     private RecyclerView indexRecyclerView;
     private IndexViewAdapter indexViewAdapter;
     private List<IndexBean> mList=new ArrayList<>();
-    private String[] dataStr={"今日订单数","今日成交额","今日收藏的商品","退款中","待付款","待发货","购物车的商品数","出售中"};
+    private String[] dataStr={"今日订单数","今日成交额","今日收藏的商品","退款中","待付款","待发货","购物车的商品数","出售中","今日访问量"};
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)

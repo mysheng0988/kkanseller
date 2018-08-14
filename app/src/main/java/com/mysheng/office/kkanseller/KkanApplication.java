@@ -32,7 +32,7 @@ public class KkanApplication extends Application {
         super.onCreate();
         PushManager.getInstance().initialize(this.getApplicationContext(), com.mysheng.office.kkanseller.service.AppPushService.class);
         PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), com.mysheng.office.kkanseller.service.ReceiveIntentService.class);
-        CrashHandler.getInstance().init(this);//异常信息记录
+       // CrashHandler.getInstance().init(this);//异常信息记录
         queues = Volley.newRequestQueue(getApplicationContext());
     }
     private boolean shouldInit() {

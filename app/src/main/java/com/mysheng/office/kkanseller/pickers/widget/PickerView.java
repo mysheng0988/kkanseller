@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+
 import android.support.v4.widget.ScrollerCompat;
 import android.text.TextPaint;
 import android.text.TextUtils;
