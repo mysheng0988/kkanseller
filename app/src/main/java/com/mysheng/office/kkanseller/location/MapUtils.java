@@ -7,6 +7,7 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 
+
 /**
  * Created by Fussen on 2016/10/31.
  */

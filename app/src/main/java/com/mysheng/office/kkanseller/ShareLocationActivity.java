@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -19,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
@@ -33,12 +35,14 @@ import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.core.SuggestionCity;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeAddress;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.mysheng.office.kkanseller.entity.ChatModel;
 import com.mysheng.office.kkanseller.location.AddressAdapter;
+import com.mysheng.office.kkanseller.location.MapUtils;
 import com.mysheng.office.kkanseller.location.SearchAddressInfo;
 import com.mysheng.office.kkanseller.location.ToastUtil;
 
@@ -67,7 +71,6 @@ public class ShareLocationActivity extends Activity implements GeocodeSearch.OnG
     private int currentPage = 0;// 当前页面，从0开始计数
     private PoiSearch.Query query;// Poi查询条件类
     private PoiSearch poiSearch;
-    private String city;
     private PoiResult poiResult; // poi返回的结果
     private List<PoiItem> poiItems;// poi数据
     private ArrayList<SearchAddressInfo> mData = new ArrayList<>();
@@ -83,18 +86,13 @@ public class ShareLocationActivity extends Activity implements GeocodeSearch.OnG
     private ImageView back;
     private RelativeLayout locationMap;
     private static final int SEARCH_ADDDRESS = 1;
-
+    private double longitude;
+    private double latitude;
+    private String cityCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_location);
-
-        double longitude = getIntent().getDoubleExtra("longitude", 0);
-        double latitude = getIntent().getDoubleExtra("latitude", 0);
-        city = getIntent().getStringExtra("cityCode");
-
-        //经纬度信息
-        latLonPoint = new LatLonPoint(latitude, longitude);
 
         mapView = (MapView) findViewById(R.id.mapview);
         listView = (ListView) findViewById(R.id.listview);
@@ -111,13 +109,49 @@ public class ShareLocationActivity extends Activity implements GeocodeSearch.OnG
         locationButton.setOnClickListener(this);
 
         mapView.onCreate(savedInstanceState);
+        //获取定位信息
+        MapUtils mapUtils = new MapUtils();
+        mapUtils.getLonLat(this, new MapUtils.LonLatListener() {
+            @Override
+            public void getLonLat(AMapLocation aMapLocation) {
+                if (aMapLocation != null) {
+                    if (aMapLocation.getErrorCode() == 0) {
+                        //定位成功回调信息，设置相关消息
+                        aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+                        latitude = aMapLocation.getLatitude();//获取纬度
+                        longitude = aMapLocation.getLongitude();//获取经度
+                        cityCode = aMapLocation.getCityCode();
+//                        tv_lat.setText("当前纬度：" + latitude);
+//                        tv_lon.setText("当前经度：" + longitude);
+//                        tv_location.setText("当前位置：" + amapLocation.getAddress());
+//                        tv_city.setText("当前城市：" + amapLocation.getProvince() + "-" + amapLocation.getCity() + "-" + amapLocation.getDistrict() + "-" + amapLocation.getStreet() + "-" + amapLocation.getStreetNum());
+//
+//                        tv_poi.setText("当前位置："+amapLocation.getAoiName());
 
-        centerAnimation = AnimationUtils.loadAnimation(this, R.anim.center_anim);
-        addressAdapter = new AddressAdapter(this, mData);
-        listView.setAdapter(addressAdapter);
+                        //经纬度信息
+                        latLonPoint = new LatLonPoint(latitude, longitude);
 
-        listView.setOnItemClickListener(this);
-        initMap();
+
+
+                        centerAnimation = AnimationUtils.loadAnimation(ShareLocationActivity.this, R.anim.center_anim);
+                        addressAdapter = new AddressAdapter(ShareLocationActivity.this, mData);
+                        listView.setAdapter(addressAdapter);
+
+                        listView.setOnItemClickListener(ShareLocationActivity.this);
+                        initMap();
+                        aMapLocation.getAccuracy();//获取精度信息
+
+                    } else {
+                        Log.e("AmapError", "location Error, ErrCode:"
+                                + aMapLocation.getErrorCode() + ", errInfo:"
+                                + aMapLocation.getErrorInfo());
+
+                        Toast.makeText(ShareLocationActivity.this, "定位失败", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
 
     }
 
@@ -212,6 +246,7 @@ public class ShareLocationActivity extends Activity implements GeocodeSearch.OnG
                 //拿到详细地址
                 addressName = result.getRegeocodeAddress().getFormatAddress(); // 逆转地里编码不是每次都可以得到对应地图上的opi
 
+               //mysheng
                 //条目中第一个地址 也就是当前你所在的地址
                 mAddressInfoFirst = new SearchAddressInfo(addressName, addressName, false, convertToLatLonPoint(mFinalChoosePosition));
 
@@ -293,7 +328,7 @@ public class ShareLocationActivity extends Activity implements GeocodeSearch.OnG
     protected void doSearchQueryByPosition() {
 
         currentPage = 0;
-        query = new PoiSearch.Query("", "", city);// 第一个参数表示搜索字符串，第二个参数表示poi搜索类型，第三个参数表示poi搜索区域（空字符串代表全国）
+        query = new PoiSearch.Query("", "", cityCode);// 第一个参数表示搜索字符串，第二个参数表示poi搜索类型，第三个参数表示poi搜索区域（空字符串代表全国）
         query.setPageSize(20);// 设置每页最多返回多少条poiitem
         query.setPageNum(currentPage);// 设置查第一页
 
@@ -413,7 +448,7 @@ public class ShareLocationActivity extends Activity implements GeocodeSearch.OnG
 
             Intent intent = new Intent(this, SearchAddressActivity.class);
             intent.putExtra("position", mFinalChoosePosition);
-            intent.putExtra("city", city);
+            intent.putExtra("city", cityCode);
             startActivityForResult(intent, SEARCH_ADDDRESS);
             isBackFromSearch = false;
 

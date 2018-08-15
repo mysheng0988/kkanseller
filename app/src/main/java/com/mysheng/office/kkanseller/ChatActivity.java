@@ -22,7 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amap.api.location.AMapLocation;
+
 import com.mysheng.office.kkanseller.RxTool.SaveBitmapToImage;
 import com.mysheng.office.kkanseller.adpter.ChatAdapter;
 import com.mysheng.office.kkanseller.adpter.ChatGenreViewAdapter;
@@ -34,7 +34,6 @@ import com.mysheng.office.kkanseller.customCamera.util.LogUtils;
 import com.mysheng.office.kkanseller.customCamera.util.StringUtils;
 import com.mysheng.office.kkanseller.entity.ChatGenreBean;
 import com.mysheng.office.kkanseller.entity.ChatModel;
-import com.mysheng.office.kkanseller.location.MapUtils;
 import com.mysheng.office.kkanseller.view.AudioRecorderButton;
 import com.mysheng.office.kkanseller.view.MediaManager;
 import com.mysheng.office.kkanseller.permissions.RxPermissions;
@@ -68,9 +67,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
     public  static  int SEND_LOCATION=0x110;
     private View animView;
     private Date frontMseDate;
-    private double longitude;
-    private double latitude;
-    private String cityCode;
+
     private int[] imageId={R.drawable.chat_images,R.drawable.camera,R.drawable.video,R.drawable.location,R.drawable.order_chat};
     private String[] genreName={"相册","相机","摄像","定位","订单"};
     @Override
@@ -79,35 +76,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.chat_layout);
         initView();
         initEvent();
-        //获取定位信息
-        MapUtils mapUtils = new MapUtils();
-        mapUtils.getLonLat(this, new MapUtils.LonLatListener() {
-            @Override
-            public void getLonLat(AMapLocation aMapLocation) {
-                if (aMapLocation != null) {
-                    if (aMapLocation.getErrorCode() == 0) {
-                        //定位成功回调信息，设置相关消息
-                        aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
-                        latitude = aMapLocation.getLatitude();//获取纬度
-                        longitude = aMapLocation.getLongitude();//获取经度
-                        cityCode = aMapLocation.getCityCode();
-//                        tv_lat.setText("当前纬度：" + latitude);
-//                        tv_lon.setText("当前经度：" + longitude);
-//                        tv_location.setText("当前位置：" + amapLocation.getAddress());
-//                        tv_city.setText("当前城市：" + amapLocation.getProvince() + "-" + amapLocation.getCity() + "-" + amapLocation.getDistrict() + "-" + amapLocation.getStreet() + "-" + amapLocation.getStreetNum());
-//
-//                        tv_poi.setText("当前位置："+amapLocation.getAoiName());
-                        aMapLocation.getAccuracy();//获取精度信息
-                    } else {
-                        Log.e("AmapError", "location Error, ErrCode:"
-                                + aMapLocation.getErrorCode() + ", errInfo:"
-                                + aMapLocation.getErrorInfo());
 
-                        Toast.makeText(ChatActivity.this, "定位失败", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
@@ -199,9 +168,6 @@ public class ChatActivity extends Activity implements View.OnClickListener{
 
     private void startLocation() {
         Intent intent=new Intent(this,ShareLocationActivity.class);
-        intent.putExtra("longitude", longitude);
-        intent.putExtra("latitude", latitude);
-        intent.putExtra("cityCode", cityCode);
        startActivityForResult(intent,SEND_LOCATION);
     }
 
@@ -418,7 +384,11 @@ public class ChatActivity extends Activity implements View.OnClickListener{
                         + ", height = " + media.getHeight()
                         + ", width = " + media.getWidth());
                 //showToast(media.getPath());
-                sendCameraImage(media.getPath());
+                ChatModel model=new ChatModel();
+                model.setContentPath(media.getCompressPath());
+                model.setWidth(media.getWidth());
+                media.setHeight(media.getHeight());
+                sendCameraImage(model);
                 break;
             case PictureConfig.TYPE_VIDEO:
                 if (TextUtils.isEmpty(media.getPath())) return;
@@ -469,10 +439,8 @@ public class ChatActivity extends Activity implements View.OnClickListener{
     /**
      * 发送拍照图片
      */
-    private void sendCameraImage(String path){
-        ChatModel chatModel=new ChatModel();
+    private void sendCameraImage(ChatModel chatModel){
         chatModel.mesType=4;
-        chatModel.setContentPath(path);
         chatModel.setMesDate(new Date());
         if(isShowDate(chatModel.getMesDate())){
             ChatModel chatModel2=new ChatModel();

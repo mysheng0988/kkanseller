@@ -1,8 +1,6 @@
 package com.mysheng.office.kkanseller.entity;
 
-import android.graphics.Bitmap;
 
-import com.amap.api.maps.AMap;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -46,6 +44,25 @@ public class ChatModel implements Serializable {
     public double latitude;//纬度
 
     public String locationPath;
+
+    public int width;
+    public int height;
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
     public String getVideoPath() {
         return videoPath;
