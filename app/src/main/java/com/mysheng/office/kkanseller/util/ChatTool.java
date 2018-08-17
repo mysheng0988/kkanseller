@@ -5,7 +5,7 @@ package com.mysheng.office.kkanseller.util;
  */
 
 public class ChatTool {
-    public static int VIEW_WIDTH=300;
-    public static int VIEW_HEIGHT=450;
+    public static int VIEW_WIDTH=100;
+    public static int VIEW_HEIGHT=160;
 
 }

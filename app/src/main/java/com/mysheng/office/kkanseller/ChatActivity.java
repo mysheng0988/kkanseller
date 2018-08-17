@@ -386,8 +386,6 @@ public class ChatActivity extends Activity implements View.OnClickListener{
                 //showToast(media.getPath());
                 ChatModel model=new ChatModel();
                 model.setContentPath(media.getCompressPath());
-                model.setWidth(media.getWidth());
-                media.setHeight(media.getHeight());
                 sendCameraImage(model);
                 break;
             case PictureConfig.TYPE_VIDEO:

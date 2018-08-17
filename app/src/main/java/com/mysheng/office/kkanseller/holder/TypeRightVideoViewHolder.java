@@ -1,11 +1,16 @@
 package com.mysheng.office.kkanseller.holder;
 
+import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.mysheng.office.kkanseller.R;
+import com.mysheng.office.kkanseller.RxTool.RxImageTool;
+import com.mysheng.office.kkanseller.RxTool.RxTool;
 import com.mysheng.office.kkanseller.entity.ChatModel;
 import com.mysheng.office.kkanseller.util.ChatTool;
 
@@ -27,21 +32,29 @@ public class TypeRightVideoViewHolder extends TypeAbstractViewHolder{
     public void bindHolder(Object model){
         if(model instanceof ChatModel){
             ChatModel chatModel= (ChatModel) model;
+            RxTool.init(mContentVideo.getContext());
             para = mContentVideo.getLayoutParams();
-            if(chatModel.getWidth()<chatModel.getHeight()){
-                para.height = ChatTool.VIEW_WIDTH;
-                para.width = ChatTool.VIEW_HEIGHT;
-                mContentVideo.setLayoutParams(para);
-            }else{
-                para.height = ChatTool.VIEW_HEIGHT;
-                para.width = ChatTool.VIEW_WIDTH;
-                mContentVideo.setLayoutParams(para);
-            }
-            if(chatModel.getContentPath()==null){
-                mContentVideo.setImageResource(R.drawable.bg);
-            }else {
-                Glide.with(mContentVideo.getContext()).load("file://"+((ChatModel) model).getContentPath()).into(mContentVideo);
-            }
+            Glide.with(mContentVideo.getContext())
+                    .load("file://"+chatModel.getContentPath())
+                    .asBitmap()//强制Glide返回一个Bitmap对象
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+                            int width = bitmap.getWidth();
+                            int height = bitmap.getHeight();
+                            if (width<height){
+                                para.height = RxImageTool.dp2px(ChatTool.VIEW_HEIGHT);
+                                para.width = RxImageTool.dp2px(ChatTool.VIEW_WIDTH);
+                                mContentVideo.setLayoutParams(para);
+
+                            }else{
+                                para.height = RxImageTool.dp2px(ChatTool.VIEW_WIDTH);
+                                para.width = RxImageTool.dp2px(ChatTool.VIEW_HEIGHT);
+                                mContentVideo.setLayoutParams(para);
+                            }
+                            mContentVideo.setImageBitmap(bitmap);
+                        }
+                    });
 
             mImageView.setImageResource(R.drawable.ynn);//图片应该加载当前用户的头像地址
         }
