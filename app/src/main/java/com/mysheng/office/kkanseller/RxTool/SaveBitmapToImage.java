@@ -84,4 +84,5 @@ public class SaveBitmapToImage {
 
         return filePic.getAbsolutePath();
     }
+
 }

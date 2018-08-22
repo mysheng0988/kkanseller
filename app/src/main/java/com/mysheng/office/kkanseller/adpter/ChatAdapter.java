@@ -9,9 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
-
 import com.mysheng.office.kkanseller.R;
 import com.mysheng.office.kkanseller.entity.ChatModel;
 import com.mysheng.office.kkanseller.holder.TypeAbstractViewHolder;
@@ -24,6 +23,7 @@ import com.mysheng.office.kkanseller.holder.TypeRightRecorderViewHolder;
 import com.mysheng.office.kkanseller.holder.TypeRightTextViewHolder;
 import com.mysheng.office.kkanseller.holder.TypeRightVideoViewHolder;
 import com.mysheng.office.kkanseller.holder.TypeTimeViewHolder;
+import com.mysheng.office.kkanseller.util.ChatTool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +32,17 @@ import java.util.List;
  * Created by myaheng on 2018/5/11.
  */
 
-public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener{
+public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private Context mContext;
     private LayoutInflater mLayoutInflater;
     private List<ChatModel> mList=new ArrayList<>();
+    private List<String> mImages=new ArrayList<>();
+    private List<ImageView> imageViews=new ArrayList<>();
     private int mMinItemWidth;
     private int mMaxItemWidth;
 
     public ChatAdapter(Context context) {
+        this.mContext=context;
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(outMetrics);
@@ -51,7 +55,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         switch (viewType){
             case ChatModel.TYPE_ONE:
             return new TypeLeftTextViewHolder(mLayoutInflater.inflate(R.layout.items_left_text,parent,false));
@@ -62,7 +65,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             case ChatModel.TYPE_THREE:
                 return new TypeLeftImageViewHolder(mLayoutInflater.inflate(R.layout.items_left_image,parent,false));
             case ChatModel.TYPE_FOUR:
-                return new TypeRightImageViewHolder(mLayoutInflater.inflate(R.layout.items_right_image,parent,false));
+                View view4=mLayoutInflater.inflate(R.layout.items_right_image,parent,false);
+                ImageView imageView=view4.findViewById(R.id.id_content_img);
+                imageViews.add(0,imageView);
+                return new TypeRightImageViewHolder(view4);
             case ChatModel.TYPE_FIVE:
                 return new TypeLeftRecorderViewHolder(mLayoutInflater.inflate(R.layout.items_left_recorder,parent,false));
             case ChatModel.TYPE_SIX:
@@ -88,25 +94,45 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     public void addList(List<ChatModel> list){
         mList.addAll(list);
-
+    }
+    public void addImages(List<String> list){
+        mImages.addAll(list);
     }
     public void addModel(ChatModel model){
         mList.add(model);
     }
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof TypeLeftRecorderViewHolder ||holder instanceof TypeRightRecorderViewHolder){
             RelativeLayout.LayoutParams lp= (RelativeLayout.LayoutParams) holder.itemView.findViewById(R.id.id_recorder_length).getLayoutParams();
             lp.width= (int) (mMinItemWidth + (mMaxItemWidth / 60f)*mList.get(position).mesTime);
             Log.d("mys", "onBindViewHolder: "+lp.width);
             holder.itemView.findViewById(R.id.id_recorder_length).setLayoutParams(lp);
+        }else if (holder instanceof TypeLeftImageViewHolder ||holder instanceof TypeRightImageViewHolder){
+            holder.itemView.findViewById(R.id.id_content_img).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mItemClickListener!=null){
+                        mItemClickListener.onItemClick(v,position,imageViews,mImages);
+                    }
+
+                }
+            });
         }
 
        ((TypeAbstractViewHolder)holder).bindHolder(mList.get(position));
 
          //holder.itemView.findViewById(R.id.id_recorder_length);
         holder.itemView.setTag(position);
-        holder.itemView.setOnClickListener(this);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mItemClickListener!=null){
+                    mItemClickListener.onItemClick(v,position,imageViews,mImages);
+                }
+
+            }
+        });
 
     }
 
@@ -120,17 +146,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         return mList.get(position).mesType;
     }
 
-    @Override
-    public void onClick(View v) {
-        if(mItemClickListener!=null){
-            mItemClickListener.onItemClick(v,mList.get((Integer) v.getTag()));
-        }
-
-    }
     public void setItemClickListener(OnItemClickListener itemClickListener) {
         mItemClickListener = itemClickListener;
     }
     public interface OnItemClickListener{
-        void onItemClick(View view, ChatModel model);
+        void onItemClick(View view, int position,List<ImageView> imageViews,List<String> lists);
     }
 }

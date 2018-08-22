@@ -10,7 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
-    <View style="@style/bg_line"/>
+    <View android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/border_clo"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,6 +49,7 @@
             android:minHeight="0dp"
             android:visibility="gone"
             android:background="@drawable/recorder_button_normal"
+            style="?android:attr/borderlessButtonStyle"
             android:text="@string/str_recorder_normal">
 
         </com.mysheng.office.kkanseller.view.AudioRecorderButton>
@@ -70,11 +73,14 @@
             android:text="发送"
             />
     </LinearLayout>
-    <View style="@style/bg_line"/>
+    <View android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/border_clo"/>
     <android.support.v7.widget.RecyclerView
         android:visibility="gone"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:background="@color/gray"
         android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="180dp" />

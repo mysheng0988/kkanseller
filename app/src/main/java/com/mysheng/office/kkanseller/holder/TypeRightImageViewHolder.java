@@ -44,8 +44,12 @@ public class TypeRightImageViewHolder extends TypeAbstractViewHolder{
                 mContentImage.setLayoutParams(para);
                 mContentImage.setImageResource(R.drawable.bg);
             }else {
+                String imagePath=chatModel.getContentPath();
+                if(!ChatTool.isNetUri(imagePath)){
+                    imagePath="file://"+imagePath;
+                }
                 Glide.with(mContentImage.getContext())
-                        .load("file://"+chatModel.getContentPath())
+                        .load(imagePath)
                         .asBitmap()//强制Glide返回一个Bitmap对象
                         .into(new SimpleTarget<Bitmap>() {
                             @Override

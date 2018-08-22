@@ -1,8 +1,10 @@
 package com.mysheng.office.kkanseller;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -23,6 +25,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.mysheng.office.kkanseller.RxTool.SaveBitmapToImage;
 import com.mysheng.office.kkanseller.adpter.ChatAdapter;
 import com.mysheng.office.kkanseller.adpter.ChatGenreViewAdapter;
@@ -34,6 +39,8 @@ import com.mysheng.office.kkanseller.customCamera.util.LogUtils;
 import com.mysheng.office.kkanseller.customCamera.util.StringUtils;
 import com.mysheng.office.kkanseller.entity.ChatGenreBean;
 import com.mysheng.office.kkanseller.entity.ChatModel;
+import com.mysheng.office.kkanseller.imagesWatcher.ImageWatcher;
+import com.mysheng.office.kkanseller.util.CrashHandler;
 import com.mysheng.office.kkanseller.view.AudioRecorderButton;
 import com.mysheng.office.kkanseller.view.MediaManager;
 import com.mysheng.office.kkanseller.permissions.RxPermissions;
@@ -62,23 +69,55 @@ public class ChatActivity extends Activity implements View.OnClickListener{
     private ChatGenreViewAdapter genreViewAdapter;
     private EditText audioText;
     private List<ChatModel> mDatas = new ArrayList<>();
+    private List<String> listImage = new ArrayList<>();
     private List<ChatGenreBean> genreDatas = new ArrayList<>();
     private AudioRecorderButton mAudioRecorderButton;
     public  static  int SEND_LOCATION=0x110;
     private View animView;
     private Date frontMseDate;
+    private ImageWatcher vImageWatcher;
+    private int[] imageId={R.drawable.icon_images,R.drawable.icon_camera,R.drawable.icon_video,R.drawable.icon_location,R.drawable.icon_goods,R.drawable.icon_order};
+    private String[] genreName={"相册","相机","摄像","定位","商品","订单"};
 
-    private int[] imageId={R.drawable.chat_images,R.drawable.camera,R.drawable.video,R.drawable.location,R.drawable.order_chat};
-    private String[] genreName={"相册","相机","摄像","定位","订单"};
+    public static String[] netImages = {
+            "http://wx1.sinaimg.cn/woriginal/daaf97d2gy1fgsxkq8uc3j20dw0ku74x.jpg",
+            "http://wx1.sinaimg.cn/woriginal/daaf97d2gy1fgsxkqm7b0j20dw0kut9h.jpg",
+            "http://wx4.sinaimg.cn/woriginal/daaf97d2gy1fgsxks2l4ij20dw0kldhb.jpg",
+            "http://wx2.sinaimg.cn/woriginal/daaf97d2gy1fgsxksskbkj20dw0kut9b.jpg",
+            "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2966021298,3341101515&fm=23&gp=0.jpg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496402134202&di=6c7f4a6afa5bdf02000c788f7a51e9c0&imgtype=0&src=http%3A%2F%2Fcdnq.duitang.com%2Fuploads%2Fitem%2F201506%2F23%2F20150623183946_iZtFs.jpeg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496996892&di=ea1e213c8ddd4427c55f073db9bf91b7&imgtype=jpg&er=1&src=http%3A%2F%2Fpic27.nipic.com%2F20130323%2F9483785_182530048000_2.jpg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496996959&di=13c094ba73675a24df2ad1d2c730c02c&imgtype=jpg&er=1&src=http%3A%2F%2Fdasouji.com%2Fwp-content%2Fuploads%2F2015%2F07%2F%25E9%2595%25BF%25E8%258A%25B1%25E5%259B%25BE-6.jpg"
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_layout);
         initView();
         initEvent();
+        vImageWatcher = ImageWatcher.Helper.with(this) // 一般来讲， ImageWatcher 需要占据全屏的位置
+                .setTranslucentStatus(0) // 如果是透明状态栏，你需要给ImageWatcher标记 一个偏移值，以修正点击ImageView查看的启动动画的Y轴起点的不正确
+                .setErrorImageRes(R.drawable.error_picture) // 配置error图标 如果不介意使用lib自带的图标，并不一定要调用这个API
+                .setHintMode(ImageWatcher.POINT)//设置指示器（默认小白点）
+                .setHintColor(getResources().getColor(R.color.red), getResources().getColor(R.color.white))//设置指示器颜色
+                //.setOnPictureLongPressListener(this) // 长按图片的回调，你可以显示一个框继续提供一些复制，发送等功能
+                .setLoader(new ImageWatcher.Loader() {//调用show方法前，请先调用setLoader 给ImageWatcher提供加载图片的实现
+                    @Override
+                    public void load(Context context, String url, final ImageWatcher.LoadCallback lc) {
+                        Glide.with(context).load(url).asBitmap().into(new SimpleTarget<Bitmap>() {
 
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                lc.onResourceReady(resource);
+                            }
+                        });
+                    }
+                })
+                .create();
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
-        layoutManager.setStackFromEnd(true);
+        //layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
@@ -97,8 +136,9 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         chatAdapter=new ChatAdapter(this);
         chatAdapter.setItemClickListener(new ChatAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, ChatModel model) {
+            public void onItemClick(final View view,int position,List<ImageView> imageViews,List<String> list) {
                 genreView.setVisibility(View.GONE);
+                ChatModel model=mDatas.get(position);
                 if(model.mesType==6){
                     //播放动画
                     if(animView != null) {
@@ -124,6 +164,10 @@ public class ChatActivity extends Activity implements View.OnClickListener{
                             return false;
                         }
                     });
+                }else if(model.getMesType()==4){
+                    ImageView imageView=view.findViewById(R.id.id_content_img);
+                    Log.e("tupian", "onItemClick: "+imageViews.size()+ list.size());
+                    vImageWatcher.show(imageView,imageViews,list);
                 }
             }
 
@@ -139,6 +183,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
                 chatModel.mesTime= (int) Math.ceil(seconds);
                 Log.d("mys", "onFinish: "+ chatModel.mesType);
                 chatAdapter.addModel(chatModel);
+                mDatas.add(chatModel);
                 chatAdapter.notifyDataSetChanged();
                 recyclerView.scrollToPosition(chatAdapter.getItemCount()-1);
 
@@ -228,50 +273,67 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         backButton.setOnClickListener(this);
     }
     private void initData(){
-        int num=0;
-        String str="测试123";
-        String connect="";
+//        int num=0;
+//        String str="测试123";
+//        String connect="";
         long timeDate= new Date().getTime()-12*60*60*1000;
-        for(int i=0;i<10;i++){
-            int type=i%2+1;
-            connect+=str+i;
+//        for(int i=0;i<10;i++){
+//            int type=i%2+1;
+//            connect+=str+i;
+//            ChatModel chatModel=new ChatModel();
+//            chatModel.mesType=type;
+//            chatModel.content=connect;
+//            timeDate+=Math.random()*1000000f;
+//            chatModel.setMesDate(new Date(timeDate));
+//            if(isShowDate(chatModel.getMesDate())){
+//                ChatModel chatModel2=new ChatModel();
+//                chatModel2.mesType=7;
+//                chatModel2.setMesDate(new Date(timeDate));
+//                Log.d("mysheng", "initData: "+num);
+//                num++;
+//                mDatas.add(chatModel2);
+//            }
+//            frontMseDate=new Date(timeDate);
+//            mDatas.add(chatModel);
+//        }
+//        for(int i=0;i<10;i++){
+//            int type=i%2+3;
+//            connect+=str+i;
+//            ChatModel chatModel=new ChatModel();
+//            chatModel.mesType=type;
+//            timeDate+=Math.random()*1000000f;
+//            chatModel.setMesDate(new Date(timeDate));
+//
+//            if(isShowDate(chatModel.getMesDate())){
+//                ChatModel chatModel2=new ChatModel();
+//                chatModel2.mesType=7;
+//                chatModel2.setMesDate(new Date(timeDate));
+//                Log.d("mysheng", "initData: "+num);
+//                num++;
+//                mDatas.add(chatModel2);
+//            }
+//            frontMseDate=new Date(timeDate);
+//            mDatas.add(chatModel);
+//        }
+        for (int i=0;i<netImages.length;i++){
             ChatModel chatModel=new ChatModel();
-            chatModel.mesType=type;
-            chatModel.content=connect;
-            timeDate+=Math.random()*1000000f;
+            chatModel.mesType=4;
+            timeDate+=Math.random()*100000f;
             chatModel.setMesDate(new Date(timeDate));
+            chatModel.setContentPath(netImages[i]);
+            listImage.add(netImages[i]);
             if(isShowDate(chatModel.getMesDate())){
                 ChatModel chatModel2=new ChatModel();
                 chatModel2.mesType=7;
                 chatModel2.setMesDate(new Date(timeDate));
-                Log.d("mysheng", "initData: "+num);
-                num++;
                 mDatas.add(chatModel2);
             }
             frontMseDate=new Date(timeDate);
             mDatas.add(chatModel);
         }
-        for(int i=0;i<10;i++){
-            int type=i%2+3;
-            connect+=str+i;
-            ChatModel chatModel=new ChatModel();
-            chatModel.mesType=type;
-            timeDate+=Math.random()*1000000f;
-            chatModel.setMesDate(new Date(timeDate));
-
-            if(isShowDate(chatModel.getMesDate())){
-                ChatModel chatModel2=new ChatModel();
-                chatModel2.mesType=7;
-                chatModel2.setMesDate(new Date(timeDate));
-                Log.d("mysheng", "initData: "+num);
-                num++;
-                mDatas.add(chatModel2);
-            }
-            frontMseDate=new Date(timeDate);
-            mDatas.add(chatModel);
-        }
-
+        chatAdapter.addImages(listImage);
         chatAdapter.addList(mDatas);
+
         chatAdapter.notifyDataSetChanged();
         recyclerView.scrollToPosition(chatAdapter.getItemCount()-1);
         for(int i=0;i<genreName.length;i++){
@@ -411,6 +473,10 @@ public class ChatActivity extends Activity implements View.OnClickListener{
     protected void showToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
+
+    /**
+     * 发送文字
+     */
     private void sendOutText(){
         String strText=audioText.getText().toString().trim();
         if("".equals(strText)){
@@ -428,6 +494,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
             chatAdapter.addModel(chatModel2);
         }
         frontMseDate=new Date();
+        mDatas.add(chatModel);
         chatAdapter.addModel(chatModel);
         chatAdapter.notifyDataSetChanged();
         recyclerView.scrollToPosition(chatAdapter.getItemCount()-1);
