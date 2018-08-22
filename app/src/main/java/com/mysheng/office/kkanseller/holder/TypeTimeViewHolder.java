@@ -19,7 +19,7 @@ public class TypeTimeViewHolder extends TypeAbstractViewHolder{
         showTime=itemView.findViewById(R.id.showTime);
     }
     @Override
-    public void bindHolder(Object model){
+    public void bindHolder(Object model,boolean isScrolling){
         if(model instanceof ChatModel){
             ChatModel chatModel= (ChatModel) model;
             String strTime= UtilDate.showDateTime(chatModel.getMesDate(),"yyyy-MM-dd HH:mm:ss");

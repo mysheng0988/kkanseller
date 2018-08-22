@@ -50,6 +50,8 @@ import java.util.List;
 
 import io.reactivex.functions.Consumer;
 
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
+
 
 /**
  * Created by myaheng on 2017/12/15.
@@ -172,6 +174,20 @@ public class ChatActivity extends Activity implements View.OnClickListener{
             }
 
         });
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                // 查看源码可知State有三种状态：SCROLL_STATE_IDLE（静止）、SCROLL_STATE_DRAGGING（上升）、SCROLL_STATE_SETTLING（下落）
+//                if (newState == SCROLL_STATE_IDLE) { // 滚动静止时才加载图片资源，极大提升流畅度
+//                    chatAdapter.setScrolling(false);
+//                    chatAdapter.notifyDataSetChanged(); // notify调用后onBindViewHolder会响应调用
+//                } else{
+//                    chatAdapter.setScrolling(true);
+//                }
+//
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//        });
         recyclerView.setAdapter(chatAdapter);
 
         mAudioRecorderButton.setAudioFinishRecorderListener(new AudioRecorderButton.AudioFinishRecorderListener() {
@@ -331,7 +347,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
             frontMseDate=new Date(timeDate);
             mDatas.add(chatModel);
         }
-        chatAdapter.addImages(listImage);
+        //chatAdapter.addImages(listImage);
         chatAdapter.addList(mDatas);
 
         chatAdapter.notifyDataSetChanged();

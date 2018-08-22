@@ -22,7 +22,7 @@ public class TypeRightTextViewHolder extends TypeAbstractViewHolder{
     }
 
     @Override
-    public void bindHolder(Object model) {
+    public void bindHolder(Object model,boolean isScrolling){
         if(model instanceof ChatModel){
             ChatModel chatModel= (ChatModel) model;
             mTextView.setText(chatModel.content);

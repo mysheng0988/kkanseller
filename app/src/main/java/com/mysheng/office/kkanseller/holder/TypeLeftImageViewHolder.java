@@ -26,7 +26,7 @@ public class TypeLeftImageViewHolder extends TypeAbstractViewHolder{
         para = mContentImage.getLayoutParams();
     }
     @Override
-    public void bindHolder(Object model){
+    public void bindHolder(Object model,boolean isScrolling){
         if(model instanceof ChatModel){
             ChatModel chatModel= (ChatModel) model;
             RxTool.init(mContentImage.getContext());

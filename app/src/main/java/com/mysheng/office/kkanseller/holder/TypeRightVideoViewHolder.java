@@ -29,7 +29,7 @@ public class TypeRightVideoViewHolder extends TypeAbstractViewHolder{
         mImageView=itemView.findViewById(R.id.id_useIcon);
     }
     @Override
-    public void bindHolder(Object model){
+    public void bindHolder(Object model,boolean isScrolling){
         if(model instanceof ChatModel){
             ChatModel chatModel= (ChatModel) model;
             RxTool.init(mContentVideo.getContext());

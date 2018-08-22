@@ -24,7 +24,7 @@ public class TypeRightRecorderViewHolder extends TypeAbstractViewHolder{
         mTextView=itemView.findViewById(R.id.id_recorder_time);
     }
     @Override
-    public void bindHolder(Object model){
+    public void bindHolder(Object model,boolean isScrolling){
         if(model instanceof ChatModel){
             ChatModel chatModel= (ChatModel) model;
             //mContentImage.setImageResource(R.drawable.ynn);

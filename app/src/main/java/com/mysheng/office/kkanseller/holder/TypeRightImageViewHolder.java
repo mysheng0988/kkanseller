@@ -1,6 +1,7 @@
 package com.mysheng.office.kkanseller.holder;
 
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ public class TypeRightImageViewHolder extends TypeAbstractViewHolder{
         mImageView=itemView.findViewById(R.id.id_useIcon);
     }
     @Override
-    public void bindHolder(Object model){
+    public void bindHolder(Object model,boolean isScrolling){
         if(model instanceof ChatModel){
             ChatModel chatModel= (ChatModel) model;
 //            Log.e("mys", "H: "+chatModel.getHeight());
@@ -44,31 +45,35 @@ public class TypeRightImageViewHolder extends TypeAbstractViewHolder{
                 mContentImage.setLayoutParams(para);
                 mContentImage.setImageResource(R.drawable.bg);
             }else {
-                String imagePath=chatModel.getContentPath();
-                if(!ChatTool.isNetUri(imagePath)){
-                    imagePath="file://"+imagePath;
-                }
-                Glide.with(mContentImage.getContext())
-                        .load(imagePath)
-                        .asBitmap()//强制Glide返回一个Bitmap对象
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
-                                int width = bitmap.getWidth();
-                                int height = bitmap.getHeight();
-                                if (width<height){
-                                    para.height = RxImageTool.dp2px(ChatTool.VIEW_HEIGHT);
-                                    para.width = RxImageTool.dp2px(ChatTool.VIEW_WIDTH);
-                                    mContentImage.setLayoutParams(para);
+//                if ( !isScrolling) {
+                    // 这里可以用Glide等网络图片加载库
+                    String imagePath=chatModel.getContentPath();
+                    if(!ChatTool.isNetUri(imagePath)){
+                        imagePath="file://"+imagePath;
+                    }
+                    Glide.with(mContentImage.getContext())
+                            .load(imagePath)
+                            .asBitmap()//强制Glide返回一个Bitmap对象
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    int width = bitmap.getWidth();
+                                    int height = bitmap.getHeight();
+                                    if (width<height){
+                                        para.height = RxImageTool.dp2px(ChatTool.VIEW_HEIGHT);
+                                        para.width = RxImageTool.dp2px(ChatTool.VIEW_WIDTH);
+                                        mContentImage.setLayoutParams(para);
 
-                                }else{
-                                    para.height = RxImageTool.dp2px(ChatTool.VIEW_WIDTH);
-                                    para.width = RxImageTool.dp2px(ChatTool.VIEW_HEIGHT);
-                                    mContentImage.setLayoutParams(para);
+                                    }else{
+                                        para.height = RxImageTool.dp2px(ChatTool.VIEW_WIDTH);
+                                        para.width = RxImageTool.dp2px(ChatTool.VIEW_HEIGHT);
+                                        mContentImage.setLayoutParams(para);
+                                    }
+                                    mContentImage.setImageBitmap(bitmap);
                                 }
-                                mContentImage.setImageBitmap(bitmap);
-                            }
-                        });
+                            });
+                //}
+
                // Glide.with(mContentImage.getContext()).load().into(mContentImage);
 
 

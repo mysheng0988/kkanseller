@@ -40,6 +40,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<ImageView> imageViews=new ArrayList<>();
     private int mMinItemWidth;
     private int mMaxItemWidth;
+    protected boolean isScrolling = true;
 
     public ChatAdapter(Context context) {
         this.mContext=context;
@@ -66,8 +67,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 return new TypeLeftImageViewHolder(mLayoutInflater.inflate(R.layout.items_left_image,parent,false));
             case ChatModel.TYPE_FOUR:
                 View view4=mLayoutInflater.inflate(R.layout.items_right_image,parent,false);
-                ImageView imageView=view4.findViewById(R.id.id_content_img);
-                imageViews.add(0,imageView);
+
                 return new TypeRightImageViewHolder(view4);
             case ChatModel.TYPE_FIVE:
                 return new TypeLeftRecorderViewHolder(mLayoutInflater.inflate(R.layout.items_left_recorder,parent,false));
@@ -98,6 +98,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void addImages(List<String> list){
         mImages.addAll(list);
     }
+    public void setScrolling(boolean scrolling) {
+        isScrolling = scrolling;
+    }
     public void addModel(ChatModel model){
         mList.add(model);
     }
@@ -108,7 +111,21 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             lp.width= (int) (mMinItemWidth + (mMaxItemWidth / 60f)*mList.get(position).mesTime);
             Log.d("mys", "onBindViewHolder: "+lp.width);
             holder.itemView.findViewById(R.id.id_recorder_length).setLayoutParams(lp);
+            holder.itemView.findViewById(R.id.id_recorder_length).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mItemClickListener!=null){
+                        mItemClickListener.onItemClick(v,position,imageViews,mImages);
+                    }
+
+                }
+            });
         }else if (holder instanceof TypeLeftImageViewHolder ||holder instanceof TypeRightImageViewHolder){
+
+            ImageView imageView=holder.itemView.findViewById(R.id.id_content_img);
+            imageViews.add(0,imageView);
+            ChatModel chatModel=mList.get(position);
+            mImages.add(chatModel.getContentPath());
             holder.itemView.findViewById(R.id.id_content_img).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -120,19 +137,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             });
         }
 
-       ((TypeAbstractViewHolder)holder).bindHolder(mList.get(position));
+       ((TypeAbstractViewHolder)holder).bindHolder(mList.get(position),isScrolling);
 
          //holder.itemView.findViewById(R.id.id_recorder_length);
         holder.itemView.setTag(position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mItemClickListener!=null){
-                    mItemClickListener.onItemClick(v,position,imageViews,mImages);
-                }
-
-            }
-        });
 
     }
 

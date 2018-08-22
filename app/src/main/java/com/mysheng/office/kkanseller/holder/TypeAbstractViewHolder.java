@@ -11,5 +11,6 @@ public abstract class TypeAbstractViewHolder extends RecyclerView.ViewHolder{
     public TypeAbstractViewHolder(View itemView) {
         super(itemView);
     }
-    public abstract void bindHolder(Object model);
+    public abstract void bindHolder(Object model,boolean isScrolling);
+
 }

@@ -31,7 +31,7 @@ public class TypeRightLocationViewHolder extends TypeAbstractViewHolder{
     }
 
     @Override
-    public void bindHolder(Object model) {
+    public void bindHolder(Object model,boolean isScrolling){
         if(model instanceof ChatModel) {
             ChatModel chatModel = (ChatModel) model;
             mTitle.setText(chatModel.getTabTitle());
