@@ -111,37 +111,26 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             lp.width= (int) (mMinItemWidth + (mMaxItemWidth / 60f)*mList.get(position).mesTime);
             Log.d("mys", "onBindViewHolder: "+lp.width);
             holder.itemView.findViewById(R.id.id_recorder_length).setLayoutParams(lp);
-            holder.itemView.findViewById(R.id.id_recorder_length).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(mItemClickListener!=null){
-                        mItemClickListener.onItemClick(v,position,imageViews,mImages);
-                    }
-
-                }
-            });
         }else if (holder instanceof TypeLeftImageViewHolder ||holder instanceof TypeRightImageViewHolder){
-
             ImageView imageView=holder.itemView.findViewById(R.id.id_content_img);
-            imageViews.add(0,imageView);
-            ChatModel chatModel=mList.get(position);
-            mImages.add(chatModel.getContentPath());
-            holder.itemView.findViewById(R.id.id_content_img).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(mItemClickListener!=null){
-                        mItemClickListener.onItemClick(v,position,imageViews,mImages);
-                    }
 
-                }
-            });
         }
 
        ((TypeAbstractViewHolder)holder).bindHolder(mList.get(position),isScrolling);
 
          //holder.itemView.findViewById(R.id.id_recorder_length);
         holder.itemView.setTag(position);
-
+        setRecursionClick(holder.itemView,mList.get(position),mImages);
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(mItemClickListener!=null){
+//                    setRecursionClick(v,mList.get(position),mImages);
+//                   // mItemClickListener.onItemClick(v,mList.get(position),mImages);
+//                }
+//
+//            }
+//        });
     }
 
     @Override
@@ -158,6 +147,32 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mItemClickListener = itemClickListener;
     }
     public interface OnItemClickListener{
-        void onItemClick(View view, int position,List<ImageView> imageViews,List<String> lists);
+        void onItemClick(View view, ChatModel model,List<String> lists);
+    }
+    //递归设置点击事件
+    private void setRecursionClick(final View view, final ChatModel model, final List<String> lists) {
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            group.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mItemClickListener != null) {
+                        mItemClickListener.onItemClick(view,  model,lists);
+                    }
+                }
+            });
+            for (int i = 0; i < group.getChildCount(); i++) {
+                setRecursionClick(group.getChildAt(i),model,lists);
+            }
+        } else {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mItemClickListener != null) {
+                        mItemClickListener.onItemClick(view, model,lists);
+                    }
+                }
+            });
+        }
     }
 }

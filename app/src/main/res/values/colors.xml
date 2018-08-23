@@ -44,4 +44,6 @@
     <color name="gray_bg">#f5f5f5</color>
     <color name="darkgrey"> #999999</color>
     <color name="img_preesed_color">#4d5255</color>
+    <color name="pers30_black">#4c000000</color>
+    <color name="button_default">#e0e0e6</color>
 </resources>

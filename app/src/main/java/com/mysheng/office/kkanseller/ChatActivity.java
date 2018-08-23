@@ -28,6 +28,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.mysheng.office.kkanseller.ImageViewer.ImageTrans;
+import com.mysheng.office.kkanseller.ImageViewer.imageload.MyImageLoad;
+import com.mysheng.office.kkanseller.ImageViewer.imageload.MyImageTransAdapter;
+import com.mysheng.office.kkanseller.ImageViewer.imageload.MyProgressBarGet;
+import com.mysheng.office.kkanseller.ImageViewer.listener.SourceImageViewGet;
 import com.mysheng.office.kkanseller.RxTool.SaveBitmapToImage;
 import com.mysheng.office.kkanseller.adpter.ChatAdapter;
 import com.mysheng.office.kkanseller.adpter.ChatGenreViewAdapter;
@@ -77,7 +82,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
     public  static  int SEND_LOCATION=0x110;
     private View animView;
     private Date frontMseDate;
-    private ImageWatcher vImageWatcher;
+
     private int[] imageId={R.drawable.icon_images,R.drawable.icon_camera,R.drawable.icon_video,R.drawable.icon_location,R.drawable.icon_goods,R.drawable.icon_order};
     private String[] genreName={"相册","相机","摄像","定位","商品","订单"};
 
@@ -99,25 +104,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.chat_layout);
         initView();
         initEvent();
-        vImageWatcher = ImageWatcher.Helper.with(this) // 一般来讲， ImageWatcher 需要占据全屏的位置
-                .setTranslucentStatus(0) // 如果是透明状态栏，你需要给ImageWatcher标记 一个偏移值，以修正点击ImageView查看的启动动画的Y轴起点的不正确
-                .setErrorImageRes(R.drawable.error_picture) // 配置error图标 如果不介意使用lib自带的图标，并不一定要调用这个API
-                .setHintMode(ImageWatcher.POINT)//设置指示器（默认小白点）
-                .setHintColor(getResources().getColor(R.color.red), getResources().getColor(R.color.white))//设置指示器颜色
-                //.setOnPictureLongPressListener(this) // 长按图片的回调，你可以显示一个框继续提供一些复制，发送等功能
-                .setLoader(new ImageWatcher.Loader() {//调用show方法前，请先调用setLoader 给ImageWatcher提供加载图片的实现
-                    @Override
-                    public void load(Context context, String url, final ImageWatcher.LoadCallback lc) {
-                        Glide.with(context).load(url).asBitmap().into(new SimpleTarget<Bitmap>() {
 
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                lc.onResourceReady(resource);
-                            }
-                        });
-                    }
-                })
-                .create();
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         //layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
@@ -138,10 +125,11 @@ public class ChatActivity extends Activity implements View.OnClickListener{
         chatAdapter=new ChatAdapter(this);
         chatAdapter.setItemClickListener(new ChatAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(final View view,int position,List<ImageView> imageViews,List<String> list) {
+            public void onItemClick(final View view,ChatModel chatModel,List<String> list) {
+                isKeyboard=true;
+                audioText.clearFocus();
                 genreView.setVisibility(View.GONE);
-                ChatModel model=mDatas.get(position);
-                if(model.mesType==6){
+                if(chatModel.mesType==6){
                     //播放动画
                     if(animView != null) {
                         animView.setBackgroundResource(R.drawable.adj);
@@ -152,7 +140,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
                     AnimationDrawable anim = (AnimationDrawable) animView.getBackground();
                     anim.start();
                     //播放音频
-                    MediaManager.playSound(model.contentPath, new MediaPlayer.OnCompletionListener() {
+                    MediaManager.playSound(chatModel.contentPath, new MediaPlayer.OnCompletionListener() {
 
                         @Override
                         public void onCompletion(MediaPlayer mp) {
@@ -166,10 +154,26 @@ public class ChatActivity extends Activity implements View.OnClickListener{
                             return false;
                         }
                     });
-                }else if(model.getMesType()==4){
-                    ImageView imageView=view.findViewById(R.id.id_content_img);
-                    Log.e("tupian", "onItemClick: "+imageViews.size()+ list.size());
-                    vImageWatcher.show(imageView,imageViews,list);
+                }else if(chatModel.getMesType()==4){
+                    switch (view.getId()){
+                        case R.id.id_content_img:
+                            int pos=list.indexOf(chatModel.getContentPath());
+                            ImageTrans.with(ChatActivity.this)
+                                    .setImageList(list)
+                                    .setSourceImageView(new SourceImageViewGet() {
+                                        @Override
+                                        public ImageView getImageView(int pos) {
+                                            return (ImageView)view.findViewById(R.id.id_content_img);
+                                        }
+                                    })
+                                    .setImageLoad(new MyImageLoad())
+                                    .setNowIndex(pos)
+                                    .setProgressBar(new MyProgressBarGet())
+                                    .setAdapter(new MyImageTransAdapter())
+                                    .show();
+                            break;
+                    }
+
                 }
             }
 
@@ -347,7 +351,7 @@ public class ChatActivity extends Activity implements View.OnClickListener{
             frontMseDate=new Date(timeDate);
             mDatas.add(chatModel);
         }
-        //chatAdapter.addImages(listImage);
+        chatAdapter.addImages(listImage);
         chatAdapter.addList(mDatas);
 
         chatAdapter.notifyDataSetChanged();
