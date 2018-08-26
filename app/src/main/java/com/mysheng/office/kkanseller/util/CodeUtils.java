@@ -107,7 +107,7 @@ public class CodeUtils {
         int startY = mRandom.nextInt(DEFAULT_HEIGHT);
         int stopX = mRandom.nextInt(DEFAULT_WIDTH);
         int stopY = mRandom.nextInt(DEFAULT_HEIGHT);
-        paint.setStrokeWidth(5);
+        paint.setStrokeWidth(3);
         paint.setColor(color);
         canvas.drawLine(startX, startY, stopX, stopY, paint);
 

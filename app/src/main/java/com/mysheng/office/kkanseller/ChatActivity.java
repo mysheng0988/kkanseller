@@ -232,8 +232,21 @@ public class ChatActivity extends Activity implements View.OnClickListener{
     }
 
     private void startLocation() {
-        Intent intent=new Intent(this,ShareLocationActivity.class);
-       startActivityForResult(intent,SEND_LOCATION);
+        rxPermissions.request(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        if (aBoolean) {
+                            Intent intent=new Intent(ChatActivity.this,ShareLocationActivity.class);
+                            startActivityForResult(intent,SEND_LOCATION);
+                        } else {
+                            showToast(getString(R.string.picture_all_permission));
+
+                        }
+                    }
+                });
+
     }
 
     private void initView(){

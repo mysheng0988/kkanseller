@@ -3,7 +3,6 @@
     android:id="@+id/chatListItem"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:descendantFocusability="beforeDescendants"
     android:gravity="center_vertical"
     android:orientation="vertical">
     <TextView
@@ -15,15 +14,13 @@
         android:id="@+id/userImage"
         android:layout_width="60dp"
         android:layout_alignParentLeft="true"
-        android:clickable="false"
         android:layout_height="60dp">
         <ImageView
             android:id="@+id/userIcon"
             android:layout_margin="5dp"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/icon"
-            />
+            android:src="@drawable/icon" />
         <TextView
             android:id="@+id/unReadNum"
             android:layout_width="wrap_content"
@@ -50,8 +47,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:gravity="center_vertical"
-            android:clickable="false"
-            android:focusable="false"
             android:text="张三"
             android:layout_marginBottom="5dp"
             android:layout_gravity="center_vertical|top" />
@@ -63,16 +58,12 @@
             android:layout_below="@+id/userName"
             android:layout_marginLeft="20dp"
             android:gravity="center_vertical"
-            android:clickable="false"
-            android:focusable="false"
             android:text="你在干嘛"
             android:layout_gravity="center_vertical|top" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/lastMsgData"
-        android:clickable="false"
-        android:focusable="false"
         android:layout_margin="10dp"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"

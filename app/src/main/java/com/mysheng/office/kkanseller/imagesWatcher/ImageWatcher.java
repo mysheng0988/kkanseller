@@ -150,6 +150,8 @@ public class ImageWatcher extends FrameLayout implements GestureDetector.OnGestu
             throw new IllegalArgumentException("error params \n" + info);
         }
         initPosition = imageGroupList.indexOf(i);
+        //initPosition=position;
+        Log.e("initPosition", "show: "+initPosition);
         if (initPosition < 0) {
             throw new IllegalArgumentException("param ImageView i must be a member of the List <ImageView> imageGroupList!");
         }
