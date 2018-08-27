@@ -3,6 +3,8 @@ package com.mysheng.office.kkanseller;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,6 +14,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.mysheng.office.kkanseller.adpter.GoodsListViewAdapter;
+import com.mysheng.office.kkanseller.entity.Goods;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 /**
  * Created by myaheng on 2018/6/30.
  */
@@ -20,6 +29,19 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
     private ImageView addMenu;
     private View inflate;
     private Dialog dialog;
+    private RecyclerView mGoodsView;
+    private GoodsListViewAdapter mAdapter;
+    private List<Goods> mData=new ArrayList<>();
+    public static String[] netImages = {
+            "http://wx1.sinaimg.cn/woriginal/daaf97d2gy1fgsxkq8uc3j20dw0ku74x.jpg",
+            "http://wx1.sinaimg.cn/woriginal/daaf97d2gy1fgsxkqm7b0j20dw0kut9h.jpg",
+            "http://wx4.sinaimg.cn/woriginal/daaf97d2gy1fgsxks2l4ij20dw0kldhb.jpg",
+            "http://wx2.sinaimg.cn/woriginal/daaf97d2gy1fgsxksskbkj20dw0kut9b.jpg",
+            "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2966021298,3341101515&fm=23&gp=0.jpg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496402134202&di=6c7f4a6afa5bdf02000c788f7a51e9c0&imgtype=0&src=http%3A%2F%2Fcdnq.duitang.com%2Fuploads%2Fitem%2F201506%2F23%2F20150623183946_iZtFs.jpeg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496996892&di=ea1e213c8ddd4427c55f073db9bf91b7&imgtype=jpg&er=1&src=http%3A%2F%2Fpic27.nipic.com%2F20130323%2F9483785_182530048000_2.jpg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496996959&di=13c094ba73675a24df2ad1d2c730c02c&imgtype=jpg&er=1&src=http%3A%2F%2Fdasouji.com%2Fwp-content%2Fuploads%2F2015%2F07%2F%25E9%2595%25BF%25E8%258A%25B1%25E5%259B%25BE-6.jpg"
+    };
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -27,10 +49,35 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
         View view= inflater.inflate(R.layout.tab03, container, false);
         addMenu=view.findViewById(R.id.addMenu);
         addMenu.setOnClickListener(this);
+        mGoodsView=view.findViewById(R.id.recyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mAdapter=new GoodsListViewAdapter(getActivity());
+        mGoodsView.setAdapter(mAdapter);
+        mGoodsView.setLayoutManager(linearLayoutManager);
+        initData();
         return view;
+
     }
 
+    private void initData() {
+        for(int i=0;i<netImages.length;i++){
+            Goods goods=new Goods();
+            goods.setGoodsPath(netImages[i]);
+            goods.setGoodsName("测试商品"+i);
+            goods.setSaleAmount("销量:"+getRandomNum()+"件");
+            goods.setGoodsPrice("￥:"+getRandomNum()+"元");
+            mData.add(goods);
+        }
+        mAdapter.addList(mData);
 
+
+    }
+
+    private int getRandomNum(){
+        Random rand = new Random();
+        return rand.nextInt(999) + 1;
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()){
