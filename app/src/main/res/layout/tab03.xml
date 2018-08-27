@@ -21,7 +21,7 @@
             android:textStyle="bold" />
         <ImageButton
             android:background="#00000000"
-            android:src="@drawable/add_menu"
+            android:src="@drawable/icon_add_menu"
             android:id="@+id/addMenu"
             android:layout_marginRight="10dp"
             android:layout_centerInParent="true"
@@ -101,9 +101,10 @@
                     android:gravity="center"
                     android:text="添加时间"/>
                <ImageView
+                   android:id="@+id/add_time_sort"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:src="@drawable/icon_sort"/>
+                   android:src="@drawable/image_level"/>
             </LinearLayout>
             <View
                 android:layout_width="1dp"
@@ -121,9 +122,10 @@
                     android:gravity="center"
                     android:text="销量"/>
                 <ImageView
+                    android:id="@+id/sale_sort"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon_sort"/>
+                    android:src="@drawable/image_level"/>
             </LinearLayout>
             <View
                 android:layout_width="1dp"
@@ -141,9 +143,10 @@
                     android:gravity="center"
                     android:text="库存"/>
                 <ImageView
+                    android:id="@+id/inventory_sort"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon_sort_desc"/>
+                    android:src="@drawable/image_level"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -31,6 +31,9 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
     private Dialog dialog;
     private RecyclerView mGoodsView;
     private GoodsListViewAdapter mAdapter;
+    private ImageView addTimeSort;
+    private ImageView saleSort;
+    private ImageView inventorySort;
     private List<Goods> mData=new ArrayList<>();
     public static String[] netImages = {
             "http://wx1.sinaimg.cn/woriginal/daaf97d2gy1fgsxkq8uc3j20dw0ku74x.jpg",
@@ -48,7 +51,16 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
     {
         View view= inflater.inflate(R.layout.tab03, container, false);
         addMenu=view.findViewById(R.id.addMenu);
+        addTimeSort=view.findViewById(R.id.add_time_sort);
+        addTimeSort.getDrawable().setLevel(5);
+        saleSort=view.findViewById(R.id.sale_sort);
+        saleSort.getDrawable().setLevel(5);
+        inventorySort=view.findViewById(R.id.inventory_sort);
+        inventorySort.getDrawable().setLevel(5);
         addMenu.setOnClickListener(this);
+        addTimeSort.setOnClickListener(this);
+        saleSort.setOnClickListener(this);
+        inventorySort.setOnClickListener(this);
         mGoodsView=view.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -84,9 +96,28 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
             case R.id.addMenu:
                 showDialog();
                 break;
+            case R.id.add_time_sort:
+            case R.id.sale_sort:
+            case R.id.inventory_sort:
+                itemSort(v,v.getId());
+                break;
         }
     }
+    private void itemSort(View view,int id){
+//        addTimeSort.getDrawable().setLevel(5);
+//        saleSort.getDrawable().setLevel(5);
+//        inventorySort.getDrawable().setLevel(5);
+        ImageView imageView=view.findViewById(id);
+        int level=imageView.getDrawable().getLevel();
+        if (level<10){
+            imageView.getDrawable().setLevel(20);
+        }else if(level>10&&level<50){
+            imageView.getDrawable().setLevel(70);
+        }else if(level>50){
+            imageView.getDrawable().setLevel(20);
+        }
 
+    }
     public void showDialog(){
         dialog = new Dialog(getActivity(),R.style.ActionSheetDialogStyle);
         //填充对话框的布局
