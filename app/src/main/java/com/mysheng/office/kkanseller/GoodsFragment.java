@@ -13,11 +13,14 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.mysheng.office.kkanseller.adpter.GoodsListViewAdapter;
 import com.mysheng.office.kkanseller.entity.Goods;
+import com.mysheng.office.kkanseller.util.UtilDate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -35,7 +38,16 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
     private ImageView saleSort;
     private ImageView inventorySort;
     private List<Goods> mData=new ArrayList<>();
+    private List<Goods> mDataOff=new ArrayList<>();
+    private TextView goodsOnline;
+    private TextView goodsOff;
     public static String[] netImages = {
+            "http://wx1.sinaimg.cn/woriginal/61e7f4aaly1fgrt0bj3htj20gg0c7myr.jpg",
+            "http://wx4.sinaimg.cn/woriginal/61e7f4aaly1fgrt0bpvkxj20go080wg9.jpg",
+            "http://wx2.sinaimg.cn/woriginal/61e7f4aaly1fgrt0bcfhpj20u011hwha.jpg",
+            "http://wx3.sinaimg.cn/woriginal/61e7f4aaly1fgrt0agnqyj20p00v9diq.jpg",
+            "http://wx2.sinaimg.cn/woriginal/61e7f4aaly1fgrt0apox0j20u011idjh.jpg",
+            "http://wx4.sinaimg.cn/woriginal/61e7f4aaly1fgrt0b0ww9j20u011iwj9.jpg",
             "http://wx1.sinaimg.cn/woriginal/daaf97d2gy1fgsxkq8uc3j20dw0ku74x.jpg",
             "http://wx1.sinaimg.cn/woriginal/daaf97d2gy1fgsxkqm7b0j20dw0kut9h.jpg",
             "http://wx4.sinaimg.cn/woriginal/daaf97d2gy1fgsxks2l4ij20dw0kldhb.jpg",
@@ -45,6 +57,25 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
             "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496996892&di=ea1e213c8ddd4427c55f073db9bf91b7&imgtype=jpg&er=1&src=http%3A%2F%2Fpic27.nipic.com%2F20130323%2F9483785_182530048000_2.jpg",
             "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496996959&di=13c094ba73675a24df2ad1d2c730c02c&imgtype=jpg&er=1&src=http%3A%2F%2Fdasouji.com%2Fwp-content%2Fuploads%2F2015%2F07%2F%25E9%2595%25BF%25E8%258A%25B1%25E5%259B%25BE-6.jpg"
     };
+    public static String[] offImages={
+            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0echzpyx6j20sg13pqg3.jpg",
+            "http://ww4.sinaimg.cn/woriginal/75d91745gw1f0eci2262gj20sg14bh14.jpg",
+            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0eci5qk5kj20sg12bdt3.jpg",
+            "http://ww1.sinaimg.cn/woriginal/75d91745gw1f0eci7jn0mj20sg0k80wq.jpg",
+            "http://ww2.sinaimg.cn/woriginal/75d91745gw1f0eci3mwbqj20go0nbwkd.jpg",
+            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0eci9sybpj20sg14enbf.jpg",
+            "http://ww2.sinaimg.cn/woriginal/75d91745gw1f0ecif04ocj20sg14mqlb.jpg",
+            "http://ww1.sinaimg.cn/woriginal/75d91745gw1f0ecigzhl9j20sg138gz4.jpg",
+            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0echzpyx6j20sg13pqg3.jpg",
+            "http://ww4.sinaimg.cn/woriginal/75d91745gw1f0eci2262gj20sg14bh14.jpg",
+            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0eci5qk5kj20sg12bdt3.jpg",
+            "http://ww1.sinaimg.cn/woriginal/75d91745gw1f0eci7jn0mj20sg0k80wq.jpg",
+            "http://ww2.sinaimg.cn/woriginal/75d91745gw1f0eci3mwbqj20go0nbwkd.jpg",
+            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0eci9sybpj20sg14enbf.jpg",
+            "http://ww2.sinaimg.cn/woriginal/75d91745gw1f0ecif04ocj20sg14mqlb.jpg",
+            "http://ww1.sinaimg.cn/woriginal/75d91745gw1f0ecigzhl9j20sg138gz4.jpg"
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -57,10 +88,14 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
         saleSort.getDrawable().setLevel(5);
         inventorySort=view.findViewById(R.id.inventory_sort);
         inventorySort.getDrawable().setLevel(5);
+        goodsOnline=view.findViewById(R.id.goods_online);
+        goodsOff=view.findViewById(R.id.goods_off);
         addMenu.setOnClickListener(this);
         addTimeSort.setOnClickListener(this);
         saleSort.setOnClickListener(this);
         inventorySort.setOnClickListener(this);
+        goodsOnline.setOnClickListener(this);
+        goodsOff.setOnClickListener(this);
         mGoodsView=view.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -73,22 +108,53 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void initData() {
+        mData.clear();
         for(int i=0;i<netImages.length;i++){
             Goods goods=new Goods();
+            goods.setGoodsType(1);
             goods.setGoodsPath(netImages[i]);
             goods.setGoodsName("测试商品"+i);
-            goods.setSaleAmount("销量:"+getRandomNum()+"件");
-            goods.setGoodsPrice("￥:"+getRandomNum()+"元");
+            goods.setSaleAmount(getRandomNum());
+            goods.setGoodsPrice(getRandomDouble());
+            String str="2018-08-"+getRandomDay();
+            goods.setAddTime(str);
             mData.add(goods);
         }
         mAdapter.addList(mData);
+        mAdapter.notifyDataSetChanged();
 
 
     }
+    private void initDataOff() {
+        mDataOff.clear();
+        for(int i=0;i<offImages.length;i++){
+            Goods goods=new Goods();
+            goods.setGoodsType(2);
+            goods.setGoodsPath(offImages[i]);
+            goods.setGoodsName("测试商品"+i);
+            goods.setSaleAmount(getRandomNum());
+            goods.setGoodsPrice(getRandomDouble());
+            String str="2018-08-"+getRandomDay();
+            goods.setAddTime(str);
+            mDataOff.add(goods);
+        }
+        mAdapter.addList(mDataOff);
+        mAdapter.notifyDataSetChanged();
 
+
+    }
     private int getRandomNum(){
         Random rand = new Random();
         return rand.nextInt(999) + 1;
+    }
+    private String getRandomDay(){
+        Random rand = new Random();
+        int day=rand.nextInt(30) + 1;
+        return day>9?day+"":"0"+day;
+    }
+    private Double getRandomDouble(){
+        Random rand = new Random();
+        return Double.valueOf(Math.round((rand.nextDouble()*100000)/100));
     }
     @Override
     public void onClick(View v) {
@@ -97,27 +163,57 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
                 showDialog();
                 break;
             case R.id.add_time_sort:
+
+                setImageLevel(saleSort,5);
+                setImageLevel(inventorySort,5);
+                itemSort(addTimeSort,1);
+                break;
             case R.id.sale_sort:
+                setImageLevel(addTimeSort,5);
+                setImageLevel(inventorySort,5);
+                itemSort(saleSort,2);
+                break;
             case R.id.inventory_sort:
-                itemSort(v,v.getId());
+                setImageLevel(addTimeSort,5);
+                setImageLevel(saleSort,5);
+                itemSort(inventorySort,3);
+                break;
+            case R.id.goods_online:
+                goodsOnline.setBackground(getResources().getDrawable(R.drawable.bg_bottom_borders));
+                goodsOff.setBackground(getResources().getDrawable(R.drawable.bg_white_borders));
+                initData();
+                break;
+            case R.id.goods_off:
+                goodsOff.setBackground(getResources().getDrawable(R.drawable.bg_bottom_borders));
+                goodsOnline.setBackground(getResources().getDrawable(R.drawable.bg_white_borders));
+                initDataOff();
                 break;
         }
     }
-    private void itemSort(View view,int id){
+    private int getImageLevel(ImageView imageView){
+        return imageView.getDrawable().getLevel();
+    }
+    private  void setImageLevel(ImageView imageView,int level){
+        imageView.getDrawable().setLevel(level);
+    }
+    private void itemSort(ImageView imageView,int type){
 //        addTimeSort.getDrawable().setLevel(5);
 //        saleSort.getDrawable().setLevel(5);
 //        inventorySort.getDrawable().setLevel(5);
-        ImageView imageView=view.findViewById(id);
-        int level=imageView.getDrawable().getLevel();
+        int level= getImageLevel(imageView);
         if (level<10){
             imageView.getDrawable().setLevel(20);
+            mAdapter.goodsItemSort(20,type);
         }else if(level>10&&level<50){
             imageView.getDrawable().setLevel(70);
+            mAdapter.goodsItemSort(70,type);
         }else if(level>50){
+            mAdapter.goodsItemSort(20,type);
             imageView.getDrawable().setLevel(20);
         }
 
     }
+
     public void showDialog(){
         dialog = new Dialog(getActivity(),R.style.ActionSheetDialogStyle);
         //填充对话框的布局

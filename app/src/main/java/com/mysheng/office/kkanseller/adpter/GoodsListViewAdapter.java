@@ -12,6 +12,9 @@ import com.mysheng.office.kkanseller.entity.Goods;
 import com.mysheng.office.kkanseller.holder.GoodsListViewHolder;
 
 import java.util.ArrayList;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -30,11 +33,19 @@ public class GoodsListViewAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public GoodsListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType){
+            case Goods.ONLINE:
+                View view1=mLayoutInflater.inflate(R.layout.item_goods_list, parent, false);
+                return new GoodsListViewHolder(view1);
+            case Goods.OFF_ONLINE:
+                View view2=mLayoutInflater.inflate(R.layout.item_goods_lower, parent, false);
+                return new GoodsListViewHolder(view2);
+        }
+        return null;
 
-        View view=mLayoutInflater.inflate(R.layout.item_goods_list, parent, false);
-        return new GoodsListViewHolder(view);
     }
     public void addList(List<Goods> list){
+        lists.clear();
         lists.addAll(list);
     }
     public void addModel(Goods model){
@@ -44,6 +55,34 @@ public class GoodsListViewAdapter extends RecyclerView.Adapter<RecyclerView.View
         lists.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(0, getItemCount());
+    }
+    public void goodsItemSort(final int isSort,final int type){
+
+        Collections.sort(lists, new Comparator<Goods>() {
+            @Override
+            public int compare(Goods o1, Goods o2) {
+                if(type==1){
+                    if(isSort<50){
+                        return o2.getAddTime().compareTo(o1.getAddTime());
+                    }
+                    return o1.getAddTime().compareTo(o2.getAddTime());
+
+                }else if(type==2){
+                    if(isSort<50){
+                        return o2.getSaleAmount().compareTo(o1.getSaleAmount());
+                    }
+                    return o1.getSaleAmount().compareTo(o2.getSaleAmount());
+                }else {
+                    if(isSort<50){
+                        return o2.getGoodsPrice().compareTo(o1.getGoodsPrice());
+                    }
+                    return o1.getGoodsPrice().compareTo(o2.getGoodsPrice());
+
+                }
+
+            }
+        });
+        notifyDataSetChanged();
     }
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
@@ -66,7 +105,10 @@ public class GoodsListViewAdapter extends RecyclerView.Adapter<RecyclerView.View
     public int getItemCount() {
         return lists.size();
     }
-
+    @Override
+    public int getItemViewType(int position) {
+        return lists.get(position).getGoodsType();
+    }
     public void setItemClickListener(GoodsListViewAdapter.OnItemClickListener itemClickListener) {
         mItemClickListener = itemClickListener;
     }

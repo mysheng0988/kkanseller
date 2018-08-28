@@ -1,37 +1,27 @@
 package com.mysheng.office.kkanseller.entity;
 
+import android.support.annotation.NonNull;
+import java.io.Serializable;
+
 /**
  * Created by myaheng on 2018/8/27.
  */
 
-public class Goods{
+public class Goods implements Serializable, Comparable<Goods>{
+    public  static final int ONLINE=1;
+    public  static final int OFF_ONLINE=2;
+
     private String goodsId;
     private String addTime;
     private String goodsName;
-    private String goodsPrice;
-    private String goodsOldPrice;
-    private String goodsInventory;
+    private Double goodsPrice;
+    private Double goodsOldPrice;
+    private Integer  goodsInventory;
     private String goodsStyle;//颜色分类
-    private String goodsType;//类型分类
+    private int goodsType;//类型分类
     private String goodsCode;
     private String goodsPath;
-    private String saleAmount;
-
-    public String getSaleAmount() {
-        return saleAmount;
-    }
-
-    public void setSaleAmount(String saleAmount) {
-        this.saleAmount = saleAmount;
-    }
-
-    public String getGoodsPath() {
-        return goodsPath;
-    }
-
-    public void setGoodsPath(String goodsPath) {
-        this.goodsPath = goodsPath;
-    }
+    private Integer  saleAmount;
 
     public String getGoodsId() {
         return goodsId;
@@ -57,27 +47,27 @@ public class Goods{
         this.goodsName = goodsName;
     }
 
-    public String getGoodsPrice() {
+    public Double getGoodsPrice() {
         return goodsPrice;
     }
 
-    public void setGoodsPrice(String goodsPrice) {
+    public void setGoodsPrice(Double goodsPrice) {
         this.goodsPrice = goodsPrice;
     }
 
-    public String getGoodsOldPrice() {
+    public Double getGoodsOldPrice() {
         return goodsOldPrice;
     }
 
-    public void setGoodsOldPrice(String goodsOldPrice) {
+    public void setGoodsOldPrice(Double goodsOldPrice) {
         this.goodsOldPrice = goodsOldPrice;
     }
 
-    public String getGoodsInventory() {
+    public Integer getGoodsInventory() {
         return goodsInventory;
     }
 
-    public void setGoodsInventory(String goodsInventory) {
+    public void setGoodsInventory(Integer goodsInventory) {
         this.goodsInventory = goodsInventory;
     }
 
@@ -89,11 +79,11 @@ public class Goods{
         this.goodsStyle = goodsStyle;
     }
 
-    public String getGoodsType() {
+    public int getGoodsType() {
         return goodsType;
     }
 
-    public void setGoodsType(String goodsType) {
+    public void setGoodsType(int goodsType) {
         this.goodsType = goodsType;
     }
 
@@ -103,5 +93,28 @@ public class Goods{
 
     public void setGoodsCode(String goodsCode) {
         this.goodsCode = goodsCode;
+    }
+
+    public String getGoodsPath() {
+        return goodsPath;
+    }
+
+    public void setGoodsPath(String goodsPath) {
+        this.goodsPath = goodsPath;
+    }
+
+    public Integer getSaleAmount() {
+        return saleAmount;
+    }
+
+    public void setSaleAmount(Integer saleAmount) {
+        this.saleAmount = saleAmount;
+    }
+
+
+
+    @Override
+    public int compareTo(@NonNull Goods o) {
+        return this.saleAmount.compareTo(o.getSaleAmount());
     }
 }
