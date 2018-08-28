@@ -118,6 +118,28 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:id="@+id/goodsOff_online"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:src="@drawable/icon_off"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="下架"/>
+        </LinearLayout>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="18dp"
+            android:alpha="0.3"
+            android:background="#666666"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:id="@+id/goodsShare"
             android:layout_weight="1">
             <ImageView
