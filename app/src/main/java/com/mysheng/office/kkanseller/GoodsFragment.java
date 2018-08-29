@@ -37,7 +37,7 @@ import java.util.Random;
  * Created by myaheng on 2018/6/30.
  */
 
-public class GoodsFragment extends Fragment implements View.OnClickListener,TextWatcher{
+public class GoodsFragment extends Fragment implements View.OnClickListener{
     private ImageView addMenu;
     private View inflate;
     private Dialog dialog;
@@ -50,9 +50,7 @@ public class GoodsFragment extends Fragment implements View.OnClickListener,Text
     private List<Goods> mDataOff=new ArrayList<>();
     private TextView goodsOnline;
     private TextView goodsOff;
-    private EditText searchText;
     private Drawable drawable;
-    private Button clearSearch;
     public static String[] netImages = {
             "http://wx1.sinaimg.cn/woriginal/61e7f4aaly1fgrt0bj3htj20gg0c7myr.jpg",
             "http://wx4.sinaimg.cn/woriginal/61e7f4aaly1fgrt0bpvkxj20go080wg9.jpg",
@@ -102,26 +100,19 @@ public class GoodsFragment extends Fragment implements View.OnClickListener,Text
         inventorySort.getDrawable().setLevel(5);
         goodsOnline=view.findViewById(R.id.goods_online);
         goodsOff=view.findViewById(R.id.goods_off);
-        searchText=view.findViewById(R.id.searchText);
-        clearSearch=view.findViewById(R.id.clearSearch);
         addMenu.setOnClickListener(this);
         addTimeSort.setOnClickListener(this);
         saleSort.setOnClickListener(this);
         inventorySort.setOnClickListener(this);
         goodsOnline.setOnClickListener(this);
         goodsOff.setOnClickListener(this);
-        clearSearch.setOnClickListener(this);
         mGoodsView=view.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mAdapter=new GoodsListViewAdapter(getActivity());
         mGoodsView.setAdapter(mAdapter);
         mGoodsView.setLayoutManager(linearLayoutManager);
-         drawable = getResources().getDrawable(R.drawable.icon_search);
-        // 这一步必须要做,否则不会显示.
-        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         initData();
-        searchText.addTextChangedListener(this);
         return view;
 
     }
@@ -225,12 +216,6 @@ public class GoodsFragment extends Fragment implements View.OnClickListener,Text
                 goodsOnline.setBackground(getResources().getDrawable(R.drawable.bg_white_borders));
                 initDataOff();
                 break;
-            case R.id.clearSearch:
-                searchText.setText("");
-                searchText.clearFocus();
-                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
-                break;
         }
     }
     private int getImageLevel(ImageView imageView){
@@ -281,24 +266,5 @@ public class GoodsFragment extends Fragment implements View.OnClickListener,Text
         lp.y = 20;//设置Dialog距离底部的距离
         dialogWindow.setAttributes(lp);
         dialog.show();//显示对话框
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (count != 0) {
-            searchText.setCompoundDrawables(null, null, null, null);
-        }
-        mAdapter.getFilter().filter(searchText.getText().toString());
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
     }
 }
