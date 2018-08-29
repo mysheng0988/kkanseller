@@ -101,13 +101,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="添加时间"/>
-               <ImageView
-                   android:id="@+id/add_time_sort"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:src="@drawable/image_level"/>
+                    android:text="价格"/>
+                <ImageView
+                    android:id="@+id/inventory_sort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/image_level"/>
             </LinearLayout>
+
             <View
                 android:layout_width="1dp"
                 android:layout_height="18dp"
@@ -143,9 +144,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="价格"/>
+                    android:text="添加时间"/>
                 <ImageView
-                    android:id="@+id/inventory_sort"
+                    android:id="@+id/add_time_sort"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/image_level"/>
