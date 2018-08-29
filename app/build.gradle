@@ -56,4 +56,5 @@ dependencies {
     implementation 'com.amap.api:map2d:latest.integration'
     implementation 'com.amap.api:search:latest.integration'
     implementation 'com.amap.api:location:latest.integration'
+    implementation files('libs/pinyin4j-2.5.1.jar')
 }

@@ -1,10 +1,14 @@
 package com.mysheng.office.kkanseller;
 
 import android.app.Dialog;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,11 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.util.Util;
 import com.mysheng.office.kkanseller.adpter.GoodsListViewAdapter;
 import com.mysheng.office.kkanseller.entity.Goods;
+import com.mysheng.office.kkanseller.util.ChinesePinyinUtil;
 import com.mysheng.office.kkanseller.util.UtilDate;
 
 import java.util.ArrayList;
@@ -28,7 +37,7 @@ import java.util.Random;
  * Created by myaheng on 2018/6/30.
  */
 
-public class GoodsFragment extends Fragment implements View.OnClickListener{
+public class GoodsFragment extends Fragment implements View.OnClickListener,TextWatcher{
     private ImageView addMenu;
     private View inflate;
     private Dialog dialog;
@@ -41,6 +50,9 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
     private List<Goods> mDataOff=new ArrayList<>();
     private TextView goodsOnline;
     private TextView goodsOff;
+    private EditText searchText;
+    private Drawable drawable;
+    private Button clearSearch;
     public static String[] netImages = {
             "http://wx1.sinaimg.cn/woriginal/61e7f4aaly1fgrt0bj3htj20gg0c7myr.jpg",
             "http://wx4.sinaimg.cn/woriginal/61e7f4aaly1fgrt0bpvkxj20go080wg9.jpg",
@@ -90,19 +102,26 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
         inventorySort.getDrawable().setLevel(5);
         goodsOnline=view.findViewById(R.id.goods_online);
         goodsOff=view.findViewById(R.id.goods_off);
+        searchText=view.findViewById(R.id.searchText);
+        clearSearch=view.findViewById(R.id.clearSearch);
         addMenu.setOnClickListener(this);
         addTimeSort.setOnClickListener(this);
         saleSort.setOnClickListener(this);
         inventorySort.setOnClickListener(this);
         goodsOnline.setOnClickListener(this);
         goodsOff.setOnClickListener(this);
+        clearSearch.setOnClickListener(this);
         mGoodsView=view.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mAdapter=new GoodsListViewAdapter(getActivity());
         mGoodsView.setAdapter(mAdapter);
         mGoodsView.setLayoutManager(linearLayoutManager);
+         drawable = getResources().getDrawable(R.drawable.icon_search);
+        // 这一步必须要做,否则不会显示.
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         initData();
+        searchText.addTextChangedListener(this);
         return view;
 
     }
@@ -113,17 +132,31 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
             Goods goods=new Goods();
             goods.setGoodsType(1);
             goods.setGoodsPath(netImages[i]);
-            goods.setGoodsName("测试商品"+i);
+            String goodsName=RandomChinese();
+            goods.setGoodsName(goodsName);
+            goods.setGoodsNameAB(ChinesePinyinUtil.getPinYinHeadChar(goodsName));
             goods.setSaleAmount(getRandomNum());
             goods.setGoodsPrice(getRandomDouble());
             String str="2018-08-"+getRandomDay();
             goods.setAddTime(str);
             mData.add(goods);
         }
+
         mAdapter.addList(mData);
         mAdapter.notifyDataSetChanged();
+        int size= mAdapter.getItemCount();
+        Log.e("mys", "initData: "+size );
 
 
+    }
+    private String RandomChinese(){
+        String str="";
+        Random rand = new Random();
+       int len= 5+rand.nextInt(30) + 1;
+        for (int i=0;i<len;i++){
+            str+= ChinesePinyinUtil.getRandomChar();
+        }
+        return str;
     }
     private void initDataOff() {
         mDataOff.clear();
@@ -131,7 +164,9 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
             Goods goods=new Goods();
             goods.setGoodsType(2);
             goods.setGoodsPath(offImages[i]);
-            goods.setGoodsName("测试商品"+i);
+            String goodsName=RandomChinese();
+            goods.setGoodsName(goodsName);
+            goods.setGoodsNameAB(ChinesePinyinUtil.getPinYinHeadChar(goodsName));
             goods.setSaleAmount(getRandomNum());
             goods.setGoodsPrice(getRandomDouble());
             String str="2018-08-"+getRandomDay();
@@ -140,6 +175,8 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
         }
         mAdapter.addList(mDataOff);
         mAdapter.notifyDataSetChanged();
+        int size= mAdapter.getItemCount();
+        Log.e("mys", "initDataOff: "+size );
 
 
     }
@@ -187,6 +224,12 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
                 goodsOff.setBackground(getResources().getDrawable(R.drawable.bg_bottom_borders));
                 goodsOnline.setBackground(getResources().getDrawable(R.drawable.bg_white_borders));
                 initDataOff();
+                break;
+            case R.id.clearSearch:
+                searchText.setText("");
+                searchText.clearFocus();
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
                 break;
         }
     }
@@ -238,5 +281,24 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
         lp.y = 20;//设置Dialog距离底部的距离
         dialogWindow.setAttributes(lp);
         dialog.show();//显示对话框
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (count != 0) {
+            searchText.setCompoundDrawables(null, null, null, null);
+        }
+        mAdapter.getFilter().filter(searchText.getText().toString());
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 }

@@ -6,24 +6,16 @@
     <RelativeLayout
         android:id="@+id/top_panel"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="35dp"
         android:background="#64000000">
 
         <ImageView
             android:id="@+id/top_panel_cancel"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_centerVertical="true"
             android:scaleType="centerInside"
             android:src="@drawable/ic_close" />
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/ic_more" />
     </RelativeLayout>
 
     <com.mysheng.office.kkanseller.ImageViewer.view.RoundPageIndicator

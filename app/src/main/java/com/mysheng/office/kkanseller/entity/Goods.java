@@ -14,6 +14,7 @@ public class Goods implements Serializable, Comparable<Goods>{
     private String goodsId;
     private String addTime;
     private String goodsName;
+    private String goodsNameAB;
     private Double goodsPrice;
     private Double goodsOldPrice;
     private Integer  goodsInventory;
@@ -22,6 +23,14 @@ public class Goods implements Serializable, Comparable<Goods>{
     private String goodsCode;
     private String goodsPath;
     private Integer  saleAmount;
+
+    public String getGoodsNameAB() {
+        return goodsNameAB;
+    }
+
+    public void setGoodsNameAB(String goodsNameAB) {
+        this.goodsNameAB = goodsNameAB;
+    }
 
     public String getGoodsId() {
         return goodsId;

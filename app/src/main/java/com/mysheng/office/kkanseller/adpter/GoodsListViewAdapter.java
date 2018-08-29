@@ -3,16 +3,19 @@ package com.mysheng.office.kkanseller.adpter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import com.mysheng.office.kkanseller.R;
 import com.mysheng.office.kkanseller.entity.Goods;
 import com.mysheng.office.kkanseller.holder.GoodsListViewHolder;
 
 import java.util.ArrayList;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -22,10 +25,12 @@ import java.util.List;
  * @DateTime: 2017-01-03 22:24
  * @Description:
  */
-public class GoodsListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class GoodsListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     private ArrayList<Goods> lists = new ArrayList<>();
+    private ArrayList<Goods> mlists = new ArrayList<>();//备份
     private OnItemClickListener mItemClickListener;
     private LayoutInflater mLayoutInflater;
+    private Filter filter;
     public GoodsListViewAdapter(Context context) {
         lists.clear();
         mLayoutInflater=LayoutInflater.from(context);
@@ -46,7 +51,9 @@ public class GoodsListViewAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
     public void addList(List<Goods> list){
         lists.clear();
+        mlists.clear();
         lists.addAll(list);
+        mlists.addAll(list);
     }
     public void addModel(Goods model){
         lists.add(model);
@@ -112,6 +119,52 @@ public class GoodsListViewAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void setItemClickListener(GoodsListViewAdapter.OnItemClickListener itemClickListener) {
         mItemClickListener = itemClickListener;
     }
+
+    /**
+     * 过滤
+     * @return
+     */
+    @Override
+    public Filter getFilter() {
+
+        if (filter == null){
+            filter = new Filter() {
+
+                @Override
+                protected FilterResults performFiltering(CharSequence charSequence) {
+                    lists=mlists;
+                    FilterResults results = new FilterResults();
+                    if (!TextUtils.isEmpty(charSequence)) {
+                        List<Goods> entries = new ArrayList<>();
+                        for (Goods entry : lists) {
+                            String pinyin = entry.getGoodsNameAB();
+                            if (pinyin.contains(charSequence.toString())){
+                                entries.add(entry);
+                            }
+                        }
+                        results.count = entries.size();
+                        results.values = entries;
+                    }else {
+                        results.count = mlists.size();
+                        results.values =mlists;
+                    }
+                    return results;
+                }
+
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+
+                    lists.clear();
+                    lists= (ArrayList<Goods>) results.values;
+                    notifyDataSetChanged();
+                    int size= getItemCount();
+                    Log.e("mys", "publishResults: "+size );
+                }
+            };
+        }
+        return filter;
+    }
+
     public interface OnItemClickListener{
         void onItemClick(View view, Goods model);
     }

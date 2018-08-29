@@ -30,24 +30,34 @@
             android:layout_height="20dp" />
 
     </RelativeLayout>
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_margin="5dp"
         android:gravity="center"
-        android:background="@drawable/search_normal"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="horizontal">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/icon_search"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="搜索"/>
-    </LinearLayout>
+        <EditText
+            android:id="@+id/searchText"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:drawableLeft="@drawable/icon_search"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:background="@drawable/bg_edit"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:hint="  搜索" />
+        <Button
+            android:id="@+id/clearSearch"
+            android:layout_width="20dp"
+            android:gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_height="20dp"
+            android:background="@drawable/icon_clear_search" />
+    </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
