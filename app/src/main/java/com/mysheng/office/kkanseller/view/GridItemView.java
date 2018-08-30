@@ -13,7 +13,6 @@ import android.widget.ImageView;
 
 import com.mysheng.office.kkanseller.R;
 
-
 /**
  * @author mysheng
  */
@@ -37,7 +36,7 @@ public class GridItemView extends ImageView {
     private void init(){
         mPaint=new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(0x88000000);
-        mDelBitmap= BitmapFactory.decodeResource(getResources(), R.drawable.icon_delete);
+        mDelBitmap= BitmapFactory.decodeResource(getResources(), R.drawable.del_img);
         mDelBound=new Rect();
     }
     @Override

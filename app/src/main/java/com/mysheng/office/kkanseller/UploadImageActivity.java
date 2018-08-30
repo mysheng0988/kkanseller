@@ -1,4 +1,5 @@
 package com.mysheng.office.kkanseller;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -11,89 +12,71 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
 import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TResult;
 import com.mysheng.office.kkanseller.adpter.GridImageViewAdapter;
+import com.mysheng.office.kkanseller.customCamera.dialog.LoadingDialog;
 import com.mysheng.office.kkanseller.util.TakePhotoSetting;
-import com.mysheng.office.kkanseller.view.GlideImageLoader;
 import com.mysheng.office.kkanseller.view.GridImageView;
-import com.youth.banner.Banner;
-import com.youth.banner.BannerConfig;
-
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by myaheng on 2018/8/30.
- */
 
-public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickListener{
+
+
+public class UploadImageActivity extends TakePhotoActivity implements View.OnClickListener {
 
     private GridImageView<String> mGridImageView;
     private View inflate;
-    private Banner banner;
-    private List<String> addList=new ArrayList<>();
-    private TakePhotoSetting takePhotoSetting;
-    private TakePhoto mTakePhoto;
+    private Button button;
+    private Dialog dialog;
     private Button choosePhoto;
     private Button takePhoto;
     private Button cancel;
     private TextView title;
-    private Dialog dialog;
-    public static String[] offImages={
-            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0echzpyx6j20sg13pqg3.jpg",
-            "http://ww4.sinaimg.cn/woriginal/75d91745gw1f0eci2262gj20sg14bh14.jpg",
-            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0eci5qk5kj20sg12bdt3.jpg",
-            "http://ww1.sinaimg.cn/woriginal/75d91745gw1f0eci7jn0mj20sg0k80wq.jpg",
-            "http://ww2.sinaimg.cn/woriginal/75d91745gw1f0eci3mwbqj20go0nbwkd.jpg",
-            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0eci9sybpj20sg14enbf.jpg",
-            "http://ww2.sinaimg.cn/woriginal/75d91745gw1f0ecif04ocj20sg14mqlb.jpg",
-            "http://ww1.sinaimg.cn/woriginal/75d91745gw1f0ecigzhl9j20sg138gz4.jpg",
-            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0echzpyx6j20sg13pqg3.jpg",
-            "http://ww4.sinaimg.cn/woriginal/75d91745gw1f0eci2262gj20sg14bh14.jpg",
-            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0eci5qk5kj20sg12bdt3.jpg",
-            "http://ww1.sinaimg.cn/woriginal/75d91745gw1f0eci7jn0mj20sg0k80wq.jpg",
-            "http://ww2.sinaimg.cn/woriginal/75d91745gw1f0eci3mwbqj20go0nbwkd.jpg",
-            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0eci9sybpj20sg14enbf.jpg",
-            "http://ww2.sinaimg.cn/woriginal/75d91745gw1f0ecif04ocj20sg14mqlb.jpg",
-            "http://ww1.sinaimg.cn/woriginal/75d91745gw1f0ecigzhl9j20sg138gz4.jpg"
-    };
+    private EditText remark;
+    private RadioGroup radioGroup;
+    private LinearLayout uploadFile;
+    private File imagePath;
+    private String dir;
+    private String PATRURL="";
+    private String loginUser_id;
+    private String SessionKey;
+    private LoadingDialog mDialog;
+    private TakePhotoSetting takePhotoSetting;
+    private TakePhoto mTakePhoto;
+    boolean isTranslucentStatus = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_goods_layout);
-        initTakePhotoView();
-        initBannerView();
-    }
 
-    private void initTakePhotoView() {
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.upload_layout);
+        mGridImageView= findViewById(R.id.gridImageView);
+        button=findViewById(R.id.button);
+        title= findViewById(R.id.common_title);
+        remark= findViewById(R.id.remark);
+
+        uploadFile=findViewById(R.id.uploadFile);
         takePhotoSetting=new TakePhotoSetting();
         mTakePhoto=getTakePhoto();
-    }
-
-    private void initBannerView() {
-        mGridImageView= findViewById(R.id.gridImageView);
-        banner=findViewById(R.id.id_banner);
-        banner.setIndicatorGravity(BannerConfig.CENTER);
-        banner.setImageLoader(new GlideImageLoader());
-//        for (int i=0;i<offImages.length;i++){
-//            addList.add(offImages[i]);
-//        }
-        banner.setImages(addList);
-//        banner.setBannerTitles(list_title);
-        banner.isAutoPlay(false);
-        banner.setBannerStyle(BannerConfig.NUM_INDICATOR);
-        //banner.setIndicatorGravity(BannerConfig.CENTER);
-        banner.start();
+        uploadFile.setOnClickListener(this);
+        //initImageWatcher();
+        title.setText("商品评价");
+        button.setOnClickListener(this);
         mGridImageView.setAdapter(new GridImageViewAdapter<String>() {
             @Override
             public void onDisplayImage(Context context, ImageView imageView, String path) {
@@ -102,7 +85,7 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
 
             @Override
             public void onAddClick(Context context, List<String> list) {
-               show();
+                show();
             }
 
             @Override
@@ -113,42 +96,11 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
             @Override
             public void onItemImageClick(ImageView imageView,List<ImageView> imageViews,int index, List<String> list) {
                 super.onItemImageClick(imageView,imageViews,index, list);
-               // vImageWatcher.show(imageView,imageViews,list);
                 Toast.makeText(getApplicationContext(), "--->" + index, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void setBannerImageList(List<String> list){
-        banner.setImages(list);
-//        banner.setBannerTitles(list_title);
-        banner.isAutoPlay(false);
-        banner.setBannerStyle(BannerConfig.NUM_INDICATOR);
-        banner.start();
-    }
 
 
-
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.choosePhoto:
-                takePhotoSetting.pickBySelectImage(mTakePhoto);
-                dialog.dismiss();
-                break;
-            case R.id.takePhoto:
-                takePhotoSetting.pickByTakeImage(mTakePhoto);
-                dialog.dismiss();
-                break;
-            case R.id.btn_cancel:
-                dialog.dismiss();
-                break;
-            default:
-                break;
-
-
-        }
     }
     @Override
     public void takeCancel() {
@@ -184,13 +136,46 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
             if(msg.obj!=null){
                 List<String> list= (List<String>) msg.obj;
                 mGridImageView.setImageData(list,false);
-                setBannerImageList(mGridImageView.getImgDataList());
+
             }
 
 
         }
     };
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.button:
+                break;
+            case R.id.choosePhoto:
+                 takePhotoSetting.pickBySelectImage(mTakePhoto);
+                dialog.dismiss();
+                break;
+            case R.id.takePhoto:
+                takePhotoSetting.pickByTakeImage(mTakePhoto);
+                dialog.dismiss();
+                break;
+            case R.id.btn_cancel:
+                dialog.dismiss();
+                break;
+            case R.id.uploadFile:
+                editTextClearFocus();
+                break;
+            default:
+                break;
 
+
+        }
+    }
+    private void editTextClearFocus(){
+        Log.d("ClearFocus", "onClick: "+2222);
+        uploadFile.setFocusable(true);
+        uploadFile.setFocusableInTouchMode(true);
+        uploadFile.requestFocus();
+        InputMethodManager imm = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(uploadFile.getWindowToken(), 0);
+    }
     public void show(){
         dialog = new Dialog(this,R.style.ActionSheetDialogStyle);
         //填充对话框的布局
@@ -216,7 +201,11 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
         dialogWindow.setAttributes(lp);
         dialog.show();//显示对话框
     }
+
+
+
     public void onBtnClick(View view){
         finish();
     }
+
 }

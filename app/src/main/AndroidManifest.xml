@@ -45,20 +45,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="com.amap.api.v2.apikey" android:value="bb9c05625388ba2edb00caa8e2b93711">
-
-        </meta-data>
+        <meta-data android:name="com.amap.api.v2.apikey" android:value="bb9c05625388ba2edb00caa8e2b93711"/>
         <provider
-
             android:name="com.mysheng.office.kkanseller.util.kkansellerProvider"
-
             android:authorities="com.mysheng.office.kkanseller.fileProvider"
-
             android:grantUriPermissions="true"
-
             android:exported="false">
             <meta-data
-
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"/>
         </provider>
@@ -84,6 +77,8 @@
         <activity android:name="com.mysheng.office.kkanseller.SearchAddressActivity">
         </activity>
         <activity android:name="com.mysheng.office.kkanseller.AddGoodsActivity">
+        </activity>
+        <activity android:name="com.mysheng.office.kkanseller.UploadImageActivity">
         </activity>
         <service
             android:name="com.mysheng.office.kkanseller.service.AppPushService"
