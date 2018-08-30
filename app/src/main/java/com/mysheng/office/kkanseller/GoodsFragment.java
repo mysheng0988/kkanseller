@@ -1,6 +1,7 @@
 package com.mysheng.office.kkanseller;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -50,7 +51,10 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
     private List<Goods> mDataOff=new ArrayList<>();
     private TextView goodsOnline;
     private TextView goodsOff;
-    private Drawable drawable;
+    private  Button addGoods;
+    private  Button batch;
+    private  Button classification;
+    private  Button cancel;
     public static String[] netImages = {
             "http://wx1.sinaimg.cn/woriginal/61e7f4aaly1fgrt0bj3htj20gg0c7myr.jpg",
             "http://wx4.sinaimg.cn/woriginal/61e7f4aaly1fgrt0bpvkxj20go080wg9.jpg",
@@ -191,7 +195,6 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
                 showDialog();
                 break;
             case R.id.add_time_sort:
-
                 setImageLevel(saleSort,5);
                 setImageLevel(inventorySort,5);
                 itemSort(addTimeSort,1);
@@ -215,6 +218,14 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
                 goodsOff.setBackground(getResources().getDrawable(R.drawable.bg_bottom_borders));
                 goodsOnline.setBackground(getResources().getDrawable(R.drawable.bg_white_borders));
                 initDataOff();
+                break;
+            case R.id.addGoods:
+                Intent intent=new Intent(getActivity(),AddGoodsActivity.class);
+                startActivity(intent);
+                dialog.dismiss();
+                break;
+            case R.id.btn_cancel:
+                dialog.dismiss();
                 break;
         }
     }
@@ -247,12 +258,14 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
         //填充对话框的布局
         inflate = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_menu_layout, null);
         //初始化控件
-//        choosePhoto =  inflate.findViewById(R.id.choosePhoto);
-//        takePhoto = inflate.findViewById(R.id.takePhoto);
-//        cancel=inflate.findViewById(R.id.btn_cancel);
-//        choosePhoto.setOnClickListener(this);
-//        takePhoto.setOnClickListener(this);
-//        cancel.setOnClickListener(this);
+        addGoods =  inflate.findViewById(R.id.addGoods);
+        batch = inflate.findViewById(R.id.batch);
+        classification = inflate.findViewById(R.id.classification);
+        cancel=inflate.findViewById(R.id.btn_cancel);
+        addGoods.setOnClickListener(this);
+        batch.setOnClickListener(this);
+        classification.setOnClickListener(this);
+        cancel.setOnClickListener(this);
         //将布局设置给Dialog
         dialog.setContentView(inflate);
         //获取当前Activity所在的窗体

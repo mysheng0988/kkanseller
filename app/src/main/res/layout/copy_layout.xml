@@ -1,0 +1,109 @@
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:collapsedTitleTextAppearance="@style/ToolBarTitleText"
+            app:contentScrim="#46a8ba"
+            app:expandedTitleMarginEnd="48dp"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleTextAppearance="@style/transparentText"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:fitsSystemWindows="true">
+
+            <LinearLayout
+                android:id="@+id/login_layout"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:background="@color/colorPrimaryDark"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                app:layout_collapseMode="pin"
+                app:layout_collapseParallaxMultiplier="0.7">
+                <TextView
+                    android:id="@+id/nick_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLength="24"
+                    android:text="Star"
+                    android:layout_marginTop="10dp"
+                    android:singleLine="true"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/sign"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLength="70"
+                    android:maxLines="2"
+                    android:text="吹牛逼的都是年轻人"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp"
+                    android:visibility="visible"/>
+            </LinearLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.v4.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="原标题：汇聚侨界力量 建功复兴伟业（社论）
+满怀憧憬，肩负使命。来自全国各地近1300名归侨侨眷代表以及来自五大洲110多个国家的近700名海外侨胞齐聚北京，出席第十次全国归侨侨眷代表大会。这是中国特色社会主义进入新时代召开的侨界盛会，是广大归侨侨眷和海外侨胞政治生活中的大事。我们对大会的召开表示热烈祝贺！对长期以来支持国家改革开放和社会主义现代化建设事业的海外侨胞表示衷心感谢！对辛勤工作在各条战线的广大归侨侨眷和侨联工作者表示亲切问候！
+这次大会是贯彻新思想、建功新时代、团结凝聚广大侨胞为实现中华民族伟大复兴的中国梦努力奋斗的大会。党的十八大以来，以习近平同志为核心的党中央对侨联工作高度重视，从党和国家全局出发，专门出台了加强和改进新形势下侨联工作的意见，深化中国侨联的机构改革，对新时期侨联工作作了新部署，为做好侨联工作指明了方向。
+第九次全国归侨侨眷代表大会以来的五年，中国侨联和各级侨联组织以习近平新时代中国特色社会主义思想为指导，坚持“国内海外工作并重、老侨新侨工作并重”，拓展海外工作，拓展新侨工作，在服务经济发展、依法维护侨益、积极参政议政、传播中华文化、拓展海外联谊、参与社会建设等方面深耕厚植、积极作为，各项工作在巩固中深化、在开拓中前进。侨界群众的获得感、幸福感不断提高，侨联的“朋友圈”不断扩大，侨联组织的吸引力、凝聚力、影响力不断增强。
+广大归侨侨眷和海外侨胞是实现中华民族伟大复兴中国梦的重要力量。一代又一代侨胞不忘祖（籍）国，热情支持中国革命、建设、改革事业，为中华民族发展壮大、促进中国和平统一大业、增进中国人民同各国人民的友好合作作出重要贡献。一大批归侨侨眷成为党和国家事业的新生力量和工作骨干，一大批海外侨胞成为连接中国与世界的友好使者和文化使者，他们在实现中国梦的征程上，留下了不可磨灭的奋斗足迹。
+新时代要有新担当、新作为。团结统一的中华民族是海内外中华儿女共同的根，博大精深的中华文化是海内外中华儿女共同的魂，实现中华民族伟大复兴是海内外中华儿女共同的梦。新时代侨联工作要以凝聚侨心侨力同圆共享中国梦为主题，通过开展“亲情中华”“创业中华”等主题活动，牢牢把握凝聚侨胞的情感纽带、精神依托、动力源泉这一主线，最大限度把广大归侨侨眷和海外侨胞中蕴藏的巨大能量凝聚起来、发挥出来，画好侨界最大同心圆。
+各级侨联要以高度政治责任感和使命感，增强“四个意识”，坚定“四个自信”，自觉肩负起新形势下侨联工作的使命和任务，锐意改革创新，勇于担当作为，立足本职岗位，深怀爱侨之心，恪守为侨之责，多办利侨之事，不断学习新知识，开拓新视野，适应新时代，开创新局面，努力打造一支政治过硬、本领高强、作风务实、乐于奉献的侨联干部队伍。
+使命呼唤担当，梦想激励斗志。广大归侨侨眷代表和侨联工作者要牢记党和人民的嘱托，团结凝聚广大归侨侨眷和海外侨胞，为实现中华民族伟大复兴、推动构建人类命运共同体的历史进程谱写新篇章。" />
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+</android.support.design.widget.CoordinatorLayout>
