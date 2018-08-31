@@ -32,4 +32,14 @@
     <item name="state_touch_drag" type="id" />
     <item name="state_touch_scale_rotate" type="id"/>
     <item name="view_image_watcher" type="id"  />
+    <!--Banner-->
+    <item name="bannerContainer" type="id"/>
+    <item name="bannerViewPager" type="id"/>
+    <item name="circleIndicator" type="id"/>
+    <item name="numIndicator" type="id"/>
+    <item name="titleView" type="id"/>
+    <item name="bannerTitle" type="id"/>
+    <item name="numIndicatorInside" type="id"/>
+    <item name="indicatorInside" type="id"/>
+    <item name="bannerDefaultImage" type="id"/>
 </resources>

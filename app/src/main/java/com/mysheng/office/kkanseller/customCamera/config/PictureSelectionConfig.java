@@ -57,7 +57,7 @@ public final class PictureSelectionConfig implements Serializable {
     private void reset() {
         mimeType = PictureConfig.TYPE_IMAGE;
         camera = false;
-        themeStyleId = R.style.picture_default_style;
+        themeStyleId = R.style.AppTheme;
         selectionMode = PictureConfig.MULTIPLE;
         maxSelectNum = 9;
         minSelectNum = 0;

@@ -234,9 +234,11 @@ public class GridImageView<T> extends ViewGroup {
             imageView.setOnDelClickL(new GridItemView.OnDelButtonClickL() {
                 @Override
                 public void onDelClickL() {
+                    T path=mImgDataList.get(position);
                     mImgDataList.remove(position);
                     mVisiblePictureList.remove(position);
                     refreshDataSet();
+                    mAdapter.onItemDelImageClick(path);
 
                 }
             });

@@ -21,7 +21,9 @@ public abstract class GridImageViewAdapter<T> {
     public void onItemImageClick(ImageView imageView,List<ImageView> group,int index, List<T> list) {
 
     }
+    public void onItemDelImageClick(T path) {
 
+    }
     public int getShowStyle() {
         return GridImageView.STYLE_GRID;
     }

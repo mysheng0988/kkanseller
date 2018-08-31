@@ -15,8 +15,31 @@
         <attr name="initPosition" format="integer"/>
         <attr name="drawItemCount" format="integer"/>
         <attr name="lineSpacingMultiplier" format="float"/>
-
-
+        <!--视频-->
+        <attr name="picture.title.textColor" format="reference|color" />
+        <attr name="picture.right.textColor" format="reference|color" />
+        <attr name="picture.leftBack.icon" format="reference" />
+        <attr name="picture.arrow_down.icon" format="reference" />
+        <attr name="picture.arrow_up.icon" format="reference" />
+        <attr name="picture.num.style" format="reference" />
+        <attr name="picture.checked.style" format="reference" />
+        <attr name="picture.bottom.bg" format="reference|color" />
+        <attr name="picture.preview.textColor" format="reference|color" />
+        <attr name="picture.complete.textColor" format="reference|color" />
+        <attr name="picture.ac_preview.title.textColor" format="reference|color" />
+        <attr name="picture.ac_preview.complete.textColor" format="reference|color" />
+        <attr name="picture.ac_preview.title.bg" format="reference|color" />
+        <attr name="picture.ac_preview.bottom.bg" format="reference|color" />
+        <attr name="picture.status.color" format="reference|color" />
+        <attr name="picture.preview.leftBack.icon" format="reference" />
+        <attr name="picture.statusFontColor" format="boolean" />
+        <attr name="picture.preview.statusFontColor" format="boolean" />
+        <attr name="picture.style.numComplete" format="boolean" />
+        <attr name="picture.style.checkNumMode" format="boolean" />
+        <attr name="picture.crop.toolbar.bg" format="reference|color" />
+        <attr name="picture.crop.status.color" format="reference|color" />
+        <attr name="picture.crop.title.color" format="reference|color" />
+        <attr name="picture.folder_checked_dot" format="reference" />
 
         <!--set number of item displayed, default is 3-->
         <attr name="npv_ShowCount" format="reference|integer" />
@@ -98,32 +121,6 @@
         <attr format="boolean" name="starClickable"></attr>
     </declare-styleable>
 
-
-
-    <attr name="picture.title.textColor" format="reference|color" />
-    <attr name="picture.right.textColor" format="reference|color" />
-    <attr name="picture.leftBack.icon" format="reference" />
-    <attr name="picture.arrow_down.icon" format="reference" />
-    <attr name="picture.arrow_up.icon" format="reference" />
-    <attr name="picture.num.style" format="reference" />
-    <attr name="picture.checked.style" format="reference" />
-    <attr name="picture.bottom.bg" format="reference|color" />
-    <attr name="picture.preview.textColor" format="reference|color" />
-    <attr name="picture.complete.textColor" format="reference|color" />
-    <attr name="picture.ac_preview.title.textColor" format="reference|color" />
-    <attr name="picture.ac_preview.complete.textColor" format="reference|color" />
-    <attr name="picture.ac_preview.title.bg" format="reference|color" />
-    <attr name="picture.ac_preview.bottom.bg" format="reference|color" />
-    <attr name="picture.status.color" format="reference|color" />
-    <attr name="picture.preview.leftBack.icon" format="reference" />
-    <attr name="picture.statusFontColor" format="boolean" />
-    <attr name="picture.preview.statusFontColor" format="boolean" />
-    <attr name="picture.style.numComplete" format="boolean" />
-    <attr name="picture.style.checkNumMode" format="boolean" />
-    <attr name="picture.crop.toolbar.bg" format="reference|color" />
-    <attr name="picture.crop.status.color" format="reference|color" />
-    <attr name="picture.crop.title.color" format="reference|color" />
-    <attr name="picture.folder_checked_dot" format="reference" />
     <!-- JCameraView-->
     <attr name="iconSize" format="dimension"/>
     <attr name="iconMargin" format="dimension"/>
@@ -137,5 +134,35 @@
         <attr name="iconSrc"/>
         <attr name="duration_max"/>
         <attr name="iconLight"/>
+    </declare-styleable>
+
+    <!--Banner-->
+    <declare-styleable name="Banner">
+        <attr name="delay_time" format="integer" />
+        <attr name="scroll_time" format="integer" />
+        <attr name="is_auto_play" format="boolean" />
+        <attr name="title_background" format="color|reference" />
+        <attr name="title_textcolor" format="color" />
+        <attr name="title_textsize" format="dimension" />
+        <attr name="title_height" format="dimension" />
+        <attr name="indicator_width" format="dimension" />
+        <attr name="indicator_height" format="dimension" />
+        <attr name="indicator_margin" format="dimension" />
+        <attr name="indicator_drawable_selected" format="reference" />
+        <attr name="indicator_drawable_unselected" format="reference" />
+        <attr name="banner_layout" format="reference"/>
+        <attr name="banner_default_image" format="reference"/>
+        <attr name="image_scale_type" format="enum">
+            <enum name="center" value="0" />
+            <enum name="center_crop" value="1" />
+            <enum name="center_inside" value="2" />
+            <enum name="fit_center" value="3" />
+            <enum name="fit_end" value="4" />
+            <enum name="fit_start" value="5" />
+            <enum name="fit_xy" value="6" />
+            <enum name="matrix" value="7" />
+        </attr>
+        <!--<attr name="indicator_animator" format="reference" />-->
+        <!--<attr name="indicator_animator_reverse" format="reference" />-->
     </declare-styleable>
 </resources>
