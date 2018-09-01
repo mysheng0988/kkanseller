@@ -2,6 +2,7 @@ package com.mysheng.office.kkanseller;
 
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,6 +40,7 @@ public abstract class OnRecyclerItemClickListener implements RecyclerView.OnItem
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+            Log.d("child", "onSingleTapUp: "+child.getId());
             if (child != null) {
                 RecyclerView.ViewHolder vh = recyclerView.getChildViewHolder(child);
                 onItemClick(vh);
@@ -57,6 +59,5 @@ public abstract class OnRecyclerItemClickListener implements RecyclerView.OnItem
     }
 
     public abstract void onItemClick(RecyclerView.ViewHolder vh);
-
     public abstract void onItemLongClick(RecyclerView.ViewHolder vh);
 }

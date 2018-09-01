@@ -60,22 +60,14 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
     private Dialog dialog;
     private ItemTouchHelper mItemTouchHelper;
     public static String[] offImages={
-            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0echzpyx6j20sg13pqg3.jpg",
-            "http://ww4.sinaimg.cn/woriginal/75d91745gw1f0eci2262gj20sg14bh14.jpg",
-            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0eci5qk5kj20sg12bdt3.jpg",
-            "http://ww1.sinaimg.cn/woriginal/75d91745gw1f0eci7jn0mj20sg0k80wq.jpg",
-            "http://ww2.sinaimg.cn/woriginal/75d91745gw1f0eci3mwbqj20go0nbwkd.jpg",
-            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0eci9sybpj20sg14enbf.jpg",
-            "http://ww2.sinaimg.cn/woriginal/75d91745gw1f0ecif04ocj20sg14mqlb.jpg",
-            "http://ww1.sinaimg.cn/woriginal/75d91745gw1f0ecigzhl9j20sg138gz4.jpg",
-            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0echzpyx6j20sg13pqg3.jpg",
-            "http://ww4.sinaimg.cn/woriginal/75d91745gw1f0eci2262gj20sg14bh14.jpg",
-            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0eci5qk5kj20sg12bdt3.jpg",
-            "http://ww1.sinaimg.cn/woriginal/75d91745gw1f0eci7jn0mj20sg0k80wq.jpg",
-            "http://ww2.sinaimg.cn/woriginal/75d91745gw1f0eci3mwbqj20go0nbwkd.jpg",
-            "http://ww3.sinaimg.cn/woriginal/75d91745gw1f0eci9sybpj20sg14enbf.jpg",
-            "http://ww2.sinaimg.cn/woriginal/75d91745gw1f0ecif04ocj20sg14mqlb.jpg",
-            "http://ww1.sinaimg.cn/woriginal/75d91745gw1f0ecigzhl9j20sg138gz4.jpg"
+            "http://wx1.sinaimg.cn/woriginal/daaf97d2gy1fgsxkq8uc3j20dw0ku74x.jpg",
+            "http://wx1.sinaimg.cn/woriginal/daaf97d2gy1fgsxkqm7b0j20dw0kut9h.jpg",
+            "http://wx4.sinaimg.cn/woriginal/daaf97d2gy1fgsxks2l4ij20dw0kldhb.jpg",
+            "http://wx2.sinaimg.cn/woriginal/daaf97d2gy1fgsxksskbkj20dw0kut9b.jpg",
+            "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2966021298,3341101515&fm=23&gp=0.jpg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496402134202&di=6c7f4a6afa5bdf02000c788f7a51e9c0&imgtype=0&src=http%3A%2F%2Fcdnq.duitang.com%2Fuploads%2Fitem%2F201506%2F23%2F20150623183946_iZtFs.jpeg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496996892&di=ea1e213c8ddd4427c55f073db9bf91b7&imgtype=jpg&er=1&src=http%3A%2F%2Fpic27.nipic.com%2F20130323%2F9483785_182530048000_2.jpg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496996959&di=13c094ba73675a24df2ad1d2c730c02c&imgtype=jpg&er=1&src=http%3A%2F%2Fdasouji.com%2Fwp-content%2Fuploads%2F2015%2F07%2F%25E9%2595%25BF%25E8%258A%25B1%25E5%259B%25BE-6.jpg"
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,18 +98,11 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
         imageViewAdapter=new AddImageViewAdapter(this);
         imageViewAdapter.setItemClickListener(new AddImageViewAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position, List<String> list) {
-                switch (view.getId()){
-                    case R.id.resImage:
-                        banner.start(position+1);
-                        break;
-                    case R.id.delImage:
-                        imageViewAdapter.removeData(position);
-
-                        banner.update(imageViewAdapter.getImagesList(),1);
-                        imageViewAdapter.notifyDataSetChanged();
-                        break;
-                }
+            public void onItemClick(View view, int position) {
+//                addList.remove(position);
+//                banner.update(addList,1);
+//                imageViewAdapter.reinitData(addList);
+//                imageViewAdapter.notifyDataSetChanged();
             }
         });
 
@@ -127,7 +112,9 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
         bannerRecyclerView.addOnItemTouchListener(new OnRecyclerItemClickListener(bannerRecyclerView) {
             @Override
             public void onItemClick(RecyclerView.ViewHolder vh) {
-                Toast.makeText(AddGoodsActivity.this, addList.get(vh.getLayoutPosition()), Toast.LENGTH_SHORT).show();
+                banner.start(vh.getLayoutPosition()+1);
+                Log.d("1111", "onItemClick: "+vh.itemView.getId());
+              //  Toast.makeText(AddGoodsActivity.this, addList.get(vh.getLayoutPosition()), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -183,14 +170,13 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
                     }
                 }
                 imageViewAdapter.notifyItemMoved(fromPosition, toPosition);
+
                 return true;
             }
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-//                imageViewAdapter.notifyDataSetChanged();
 //
-//                banner.update(imageViewAdapter.getImagesList(),1);
             }
 
             /**
@@ -225,6 +211,7 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
             public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 super.clearView(recyclerView, viewHolder);
                 viewHolder.itemView.setBackgroundColor(0);
+                banner.update(addList,viewHolder.getLayoutPosition()+1);
 
             }
         });
@@ -287,8 +274,8 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
             if(msg.obj!=null){
                 List<String> list= (List<String>) msg.obj;
 
-//                mGridImageView.setImageData(list,false);
-//                banner.update(mGridImageView.getImgDataList(),1);
+
+                banner.update(list,1);
             }
 
 

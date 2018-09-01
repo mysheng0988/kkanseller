@@ -233,8 +233,8 @@ public class Banner extends FrameLayout implements OnPageChangeListener {
         return this;
     }
 
-    public Banner setImages(List<?> imageUrls) {
-        this.imageUrls = imageUrls;
+    public Banner setImages(List<?> imagePath) {
+        this.imageUrls = imagePath;
         this.count = imageUrls.size();
         return this;
     }
@@ -242,17 +242,19 @@ public class Banner extends FrameLayout implements OnPageChangeListener {
         return this.imageUrls;
     }
 
-    public void update(List<?> imageUrls, List<String> titles,int position) {
+    public void update(List<String> imagePath, List<String> titles,int position) {
         this.titles.clear();
         this.titles.addAll(titles);
-        update(imageUrls,position);
+        update(imagePath,position);
     }
 
-    public void update(List<?> imageUrls,int position) {
+    public void update(List<String> imagePath,int position) {
+        List<String> updatePath=new ArrayList<>();
+        updatePath.addAll(imagePath);
         this.imageUrls.clear();
         this.imageViews.clear();
         this.indicatorImages.clear();
-        this.imageUrls.addAll(imageUrls);
+        this.imageUrls.addAll(updatePath);
         this.count = this.imageUrls.size();
         if(position>count){
             start(1);
@@ -261,7 +263,6 @@ public class Banner extends FrameLayout implements OnPageChangeListener {
         }
 
     }
-
     public void updateBannerStyle(int bannerStyle) {
         indicator.setVisibility(GONE);
         numIndicator.setVisibility(GONE);

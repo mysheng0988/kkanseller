@@ -6,12 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.mysheng.office.kkanseller.R;
-
 import com.mysheng.office.kkanseller.holder.AddImageViewHolder;
-import com.mysheng.office.kkanseller.holder.IndexViewHolder;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,18 +37,17 @@ public class AddImageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         lists.addAll(list);
     }
 
-    public void removeData(int position) {
-        lists.remove(position);
-        notifyItemRemoved(position);
-    }
-    public List<String> getImagesList(){
-        return lists;
-    }
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
-        AddImageViewHolder viewHolder= (AddImageViewHolder) holder;
+        final AddImageViewHolder viewHolder= (AddImageViewHolder) holder;
         viewHolder.bindHolder(lists.get(position));
-        setRecursionClick(holder.itemView,position,lists);
+        viewHolder.delImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mItemClickListener. onItemClick(v , viewHolder.getLayoutPosition());
+            }
+        });
+        //setRecursionClick(holder.itemView,position,lists);
     }
 
 
@@ -62,37 +57,37 @@ public class AddImageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return lists.size();
     }
 
-    //递归设置点击事件
-    private void setRecursionClick(final View view,final int position, final List<String> lists) {
-        if (view instanceof ViewGroup) {
-            ViewGroup group = (ViewGroup) view;
-            group.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mItemClickListener != null) {
-                        mItemClickListener.onItemClick(view,  position,lists);
-                    }
-                }
-            });
-            for (int i = 0; i < group.getChildCount(); i++) {
-                setRecursionClick(group.getChildAt(i),position,lists);
-            }
-        } else {
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mItemClickListener != null) {
-                        mItemClickListener.onItemClick(view, position,lists);
-                    }
-                }
-            });
-        }
-    }
+//    //递归设置点击事件
+//    private void setRecursionClick(final View view,final int position, final List<String> lists) {
+//        if (view instanceof ViewGroup) {
+//            ViewGroup group = (ViewGroup) view;
+//            group.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (mItemClickListener != null) {
+//                        mItemClickListener.onItemClick(view,  position,lists);
+//                    }
+//                }
+//            });
+//            for (int i = 0; i < group.getChildCount(); i++) {
+//                setRecursionClick(group.getChildAt(i),position,lists);
+//            }
+//        } else {
+//            view.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (mItemClickListener != null) {
+//                        mItemClickListener.onItemClick(view, position,lists);
+//                    }
+//                }
+//            });
+//        }
+//    }
 
     public void setItemClickListener(OnItemClickListener itemClickListener) {
         mItemClickListener = itemClickListener;
     }
     public interface OnItemClickListener{
-        void onItemClick(View view, int position,List<String> list);
+        void onItemClick(View view, int position);
     }
 }
