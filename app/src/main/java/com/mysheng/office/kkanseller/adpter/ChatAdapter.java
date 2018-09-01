@@ -111,9 +111,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             lp.width= (int) (mMinItemWidth + (mMaxItemWidth / 60f)*mList.get(position).mesTime);
             Log.d("mys", "onBindViewHolder: "+lp.width);
             holder.itemView.findViewById(R.id.id_recorder_length).setLayoutParams(lp);
-        }else if (holder instanceof TypeLeftImageViewHolder ||holder instanceof TypeRightImageViewHolder){
-            ImageView imageView=holder.itemView.findViewById(R.id.id_content_img);
-
         }
 
        ((TypeAbstractViewHolder)holder).bindHolder(mList.get(position),isScrolling);

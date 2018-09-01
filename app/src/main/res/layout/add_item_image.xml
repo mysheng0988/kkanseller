@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.mysheng.office.kkanseller.view.SquareView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_margin="1dp"
     android:background="@drawable/bg_item_radius"
-    android:layout_height="80dp">
-    <ImageView
-        android:id="@+id/resImage"
-        android:layout_margin="10dp"
-        android:layout_width="match_parent"
-        android:scaleType="centerCrop"
-        android:layout_height="match_parent"
-        android:src="@drawable/icon"/>
-    <ImageView
-        android:id="@+id/delImage"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_gravity="right|top"
-        android:src="@drawable/icon_red_delete"/>
-</FrameLayout>
+    android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/resImage"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:scaleType="centerCrop"
+            android:layout_height="match_parent"
+            android:src="@drawable/icon"/>
+        <ImageView
+            android:id="@+id/delImage"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="right|top"
+            android:src="@drawable/icon_red_delete"/>
+</com.mysheng.office.kkanseller.view.SquareView>
+

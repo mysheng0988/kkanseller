@@ -1,5 +1,4 @@
 package com.mysheng.office.kkanseller.adpter;
-
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +22,7 @@ public class AddImageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public AddImageViewAdapter(Context context) {
         lists.clear();
         mLayoutInflater=LayoutInflater.from(context);
+
     }
 
     @Override
@@ -40,6 +40,7 @@ public class AddImageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final AddImageViewHolder viewHolder= (AddImageViewHolder) holder;
+
         viewHolder.bindHolder(lists.get(position));
         viewHolder.delImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +57,9 @@ public class AddImageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public int getItemCount() {
         return lists.size();
     }
-
+    public List<String> getImagesList(){
+        return lists;
+    }
 //    //递归设置点击事件
 //    private void setRecursionClick(final View view,final int position, final List<String> lists) {
 //        if (view instanceof ViewGroup) {

@@ -1,7 +1,6 @@
 package com.mysheng.office.kkanseller;
 import android.app.Dialog;
 import android.app.Service;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,22 +17,18 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
 import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TResult;
 import com.mysheng.office.kkanseller.adpter.AddImageViewAdapter;
-import com.mysheng.office.kkanseller.adpter.GridImageViewAdapter;
 import com.mysheng.office.kkanseller.banner.Banner;
 import com.mysheng.office.kkanseller.banner.BannerConfig;
 import com.mysheng.office.kkanseller.banner.GlideImageLoader;
 import com.mysheng.office.kkanseller.util.TakePhotoSetting;
-import com.mysheng.office.kkanseller.view.GridImageView;
 
 
 
@@ -99,10 +94,13 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
         imageViewAdapter.setItemClickListener(new AddImageViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-//                addList.remove(position);
-//                banner.update(addList,1);
-//                imageViewAdapter.reinitData(addList);
-//                imageViewAdapter.notifyDataSetChanged();
+                Toast.makeText(AddGoodsActivity.this, position+"", Toast.LENGTH_SHORT).show();
+                addList.remove(position);
+                imageViewAdapter.getImagesList().remove(position);
+                banner.update(addList,position+1);
+               // imageViewAdapter.reinitData(addList);
+                imageViewAdapter. notifyItemRemoved(position);
+                imageViewAdapter.notifyItemRangeChanged(position, imageViewAdapter.getItemCount());;
             }
         });
 
@@ -163,10 +161,12 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
                 if (fromPosition < toPosition) {
                     for (int i = fromPosition; i < toPosition; i++) {
                         Collections.swap(addList, i, i + 1);
+                        Collections.swap(imageViewAdapter.getImagesList(),i,i+1);
                     }
                 } else {
                     for (int i = fromPosition; i > toPosition; i--) {
                         Collections.swap(addList, i, i - 1);
+                        Collections.swap(imageViewAdapter.getImagesList(),i,i-1);
                     }
                 }
                 imageViewAdapter.notifyItemMoved(fromPosition, toPosition);
@@ -210,7 +210,7 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
             @Override
             public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 super.clearView(recyclerView, viewHolder);
-                viewHolder.itemView.setBackgroundColor(0);
+                viewHolder.itemView.setBackgroundResource(R.drawable.bg_item_radius);
                 banner.update(addList,viewHolder.getLayoutPosition()+1);
 
             }
