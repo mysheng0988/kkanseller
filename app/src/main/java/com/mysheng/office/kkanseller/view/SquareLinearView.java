@@ -3,14 +3,15 @@ package com.mysheng.office.kkanseller.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
-public class SquareView extends FrameLayout{
-    public SquareView(Context context) {
+public class SquareLinearView extends LinearLayout{
+    public SquareLinearView(Context context) {
         super(context); }
-    public SquareView(Context context, AttributeSet attrs) {
+    public SquareLinearView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-    public SquareView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SquareLinearView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

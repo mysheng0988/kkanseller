@@ -40,7 +40,6 @@ public abstract class OnRecyclerItemClickListener implements RecyclerView.OnItem
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-            Log.d("child", "onSingleTapUp: "+child.getId());
             if (child != null) {
                 RecyclerView.ViewHolder vh = recyclerView.getChildViewHolder(child);
                 onItemClick(vh);

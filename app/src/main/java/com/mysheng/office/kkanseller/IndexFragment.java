@@ -43,7 +43,7 @@ public class IndexFragment extends Fragment {
         button=view.findViewById(R.id.button);
         indexRecyclerView=view.findViewById(R.id.indexRecyclerView);
         indexViewAdapter=new IndexViewAdapter(getActivity());
-         GridLayoutManager gridLayoutManager=new GridLayoutManager(getActivity(),3);
+         GridLayoutManager gridLayoutManager=new GridLayoutManager(getActivity(),4);
         indexRecyclerView.setLayoutManager(gridLayoutManager);
 //        int leftRight = dip2px(2);
 //        int topBottom = dip2px(2);

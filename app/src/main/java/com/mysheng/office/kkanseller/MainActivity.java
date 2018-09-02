@@ -105,7 +105,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 			{
 				transaction.show(mTab03);
 			}
-			mImgGoods.setImageResource(R.drawable.goods_pressed);
+			mImgGoods.setImageResource(R.drawable.goods_list_pressed);
 			break;
 		case 3:
 			if (mTab04 == null)
@@ -173,7 +173,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener
 	{
 		mImgIndex.setImageResource(R.drawable.index_normal);
 		mImgMessage.setImageResource(R.drawable.msg_normal);
-		mImgGoods.setImageResource(R.drawable.goods_normal);
+		mImgGoods.setImageResource(R.drawable.goods_list_normal);
 		mImgPerson.setImageResource(R.drawable.person_normal);
 	}
 

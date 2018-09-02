@@ -17,9 +17,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
 import com.jph.takephoto.model.TImage;
@@ -29,9 +28,6 @@ import com.mysheng.office.kkanseller.banner.Banner;
 import com.mysheng.office.kkanseller.banner.BannerConfig;
 import com.mysheng.office.kkanseller.banner.GlideImageLoader;
 import com.mysheng.office.kkanseller.util.TakePhotoSetting;
-
-
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -51,7 +47,7 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
     private Button choosePhoto;
     private Button takePhoto;
     private Button cancel;
-    private TextView title;
+    private ImageView comeBack;
     private Dialog dialog;
     private ItemTouchHelper mItemTouchHelper;
     public static String[] offImages={
@@ -73,6 +69,8 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
     }
 
     private void initTakePhotoView() {
+        comeBack=findViewById(R.id.comeBack);
+        comeBack.setOnClickListener(this);
         takePhotoSetting=new TakePhotoSetting();
         mTakePhoto=getTakePhoto();
     }
@@ -95,10 +93,8 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
             @Override
             public void onItemClick(View view, int position) {
                 Toast.makeText(AddGoodsActivity.this, position+"", Toast.LENGTH_SHORT).show();
-                addList.remove(position);
                 imageViewAdapter.getImagesList().remove(position);
-                banner.update(addList,position+1);
-               // imageViewAdapter.reinitData(addList);
+                banner.update(imageViewAdapter.getImagesList(),position+1);
                 imageViewAdapter. notifyItemRemoved(position);
                 imageViewAdapter.notifyItemRangeChanged(position, imageViewAdapter.getItemCount());;
             }
@@ -110,9 +106,7 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
         bannerRecyclerView.addOnItemTouchListener(new OnRecyclerItemClickListener(bannerRecyclerView) {
             @Override
             public void onItemClick(RecyclerView.ViewHolder vh) {
-                banner.start(vh.getLayoutPosition()+1);
-                Log.d("1111", "onItemClick: "+vh.itemView.getId());
-              //  Toast.makeText(AddGoodsActivity.this, addList.get(vh.getLayoutPosition()), Toast.LENGTH_SHORT).show();
+               banner.start(vh.getLayoutPosition()+1);
             }
 
             @Override
@@ -160,12 +154,10 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
                 int toPosition = target.getAdapterPosition();
                 if (fromPosition < toPosition) {
                     for (int i = fromPosition; i < toPosition; i++) {
-                        Collections.swap(addList, i, i + 1);
                         Collections.swap(imageViewAdapter.getImagesList(),i,i+1);
                     }
                 } else {
                     for (int i = fromPosition; i > toPosition; i--) {
-                        Collections.swap(addList, i, i - 1);
                         Collections.swap(imageViewAdapter.getImagesList(),i,i-1);
                     }
                 }
@@ -211,7 +203,7 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
             public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 super.clearView(recyclerView, viewHolder);
                 viewHolder.itemView.setBackgroundResource(R.drawable.bg_item_radius);
-                banner.update(addList,viewHolder.getLayoutPosition()+1);
+                banner.update(imageViewAdapter.getImagesList(),viewHolder.getLayoutPosition()+1);
 
             }
         });
@@ -233,6 +225,9 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
                 break;
             case R.id.btn_cancel:
                 dialog.dismiss();
+                break;
+            case R.id.comeBack:
+                finish();
                 break;
             default:
                 break;
