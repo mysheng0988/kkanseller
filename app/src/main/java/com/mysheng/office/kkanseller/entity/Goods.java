@@ -10,6 +10,8 @@ import java.io.Serializable;
 public class Goods implements Serializable, Comparable<Goods>{
     public  static final int ONLINE=1;
     public  static final int OFF_ONLINE=2;
+    public  static final int examine=3;
+    public  static final int examine_failed=4;
 
     private String goodsId;
     private String addTime;

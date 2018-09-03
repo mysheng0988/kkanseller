@@ -21,6 +21,7 @@ public class GoodsListViewHolder extends  RecyclerView.ViewHolder{
     public ImageView goodsIcon;
     public TextView goodsName;
     public TextView goodsPrice;
+    public TextView goodsInventory;
     public TextView saleAmount;
     public TextView addTime;
 
@@ -31,6 +32,7 @@ public class GoodsListViewHolder extends  RecyclerView.ViewHolder{
         goodsIcon = itemView.findViewById(R.id.goodsIcon);
         goodsName = itemView.findViewById(R.id.goodsName);
         goodsPrice = itemView.findViewById(R.id.goodsPrice);
+        goodsInventory = itemView.findViewById(R.id.goodsInventory);
         saleAmount = itemView.findViewById(R.id.saleAmount);
         addTime = itemView.findViewById(R.id.addTime);
 
@@ -42,6 +44,7 @@ public class GoodsListViewHolder extends  RecyclerView.ViewHolder{
         goodsPrice.setText("￥:"+goods.getGoodsPrice()+"元");
         saleAmount.setText("销量:"+goods.getSaleAmount()+"件");
         addTime.setText("添加日期:"+goods.getAddTime());
+        goodsInventory.setText("库存:"+goods.getGoodsInventory()+"件");
     }
 
 }

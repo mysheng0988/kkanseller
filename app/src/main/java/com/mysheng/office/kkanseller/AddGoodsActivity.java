@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -24,9 +26,11 @@ import com.jph.takephoto.app.TakePhotoActivity;
 import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TResult;
 import com.mysheng.office.kkanseller.adpter.AddImageViewAdapter;
+import com.mysheng.office.kkanseller.adpter.GoodsParamViewAdapter;
 import com.mysheng.office.kkanseller.banner.Banner;
 import com.mysheng.office.kkanseller.banner.BannerConfig;
 import com.mysheng.office.kkanseller.banner.GlideImageLoader;
+import com.mysheng.office.kkanseller.util.DividerGridItemDecoration;
 import com.mysheng.office.kkanseller.util.TakePhotoSetting;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,7 +42,9 @@ import java.util.List;
 
 public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickListener{
     private RecyclerView bannerRecyclerView;
+    private RecyclerView paramRecyclerView;
     private AddImageViewAdapter imageViewAdapter;
+    private GoodsParamViewAdapter paramViewAdapter;
     private View inflate;
     private Banner banner;
     private List<String> addList=new ArrayList<>();
@@ -66,6 +72,7 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
         setContentView(R.layout.add_goods_layout);
         initTakePhotoView();
         initBannerView();
+        initParamView();
     }
 
     private void initTakePhotoView() {
@@ -73,6 +80,13 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
         comeBack.setOnClickListener(this);
         takePhotoSetting=new TakePhotoSetting();
         mTakePhoto=getTakePhoto();
+    }
+    private void initParamView() {
+        paramRecyclerView=findViewById(R.id.paramRecyclerView);
+        paramRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        paramRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        paramViewAdapter=new GoodsParamViewAdapter(this);
+        paramRecyclerView.setAdapter(paramViewAdapter);
     }
 
     private void initBannerView() {
@@ -88,6 +102,7 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
         banner.start();
         bannerRecyclerView=findViewById(R.id.bannerRecyclerView);
         bannerRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+        bannerRecyclerView.addItemDecoration(new DividerGridItemDecoration());
         imageViewAdapter=new AddImageViewAdapter(this);
         imageViewAdapter.setItemClickListener(new AddImageViewAdapter.OnItemClickListener() {
             @Override

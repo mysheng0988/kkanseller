@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.mysheng.office.kkanseller.view.SquareLinearView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="1dp"
+    android:layout_height="80dp"
     android:background="@drawable/bg_item_radius"
     android:gravity="center"
     android:orientation="vertical">
@@ -20,4 +19,4 @@
         android:layout_height="30dp"
         android:text="今日销量"
         android:textSize="12sp"/>
-</com.mysheng.office.kkanseller.view.SquareLinearView>
+</LinearLayout>

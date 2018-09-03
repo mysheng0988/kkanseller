@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.LinearLayout;
 
 import com.mysheng.office.kkanseller.R;
+import com.mysheng.office.kkanseller.entity.ChatModel;
 import com.mysheng.office.kkanseller.entity.Goods;
 import com.mysheng.office.kkanseller.holder.GoodsListViewHolder;
 
@@ -41,6 +43,12 @@ public class GoodsListViewAdapter extends RecyclerView.Adapter<RecyclerView.View
             case Goods.OFF_ONLINE:
                 View view2=mLayoutInflater.inflate(R.layout.item_goods_lower, parent, false);
                 return new GoodsListViewHolder(view2);
+            case Goods.examine:
+                View view3=mLayoutInflater.inflate(R.layout.item_goods_examine, parent, false);
+                return new GoodsListViewHolder(view3);
+            case Goods.examine_failed:
+                View view4=mLayoutInflater.inflate(R.layout.item_goods_examine_failed, parent, false);
+                return new GoodsListViewHolder(view4);
         }
         return null;
 
@@ -55,7 +63,7 @@ public class GoodsListViewAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void removeData(int position) {
         lists.remove(position);
         notifyItemRemoved(position);
-        notifyItemRangeChanged(0, getItemCount());
+        notifyItemRangeChanged(position, getItemCount());
     }
     public void goodsItemSort(final int isSort,final int type){
 
@@ -64,20 +72,26 @@ public class GoodsListViewAdapter extends RecyclerView.Adapter<RecyclerView.View
             public int compare(Goods o1, Goods o2) {
                 if(type==1){
                     if(isSort<50){
-                        return o2.getAddTime().compareTo(o1.getAddTime());
+                        return o2.getGoodsPrice().compareTo(o1.getGoodsPrice());
                     }
-                    return o1.getAddTime().compareTo(o2.getAddTime());
+                    return o1.getGoodsPrice().compareTo(o2.getGoodsPrice());
 
                 }else if(type==2){
                     if(isSort<50){
                         return o2.getSaleAmount().compareTo(o1.getSaleAmount());
                     }
                     return o1.getSaleAmount().compareTo(o2.getSaleAmount());
-                }else {
+                }else if (type==3){
                     if(isSort<50){
-                        return o2.getGoodsPrice().compareTo(o1.getGoodsPrice());
+                        return o2.getGoodsInventory().compareTo(o1.getGoodsInventory());
                     }
-                    return o1.getGoodsPrice().compareTo(o2.getGoodsPrice());
+                    return o1.getGoodsInventory().compareTo(o2.getGoodsInventory());
+
+                }else{
+                    if(isSort<50){
+                        return o2.getAddTime().compareTo(o1.getAddTime());
+                    }
+                    return o1.getAddTime().compareTo(o2.getAddTime());
 
                 }
 
@@ -89,15 +103,24 @@ public class GoodsListViewAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         GoodsListViewHolder viewHolder= (GoodsListViewHolder) holder;
         viewHolder.bindHolder(lists.get(position));
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+//        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(mItemClickListener!=null){
+//                    mItemClickListener.onItemClick(v,lists.get(position));
+//                }
+//
+//            }
+//        });
+        viewHolder.itemView.findViewById(R.id.goodsDetailed).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mItemClickListener!=null){
-                    mItemClickListener.onItemClick(v,lists.get(position));
+                if (mItemClickListener != null) {
+                    mItemClickListener.onItemClick(v, lists.get(position));
                 }
-
             }
         });
+        setRecursionClick(viewHolder.itemView.findViewById(R.id.container),lists.get(position));
     }
 
 
@@ -109,6 +132,27 @@ public class GoodsListViewAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public int getItemViewType(int position) {
         return lists.get(position).getGoodsType();
+    }
+
+    private void setRecursionClick(final View view, final Goods model) {
+        if (view instanceof LinearLayout) {
+            LinearLayout group = (LinearLayout) view;
+
+            for (int i = 0; i < group.getChildCount(); i++) {
+                View l=group.getChildAt(i);
+                if (group.getChildAt(i) instanceof LinearLayout) {
+                    group.getChildAt(i).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mItemClickListener != null) {
+                                mItemClickListener.onItemClick(v, model);
+                            }
+                        }
+                    });
+                   // setRecursionClick(group.getChildAt(i),model);
+                }
+            }
+        }
     }
     public void setItemClickListener(GoodsListViewAdapter.OnItemClickListener itemClickListener) {
         mItemClickListener = itemClickListener;

@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:background="#4D000000"
                 android:scaleType="center"
-                android:src="@drawable/icon_off_online"/>
+                android:src="@drawable/icon_examine"/>
         </FrameLayout>
 
         <LinearLayout
@@ -145,18 +145,18 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:id="@+id/goods_online"
+            android:id="@+id/examineDetailed"
             android:layout_weight="1">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:src="@drawable/ic_online"/>
+                android:src="@drawable/icon_details"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="上架"/>
+                android:text="详情"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

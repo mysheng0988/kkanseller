@@ -77,6 +77,20 @@
                 android:alpha="0.3"
                 android:background="#666666"/>
             <TextView
+                android:id="@+id/goods_examine"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="待审核"/>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="18dp"
+                android:alpha="0.3"
+                android:background="#666666"/>
+            <TextView
                 android:id="@+id/goods_off"
                 android:layout_width="0dp"
                 android:layout_height="35dp"
@@ -103,7 +117,7 @@
                     android:gravity="center"
                     android:text="价格"/>
                 <ImageView
-                    android:id="@+id/inventory_sort"
+                    android:id="@+id/price_sort"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/image_level"/>
@@ -130,6 +144,28 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/image_level"/>
             </LinearLayout>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="18dp"
+                android:alpha="0.3"
+                android:background="#666666"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="库存"/>
+                <ImageView
+                    android:id="@+id/inventory_sort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/image_level"/>
+            </LinearLayout>
+
             <View
                 android:layout_width="1dp"
                 android:layout_height="18dp"

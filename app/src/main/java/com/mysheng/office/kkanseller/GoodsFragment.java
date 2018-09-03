@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.util.Util;
 import com.mysheng.office.kkanseller.adpter.GoodsListViewAdapter;
@@ -38,7 +39,7 @@ import java.util.Random;
  * Created by myaheng on 2018/6/30.
  */
 
-public class GoodsFragment extends Fragment implements View.OnClickListener{
+public class GoodsFragment extends Fragment implements View.OnClickListener,GoodsListViewAdapter.OnItemClickListener{
     private ImageView addMenu;
     private View inflate;
     private Dialog dialog;
@@ -46,15 +47,17 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
     private GoodsListViewAdapter mAdapter;
     private ImageView addTimeSort;
     private ImageView saleSort;
+    private ImageView priceSort;
     private ImageView inventorySort;
     private List<Goods> mData=new ArrayList<>();
     private List<Goods> mDataOff=new ArrayList<>();
     private TextView goodsOnline;
+    private TextView goodsExamine;
     private TextView goodsOff;
-    private  Button addGoods;
-    private  Button batch;
-    private  Button classification;
-    private  Button cancel;
+    private  TextView addGoods;
+    private  TextView batch;
+    private  TextView classification;
+    private  TextView cancel;
     public static String[] netImages = {
             "http://wx1.sinaimg.cn/woriginal/61e7f4aaly1fgrt0bj3htj20gg0c7myr.jpg",
             "http://wx4.sinaimg.cn/woriginal/61e7f4aaly1fgrt0bpvkxj20go080wg9.jpg",
@@ -100,20 +103,25 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
         addTimeSort.getDrawable().setLevel(5);
         saleSort=view.findViewById(R.id.sale_sort);
         saleSort.getDrawable().setLevel(5);
+        priceSort=view.findViewById(R.id.price_sort);
+        priceSort.getDrawable().setLevel(5);
         inventorySort=view.findViewById(R.id.inventory_sort);
         inventorySort.getDrawable().setLevel(5);
         goodsOnline=view.findViewById(R.id.goods_online);
+        goodsExamine=view.findViewById(R.id.goods_examine);
         goodsOff=view.findViewById(R.id.goods_off);
         addMenu.setOnClickListener(this);
         addTimeSort.setOnClickListener(this);
         saleSort.setOnClickListener(this);
         inventorySort.setOnClickListener(this);
         goodsOnline.setOnClickListener(this);
+        goodsExamine.setOnClickListener(this);
         goodsOff.setOnClickListener(this);
         mGoodsView=view.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mAdapter=new GoodsListViewAdapter(getActivity());
+        mAdapter.setItemClickListener(this);
         mGoodsView.setAdapter(mAdapter);
         mGoodsView.setLayoutManager(linearLayoutManager);
         initData();
@@ -130,7 +138,8 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
             String goodsName=RandomChinese();
             goods.setGoodsName(goodsName);
             goods.setGoodsNameAB(ChinesePinyinUtil.getPinYinHeadChar(goodsName));
-            goods.setSaleAmount(getRandomNum());
+            goods.setSaleAmount(getRandomNum(999));
+            goods.setGoodsInventory(getRandomNum(999));
             goods.setGoodsPrice(getRandomDouble());
             String str="2018-08-"+getRandomDay();
             goods.setAddTime(str);
@@ -162,7 +171,8 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
             String goodsName=RandomChinese();
             goods.setGoodsName(goodsName);
             goods.setGoodsNameAB(ChinesePinyinUtil.getPinYinHeadChar(goodsName));
-            goods.setSaleAmount(getRandomNum());
+            goods.setSaleAmount(getRandomNum(999));
+            goods.setGoodsInventory(getRandomNum(999));
             goods.setGoodsPrice(getRandomDouble());
             String str="2018-08-"+getRandomDay();
             goods.setAddTime(str);
@@ -175,9 +185,32 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
 
 
     }
-    private int getRandomNum(){
+    private void initDataExamine() {
+        mDataOff.clear();
+        for(int i=0;i<offImages.length;i++){
+            Goods goods=new Goods();
+            goods.setGoodsType(getRandomNum(2)+2);
+            goods.setGoodsPath(offImages[i]);
+            String goodsName=RandomChinese();
+            goods.setGoodsName(goodsName);
+            goods.setGoodsNameAB(ChinesePinyinUtil.getPinYinHeadChar(goodsName));
+            goods.setSaleAmount(0);
+            goods.setGoodsInventory(getRandomNum(999));
+            goods.setGoodsPrice(getRandomDouble());
+            String str="2018-08-"+getRandomDay();
+            goods.setAddTime(str);
+            mDataOff.add(goods);
+        }
+        mAdapter.addList(mDataOff);
+        mAdapter.notifyDataSetChanged();
+        int size= mAdapter.getItemCount();
+        Log.e("mys", "initDataOff: "+size );
+
+
+    }
+    private int getRandomNum(int num){
         Random rand = new Random();
-        return rand.nextInt(999) + 1;
+        return rand.nextInt(num) + 1;
     }
     private String getRandomDay(){
         Random rand = new Random();
@@ -194,29 +227,43 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
             case R.id.addMenu:
                 showDialog();
                 break;
-            case R.id.add_time_sort:
-                setImageLevel(saleSort,5);
-                setImageLevel(inventorySort,5);
-                itemSort(addTimeSort,1);
+            case R.id.price_sort:
+                saleSort.getDrawable().setLevel(5);
+                inventorySort.getDrawable().setLevel(5);
+                addTimeSort.getDrawable().setLevel(5);
+                itemSort(priceSort,1);
                 break;
             case R.id.sale_sort:
-                setImageLevel(addTimeSort,5);
-                setImageLevel(inventorySort,5);
+                priceSort.getDrawable().setLevel(5);
+                inventorySort.getDrawable().setLevel(5);
+                addTimeSort.getDrawable().setLevel(5);
                 itemSort(saleSort,2);
                 break;
             case R.id.inventory_sort:
-                setImageLevel(addTimeSort,5);
-                setImageLevel(saleSort,5);
+                priceSort.getDrawable().setLevel(5);
+                saleSort.getDrawable().setLevel(5);
+                addTimeSort.getDrawable().setLevel(5);
                 itemSort(inventorySort,3);
                 break;
+            case R.id.add_time_sort:
+                priceSort.getDrawable().setLevel(5);
+                saleSort.getDrawable().setLevel(5);
+                inventorySort.getDrawable().setLevel(5);
+                itemSort(addTimeSort,4);
+                break;
             case R.id.goods_online:
+                reInitBackground();
                 goodsOnline.setBackground(getResources().getDrawable(R.drawable.bg_bottom_borders));
-                goodsOff.setBackground(getResources().getDrawable(R.drawable.bg_white_borders));
                 initData();
                 break;
+            case R.id.goods_examine:
+                reInitBackground();
+                goodsExamine.setBackground(getResources().getDrawable(R.drawable.bg_white_borders));
+                initDataExamine();
+                break;
             case R.id.goods_off:
+                reInitBackground();
                 goodsOff.setBackground(getResources().getDrawable(R.drawable.bg_bottom_borders));
-                goodsOnline.setBackground(getResources().getDrawable(R.drawable.bg_white_borders));
                 initDataOff();
                 break;
             case R.id.addGoods:
@@ -229,11 +276,13 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
                 break;
         }
     }
+    private void reInitBackground(){
+        goodsOnline.setBackground(getResources().getDrawable(R.drawable.bg_white_borders));
+        goodsExamine.setBackground(getResources().getDrawable(R.drawable.bg_white_borders));
+        goodsOff.setBackground(getResources().getDrawable(R.drawable.bg_white_borders));
+    }
     private int getImageLevel(ImageView imageView){
         return imageView.getDrawable().getLevel();
-    }
-    private  void setImageLevel(ImageView imageView,int level){
-        imageView.getDrawable().setLevel(level);
     }
     private void itemSort(ImageView imageView,int type){
 //        addTimeSort.getDrawable().setLevel(5);
@@ -279,5 +328,36 @@ public class GoodsFragment extends Fragment implements View.OnClickListener{
         lp.y = 20;//设置Dialog距离底部的距离
         dialogWindow.setAttributes(lp);
         dialog.show();//显示对话框
+    }
+
+    @Override
+    public void onItemClick(View view, Goods model) {
+        switch (view.getId()){
+            case R.id.goodsDetailed:
+                Toast.makeText(getActivity(),model.getGoodsPrice()+"商品详情",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.goodsPreview:
+                Toast.makeText(getActivity(),model.getGoodsPrice()+"预览",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.goodsReduce:
+                Toast.makeText(getActivity(),model.getGoodsPrice()+"减库存",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.goodsOff_online:
+                Toast.makeText(getActivity(),model.getGoodsPrice()+"下架",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.goods_online:
+                Toast.makeText(getActivity(),model.getGoodsPrice()+"上架",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.goodsShare:
+                Toast.makeText(getActivity(),model.getGoodsPrice()+"分享",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.goodsDelete:
+                Toast.makeText(getActivity(),model.getGoodsPrice()+"删除",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.examineDetailed:
+                Toast.makeText(getActivity(),model.getGoodsPrice()+"审核详情",Toast.LENGTH_SHORT).show();
+                break;
+        }
+
     }
 }

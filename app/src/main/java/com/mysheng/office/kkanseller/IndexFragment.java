@@ -20,6 +20,7 @@ import com.mysheng.office.kkanseller.pickers.entity.City;
 import com.mysheng.office.kkanseller.pickers.entity.County;
 import com.mysheng.office.kkanseller.pickers.entity.Province;
 import com.mysheng.office.kkanseller.util.AddressPickTask;
+import com.mysheng.office.kkanseller.util.DividerGridItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +44,10 @@ public class IndexFragment extends Fragment {
         button=view.findViewById(R.id.button);
         indexRecyclerView=view.findViewById(R.id.indexRecyclerView);
         indexViewAdapter=new IndexViewAdapter(getActivity());
-         GridLayoutManager gridLayoutManager=new GridLayoutManager(getActivity(),4);
+         GridLayoutManager gridLayoutManager=new GridLayoutManager(getActivity(),3);
         indexRecyclerView.setLayoutManager(gridLayoutManager);
-//        int leftRight = dip2px(2);
-//        int topBottom = dip2px(2);
-        //indexRecyclerView.addItemDecoration(new SpacesItemDecoration(leftRight,topBottom,Color.GRAY));
+
+        indexRecyclerView.addItemDecoration(new DividerGridItemDecoration());
         indexRecyclerView.setAdapter(indexViewAdapter);
         initData();
         button.setOnClickListener(new View.OnClickListener() {
