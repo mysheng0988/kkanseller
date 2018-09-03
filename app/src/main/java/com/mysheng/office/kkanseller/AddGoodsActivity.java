@@ -19,7 +19,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
@@ -30,7 +32,11 @@ import com.mysheng.office.kkanseller.adpter.GoodsParamViewAdapter;
 import com.mysheng.office.kkanseller.banner.Banner;
 import com.mysheng.office.kkanseller.banner.BannerConfig;
 import com.mysheng.office.kkanseller.banner.GlideImageLoader;
+import com.mysheng.office.kkanseller.entity.Goods;
+import com.mysheng.office.kkanseller.entity.GoodsParam;
+import com.mysheng.office.kkanseller.manager.FullyLinearLayoutManager;
 import com.mysheng.office.kkanseller.util.DividerGridItemDecoration;
+
 import com.mysheng.office.kkanseller.util.TakePhotoSetting;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,6 +62,9 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
     private ImageView comeBack;
     private Dialog dialog;
     private ItemTouchHelper mItemTouchHelper;
+    private ImageView addItem;
+    private EditText specType1;
+    private EditText specType2;
     public static String[] offImages={
             "http://wx1.sinaimg.cn/woriginal/daaf97d2gy1fgsxkq8uc3j20dw0ku74x.jpg",
             "http://wx1.sinaimg.cn/woriginal/daaf97d2gy1fgsxkqm7b0j20dw0kut9h.jpg",
@@ -83,10 +92,28 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
     }
     private void initParamView() {
         paramRecyclerView=findViewById(R.id.paramRecyclerView);
-        paramRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        addItem=findViewById(R.id.addItem);
+        addItem.setOnClickListener(this);
+        specType1=findViewById(R.id.specType1);
+        specType1.setText("颜色");
+        specType2=findViewById(R.id.specType2);
+        specType2.setText("尺寸");
+       // paramRecyclerView.setHasFixedSize(true);
+        FullyLinearLayoutManager fullyManager = new FullyLinearLayoutManager(this);
+        fullyManager.setRecyclerViewLayout((LinearLayout) findViewById(R.id.recycler_layout));
+        paramRecyclerView.setLayoutManager(fullyManager);
+       //paramRecyclerView.setNestedScrollingEnabled(false);
         paramRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         paramViewAdapter=new GoodsParamViewAdapter(this);
+        paramViewAdapter.setItemClickListener(new GoodsParamViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                paramViewAdapter.removeData(position);
+                paramViewAdapter.notifyDataSetChanged();
+            }
+        });
         paramRecyclerView.setAdapter(paramViewAdapter);
+       paramRecyclerView.setSelected(true);
     }
 
     private void initBannerView() {
@@ -230,6 +257,9 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.addItem:
+                addItemParam();
+                break;
             case R.id.choosePhoto:
                 takePhotoSetting.pickBySelectImage(mTakePhoto);
                 dialog.dismiss();
@@ -250,6 +280,16 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
 
         }
     }
+
+    private void addItemParam() {
+        Log.d("add", "addItemParam: "+1111);
+        GoodsParam param=new GoodsParam();
+        param.setSpecNameType1(specType1.getText().toString().trim());
+        param.setSpecNameType2(specType2.getText().toString().trim());
+        paramViewAdapter.addModel(param);
+        paramViewAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public void takeCancel() {
         super.takeCancel();

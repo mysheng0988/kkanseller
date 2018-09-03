@@ -155,9 +155,9 @@
         android:background="@color/border_clo"/>
     <ImageView
         android:id="@+id/deleteItem"
-        android:layout_width="40dp"
+        android:layout_width="30dp"
         android:layout_gravity="center"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:src="@drawable/icon_reduce_item"/>
 
 </LinearLayout>

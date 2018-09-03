@@ -11,7 +11,7 @@ public class GoodsParam {
     private String specNameType2;
     private String price;
     private String inventory;
-    private boolean isOnly=false;
+
 
     public String getSpecNameType1() {
         return specNameType1;
@@ -28,16 +28,6 @@ public class GoodsParam {
     public void setSpecNameType2(String specNameType2) {
         this.specNameType2 = specNameType2;
     }
-
-
-    public boolean getIsOnly() {
-        return isOnly;
-    }
-
-    public void setIsOnly(boolean only) {
-        isOnly = only;
-    }
-
     public String getSpecName1() {
         return specName1;
     }

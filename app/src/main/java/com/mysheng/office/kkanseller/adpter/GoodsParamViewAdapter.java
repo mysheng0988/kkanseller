@@ -3,11 +3,14 @@ package com.mysheng.office.kkanseller.adpter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.mysheng.office.kkanseller.R;
+import com.mysheng.office.kkanseller.entity.Goods;
 import com.mysheng.office.kkanseller.entity.GoodsParam;
 import com.mysheng.office.kkanseller.holder.GoodsParamViewHolder;
 
@@ -23,10 +26,8 @@ public class GoodsParamViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private OnItemClickListener mItemClickListener;
     private LayoutInflater mLayoutInflater;
     public GoodsParamViewAdapter(Context context) {
-        lists.clear();
         GoodsParam param=new GoodsParam();
-        param.setIsOnly(true);
-        lists.add(param);
+        addModel(param);
         mLayoutInflater=LayoutInflater.from(context);
     }
 
@@ -39,22 +40,26 @@ public class GoodsParamViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return new GoodsParamViewHolder(view);
     }
     public void addModel(GoodsParam model){
+        if(lists.size()==1&&TextUtils.isEmpty(lists.get(0).getSpecNameType1())){
+           removeData(0);
+           notifyDataSetChanged();
+        }
         lists.add(model);
+
     }
     public void removeData(int position) {
         lists.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(0, getItemCount());
     }
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         GoodsParamViewHolder viewHolder= (GoodsParamViewHolder) holder;
         viewHolder.bindHolder(lists.get(position));
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        ImageView imageView=viewHolder.itemView.findViewById(R.id.deleteItem);
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mItemClickListener!=null){
-                    mItemClickListener.onItemClick(v,lists.get(position));
+                    mItemClickListener.onItemClick(v,position);
                 }
 
             }
@@ -72,6 +77,6 @@ public class GoodsParamViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         mItemClickListener = itemClickListener;
     }
     public interface OnItemClickListener{
-        void onItemClick(View view, GoodsParam model);
+        void onItemClick(View view, int position);
     }
 }
