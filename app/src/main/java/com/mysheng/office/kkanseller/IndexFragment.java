@@ -1,11 +1,11 @@
 package com.mysheng.office.kkanseller;
 
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +13,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.jph.takephoto.app.TakePhoto;
+import com.jph.takephoto.app.TakePhotoActivity;
+import com.jph.takephoto.app.TakePhotoFragment;
+import com.jph.takephoto.model.TImage;
+import com.jph.takephoto.model.TResult;
 import com.mysheng.office.kkanseller.adpter.IndexViewAdapter;
-import com.mysheng.office.kkanseller.decoration.SpacesItemDecoration;
+import com.mysheng.office.kkanseller.customCamera.dialog.LoadingDialog;
 import com.mysheng.office.kkanseller.entity.IndexBean;
 import com.mysheng.office.kkanseller.pickers.entity.City;
 import com.mysheng.office.kkanseller.pickers.entity.County;
 import com.mysheng.office.kkanseller.pickers.entity.Province;
 import com.mysheng.office.kkanseller.util.AddressPickTask;
-import com.mysheng.office.kkanseller.util.DividerGridItemDecoration;
+import com.mysheng.office.kkanseller.decoration.DividerGridItemDecoration;
+import com.mysheng.office.kkanseller.util.TakePhotoSetting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +36,12 @@ import java.util.Random;
  * Created by myaheng on 2018/6/30.
  */
 
-public class IndexFragment extends Fragment {
+public class IndexFragment extends TakePhotoFragment {
     private Button button;
     private RecyclerView indexRecyclerView;
     private IndexViewAdapter indexViewAdapter;
+    private TakePhotoSetting takePhotoSetting;
+    private TakePhoto mTakePhoto;
     private List<IndexBean> mList=new ArrayList<>();
     private String[] dataStr={"今日订单数","今日成交额","今日收藏的商品","退款中","待付款","待发货","购物车的商品数","出售中","今日访问量"};
     @Override
@@ -48,6 +56,12 @@ public class IndexFragment extends Fragment {
         indexRecyclerView.setLayoutManager(gridLayoutManager);
 
         indexRecyclerView.addItemDecoration(new DividerGridItemDecoration());
+        indexViewAdapter.setItemClickListener(new IndexViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, IndexBean model) {
+                takePhotoSetting.pickBySelectImage(mTakePhoto);
+            }
+        });
         indexRecyclerView.setAdapter(indexViewAdapter);
         initData();
         button.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +70,10 @@ public class IndexFragment extends Fragment {
                 onAddressPicker();
             }
         });
+        takePhotoSetting=new TakePhotoSetting();
+        takePhotoSetting.setLimit(1);
+        takePhotoSetting.setCutting(true);
+        mTakePhoto=getTakePhoto();
         return view;
     }
     private void initData(){
@@ -107,5 +125,32 @@ public class IndexFragment extends Fragment {
     }
     public int dip2px(float dpValue) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, getResources().getDisplayMetrics());
+    }
+
+    @Override
+    public void takeCancel() {
+        super.takeCancel();
+    }
+
+    @Override
+    public void takeFail(TResult result, String msg) {
+        super.takeFail(result, msg);
+
+    }
+
+    @Override
+    public void takeSuccess(TResult result) {
+
+        ArrayList<TImage> images=result.getImages();
+
+
+
+		for (int i = 0;i<images.size(); i ++) {
+			Log.d("mmm", "takeSuccess: "+images.get(i).getCompressPath());
+
+
+		}
+
+
     }
 }

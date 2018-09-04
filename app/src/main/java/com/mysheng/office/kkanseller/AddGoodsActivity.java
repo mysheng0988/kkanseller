@@ -8,9 +8,9 @@ import android.os.Message;
 import android.os.Vibrator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -32,10 +32,9 @@ import com.mysheng.office.kkanseller.adpter.GoodsParamViewAdapter;
 import com.mysheng.office.kkanseller.banner.Banner;
 import com.mysheng.office.kkanseller.banner.BannerConfig;
 import com.mysheng.office.kkanseller.banner.GlideImageLoader;
-import com.mysheng.office.kkanseller.entity.Goods;
 import com.mysheng.office.kkanseller.entity.GoodsParam;
 import com.mysheng.office.kkanseller.manager.FullyLinearLayoutManager;
-import com.mysheng.office.kkanseller.util.DividerGridItemDecoration;
+import com.mysheng.office.kkanseller.decoration.DividerGridItemDecoration;
 
 import com.mysheng.office.kkanseller.util.TakePhotoSetting;
 import java.util.ArrayList;
@@ -95,9 +94,7 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
         addItem=findViewById(R.id.addItem);
         addItem.setOnClickListener(this);
         specType1=findViewById(R.id.specType1);
-        specType1.setText("颜色");
         specType2=findViewById(R.id.specType2);
-        specType2.setText("尺寸");
        // paramRecyclerView.setHasFixedSize(true);
         FullyLinearLayoutManager fullyManager = new FullyLinearLayoutManager(this);
         fullyManager.setRecyclerViewLayout((LinearLayout) findViewById(R.id.recycler_layout));
@@ -109,7 +106,6 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
             @Override
             public void onItemClick(View view, int position) {
                 paramViewAdapter.removeData(position);
-                paramViewAdapter.notifyDataSetChanged();
             }
         });
         paramRecyclerView.setAdapter(paramViewAdapter);
@@ -282,12 +278,17 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
     }
 
     private void addItemParam() {
-        Log.d("add", "addItemParam: "+1111);
-        GoodsParam param=new GoodsParam();
-        param.setSpecNameType1(specType1.getText().toString().trim());
-        param.setSpecNameType2(specType2.getText().toString().trim());
-        paramViewAdapter.addModel(param);
-        paramViewAdapter.notifyDataSetChanged();
+        String specStr1=specType1.getText().toString().trim();
+        String specStr2=specType2.getText().toString().trim();
+        if(TextUtils.isEmpty(specStr1)&&TextUtils.isEmpty(specStr2)){
+            Toast.makeText(this,"请填写规格类型！",Toast.LENGTH_SHORT).show();
+        }else{
+            GoodsParam param=new GoodsParam();
+            param.setSpecNameType1(specStr1);
+            param.setSpecNameType2(specStr2);
+            paramViewAdapter.addModel(param);
+        }
+
     }
 
     @Override

@@ -40,12 +40,9 @@ public class GoodsParamViewHolder extends  RecyclerView.ViewHolder{
         specName2 = itemView.findViewById(R.id.specType1);
         price = itemView.findViewById(R.id.price);
         inventory = itemView.findViewById(R.id.inventory);
-
-
     }
     public void bindHolder(GoodsParam param){
-        if(TextUtils.isEmpty(param.getSpecNameType1())
-                &&TextUtils.isEmpty(param.getSpecNameType2())){
+        if(param.isFirstOnly()) {
             spec1.setVisibility(View.GONE);
             spec2.setVisibility(View.GONE);
             deleteItem.setVisibility(View.GONE);
@@ -53,8 +50,8 @@ public class GoodsParamViewHolder extends  RecyclerView.ViewHolder{
             spec1.setVisibility(View.VISIBLE);
             spec2.setVisibility(View.VISIBLE);
             deleteItem.setVisibility(View.VISIBLE);
-            specNameType1.setText(param.getSpecNameType1());
-            specNameType2.setText(param.getSpecNameType2());
+            specNameType1.setText(param.getSpecNameType1()+":");
+            specNameType2.setText(param.getSpecNameType2()+":");
         }
         specName1.setText(param.getSpecName1());
         specName2.setText(param.getSpecName2());

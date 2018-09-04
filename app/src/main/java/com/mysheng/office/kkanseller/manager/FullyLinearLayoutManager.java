@@ -79,7 +79,7 @@ public class FullyLinearLayoutManager extends LinearLayoutManager {
 
 		setMeasuredDimension(width, height);
 		//实现固定recyclerview的父布局的高度值
-		LinearLayout.LayoutParams parmas = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height);
+		LinearLayout.LayoutParams parmas = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height+getItemCount()*3);
 		mRecyclerViewLayout.setLayoutParams(parmas);
 	}
 

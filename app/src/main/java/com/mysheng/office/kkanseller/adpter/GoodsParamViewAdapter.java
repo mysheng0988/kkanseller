@@ -15,6 +15,7 @@ import com.mysheng.office.kkanseller.entity.GoodsParam;
 import com.mysheng.office.kkanseller.holder.GoodsParamViewHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author: duke
@@ -27,6 +28,7 @@ public class GoodsParamViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private LayoutInflater mLayoutInflater;
     public GoodsParamViewAdapter(Context context) {
         GoodsParam param=new GoodsParam();
+        param.setFirstOnly(true);
         addModel(param);
         mLayoutInflater=LayoutInflater.from(context);
     }
@@ -40,15 +42,29 @@ public class GoodsParamViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return new GoodsParamViewHolder(view);
     }
     public void addModel(GoodsParam model){
-        if(lists.size()==1&&TextUtils.isEmpty(lists.get(0).getSpecNameType1())){
-           removeData(0);
-           notifyDataSetChanged();
+        if(lists.size()==1&&lists.get(0).isFirstOnly()){
+            lists.clear();
+            lists.add(model);
+            notifyDataSetChanged();
+        }else {
+            lists.add(model);
+            notifyItemInserted(0);
         }
-        lists.add(model);
-
     }
     public void removeData(int position) {
-        lists.remove(position);
+        if(lists.size()==1){
+            lists.get(position).setFirstOnly(true);
+            notifyItemChanged(position);
+        }else{
+            lists.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, getItemCount());
+        }
+
+    }
+    public List<GoodsParam> getGoodsParamList(){
+        return lists;
+
     }
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {

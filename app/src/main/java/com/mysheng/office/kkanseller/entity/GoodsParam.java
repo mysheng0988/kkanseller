@@ -11,7 +11,15 @@ public class GoodsParam {
     private String specNameType2;
     private String price;
     private String inventory;
+    private boolean  firstOnly=false;
 
+    public boolean isFirstOnly() {
+        return firstOnly;
+    }
+
+    public void setFirstOnly(boolean firstOnly) {
+        this.firstOnly = firstOnly;
+    }
 
     public String getSpecNameType1() {
         return specNameType1;
