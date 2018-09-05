@@ -19,6 +19,7 @@ import com.jph.takephoto.app.TakePhotoFragment;
 import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TResult;
 import com.mysheng.office.kkanseller.adpter.IndexViewAdapter;
+import com.mysheng.office.kkanseller.circleprogress.CircleProgress;
 import com.mysheng.office.kkanseller.customCamera.dialog.LoadingDialog;
 import com.mysheng.office.kkanseller.entity.IndexBean;
 import com.mysheng.office.kkanseller.pickers.entity.City;
@@ -44,6 +45,7 @@ public class IndexFragment extends TakePhotoFragment {
     private TakePhoto mTakePhoto;
     private List<IndexBean> mList=new ArrayList<>();
     private String[] dataStr={"今日订单数","今日成交额","今日收藏的商品","退款中","待付款","待发货","购物车的商品数","出售中","今日访问量"};
+    private CircleProgress mCircleProgress;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -51,6 +53,7 @@ public class IndexFragment extends TakePhotoFragment {
         View view= inflater.inflate(R.layout.tab01, container, false);
         button=view.findViewById(R.id.button);
         indexRecyclerView=view.findViewById(R.id.indexRecyclerView);
+        mCircleProgress=view.findViewById(R.id.circle_progress);
         indexViewAdapter=new IndexViewAdapter(getActivity());
          GridLayoutManager gridLayoutManager=new GridLayoutManager(getActivity(),3);
         indexRecyclerView.setLayoutManager(gridLayoutManager);

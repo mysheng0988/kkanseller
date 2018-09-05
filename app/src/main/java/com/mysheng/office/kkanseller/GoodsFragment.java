@@ -111,6 +111,7 @@ public class GoodsFragment extends Fragment implements View.OnClickListener,Good
         goodsExamine=view.findViewById(R.id.goods_examine);
         goodsOff=view.findViewById(R.id.goods_off);
         addMenu.setOnClickListener(this);
+        priceSort.setOnClickListener(this);
         addTimeSort.setOnClickListener(this);
         saleSort.setOnClickListener(this);
         inventorySort.setOnClickListener(this);
@@ -258,7 +259,7 @@ public class GoodsFragment extends Fragment implements View.OnClickListener,Good
                 break;
             case R.id.goods_examine:
                 reInitBackground();
-                goodsExamine.setBackground(getResources().getDrawable(R.drawable.bg_white_borders));
+                goodsExamine.setBackground(getResources().getDrawable(R.drawable.bg_bottom_borders));
                 initDataExamine();
                 break;
             case R.id.goods_off:
@@ -285,17 +286,11 @@ public class GoodsFragment extends Fragment implements View.OnClickListener,Good
         return imageView.getDrawable().getLevel();
     }
     private void itemSort(ImageView imageView,int type){
-//        addTimeSort.getDrawable().setLevel(5);
-//        saleSort.getDrawable().setLevel(5);
-//        inventorySort.getDrawable().setLevel(5);
         int level= getImageLevel(imageView);
-        if (level<10){
-            imageView.getDrawable().setLevel(20);
-            mAdapter.goodsItemSort(20,type);
-        }else if(level>10&&level<50){
+        if(level>10&&level<50){
             imageView.getDrawable().setLevel(70);
             mAdapter.goodsItemSort(70,type);
-        }else if(level>50){
+        }else{
             mAdapter.goodsItemSort(20,type);
             imageView.getDrawable().setLevel(20);
         }
