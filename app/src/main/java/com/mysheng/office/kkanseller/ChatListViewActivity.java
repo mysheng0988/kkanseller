@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.mysheng.office.kkanseller.adpter.ChatListViewAdapter;
 import com.mysheng.office.kkanseller.entity.ChatListModel;
-import com.mysheng.office.kkanseller.holder.ViewLineDivider;
+import com.mysheng.office.kkanseller.decoration.ViewLineDivider;
 
 import java.util.ArrayList;
 import java.util.Date;

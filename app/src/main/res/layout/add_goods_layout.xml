@@ -41,6 +41,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/addTitle"
         android:orientation="vertical"
+        android:scrollbarThumbVertical="@drawable/scrollbar_ver_thumb"
         android:fillViewport="true">
         <LinearLayout
             android:layout_width="match_parent"
@@ -187,6 +188,7 @@
                   />
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/selectDescribe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -212,6 +214,7 @@
             </LinearLayout>
             <View style="@style/bg_line" />
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_margin="2dp"

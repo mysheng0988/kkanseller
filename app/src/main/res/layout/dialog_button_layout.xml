@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent">
-    <Button
+    <TextView
         android:id="@+id/takePhoto"
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -18,7 +18,7 @@
         android:layout_height="1px"
         android:background="#9e9e9e"
         />
-    <Button
+    <TextView
         android:id="@+id/choosePhoto"
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -28,7 +28,7 @@
         android:textColor="#0000ff"
         android:textSize="18sp"
         android:textStyle="bold" />
-    <Button
+    <TextView
         android:id="@+id/btn_cancel"
         android:layout_width="match_parent"
         android:layout_height="45dp"

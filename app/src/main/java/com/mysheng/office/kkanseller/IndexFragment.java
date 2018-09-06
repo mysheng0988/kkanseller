@@ -54,6 +54,13 @@ public class IndexFragment extends TakePhotoFragment {
         button=view.findViewById(R.id.button);
         indexRecyclerView=view.findViewById(R.id.indexRecyclerView);
         mCircleProgress=view.findViewById(R.id.circle_progress);
+        mCircleProgress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Random  mRandom = new Random();
+                mCircleProgress.setValue(mRandom.nextInt((int) mCircleProgress.getMaxValue()));
+            }
+        });
         indexViewAdapter=new IndexViewAdapter(getActivity());
          GridLayoutManager gridLayoutManager=new GridLayoutManager(getActivity(),3);
         indexRecyclerView.setLayoutManager(gridLayoutManager);

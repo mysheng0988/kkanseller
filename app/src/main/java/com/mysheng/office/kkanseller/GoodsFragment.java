@@ -286,6 +286,7 @@ public class GoodsFragment extends Fragment implements View.OnClickListener,Good
         return imageView.getDrawable().getLevel();
     }
     private void itemSort(ImageView imageView,int type){
+        mGoodsView.scrollToPosition(0);
         int level= getImageLevel(imageView);
         if(level>10&&level<50){
             imageView.getDrawable().setLevel(70);

@@ -45,7 +45,10 @@ public class AddImageViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         viewHolder.delImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mItemClickListener. onItemClick(v , viewHolder.getLayoutPosition());
+                if(mItemClickListener!=null){
+                    mItemClickListener. onItemClick(v , viewHolder.getLayoutPosition());
+                }
+
             }
         });
         //setRecursionClick(holder.itemView,position,lists);

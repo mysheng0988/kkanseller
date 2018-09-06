@@ -6,6 +6,7 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Process;
+import android.support.multidex.MultiDex;
 import android.util.DisplayMetrics;
 
 import com.android.volley.RequestQueue;
@@ -152,5 +153,10 @@ public class KkanApplication extends Application {
         String key = generate(url);
         String destUrl = getImageCachePath() + "/" + key;
         return destUrl;
+    }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
     }
 }

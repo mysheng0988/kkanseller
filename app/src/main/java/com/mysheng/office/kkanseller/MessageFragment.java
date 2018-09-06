@@ -1,7 +1,6 @@
 package com.mysheng.office.kkanseller;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +13,7 @@ import android.widget.Toast;
 
 import com.mysheng.office.kkanseller.adpter.ChatListViewAdapter;
 import com.mysheng.office.kkanseller.entity.ChatListModel;
-import com.mysheng.office.kkanseller.holder.ViewLineDivider;
+import com.mysheng.office.kkanseller.decoration.ViewLineDivider;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,7 +42,7 @@ public class MessageFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.addItemDecoration(new ViewLineDivider(LinearLayoutManager.VERTICAL, 4, Color.WHITE));
+        recyclerView.addItemDecoration(new ViewLineDivider(LinearLayoutManager.VERTICAL, 2, 0xFFCCCCCC));
         recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         /**
          * 传递出slidelayout中content和options两个布局所有view的点击事件，根据需要做判断

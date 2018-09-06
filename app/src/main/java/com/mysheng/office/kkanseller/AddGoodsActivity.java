@@ -1,6 +1,7 @@
 package com.mysheng.office.kkanseller;
 import android.app.Dialog;
 import android.app.Service;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
@@ -37,6 +39,8 @@ import com.mysheng.office.kkanseller.manager.FullyLinearLayoutManager;
 import com.mysheng.office.kkanseller.decoration.DividerGridItemDecoration;
 
 import com.mysheng.office.kkanseller.util.TakePhotoSetting;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,20 +59,22 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
     private List<String> addList=new ArrayList<>();
     private TakePhotoSetting takePhotoSetting;
     private TakePhoto mTakePhoto;
-    private Button choosePhoto;
-    private Button takePhoto;
-    private Button cancel;
+    private TextView choosePhoto;
+    private TextView takePhoto;
+    private TextView cancel;
     private ImageView comeBack;
     private Dialog dialog;
     private ItemTouchHelper mItemTouchHelper;
     private ImageView addItem;
     private EditText specType1;
     private EditText specType2;
+    private LinearLayout  selectDescribe;
     public static String[] offImages={
             "http://wx1.sinaimg.cn/woriginal/daaf97d2gy1fgsxkq8uc3j20dw0ku74x.jpg",
             "http://wx1.sinaimg.cn/woriginal/daaf97d2gy1fgsxkqm7b0j20dw0kut9h.jpg",
             "http://wx4.sinaimg.cn/woriginal/daaf97d2gy1fgsxks2l4ij20dw0kldhb.jpg",
             "http://wx2.sinaimg.cn/woriginal/daaf97d2gy1fgsxksskbkj20dw0kut9b.jpg",
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1536225640038&di=380c14a5a3e69fbcd511be951b189f17&imgtype=0&src=http%3A%2F%2Fpic1.183read.com%2Fdata%2Fmagazine%2F10%2F30610%2F60%2F516160%2Farticle_images%2Fa391445406bf7348e0abbd6dd66e74b6.jpg",
             "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2966021298,3341101515&fm=23&gp=0.jpg",
             "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496402134202&di=6c7f4a6afa5bdf02000c788f7a51e9c0&imgtype=0&src=http%3A%2F%2Fcdnq.duitang.com%2Fuploads%2Fitem%2F201506%2F23%2F20150623183946_iZtFs.jpeg",
             "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496996892&di=ea1e213c8ddd4427c55f073db9bf91b7&imgtype=jpg&er=1&src=http%3A%2F%2Fpic27.nipic.com%2F20130323%2F9483785_182530048000_2.jpg",
@@ -85,7 +91,9 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
 
     private void initTakePhotoView() {
         comeBack=findViewById(R.id.comeBack);
+        selectDescribe=findViewById(R.id.selectDescribe);
         comeBack.setOnClickListener(this);
+        selectDescribe.setOnClickListener(this);
         takePhotoSetting=new TakePhotoSetting();
         mTakePhoto=getTakePhoto();
     }
@@ -269,6 +277,11 @@ public class AddGoodsActivity extends TakePhotoActivity implements View.OnClickL
                 break;
             case R.id.comeBack:
                 finish();
+                break;
+            case R.id.selectDescribe:
+                Intent intent = new Intent(AddGoodsActivity.this, DescribeActivity.class);
+                intent.putExtra("imageLists", (Serializable) imageViewAdapter.getImagesList());
+                startActivity(intent);
                 break;
             default:
                 break;
