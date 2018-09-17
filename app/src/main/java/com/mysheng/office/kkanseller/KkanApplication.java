@@ -38,17 +38,21 @@ public class KkanApplication extends Application {
     private static String IMAGE_CACHE_PATH;
 
     public static RequestQueue queues;
+    public static Context mContext;
     @Override
     public void onCreate() {
         super.onCreate();
-        PushManager.getInstance().initialize(this.getApplicationContext(), com.mysheng.office.kkanseller.service.AppPushService.class);
-        PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), com.mysheng.office.kkanseller.service.ReceiveIntentService.class);
+        mContext=getApplicationContext();
+        PushManager.getInstance().initialize(mContext, com.mysheng.office.kkanseller.service.AppPushService.class);
+        PushManager.getInstance().registerPushIntentService(this.mContext, com.mysheng.office.kkanseller.service.ReceiveIntentService.class);
        // CrashHandler.getInstance().init(this);//异常信息记录
         mDisplayMetrics = getResources().getDisplayMetrics();
         cThreadPool = Executors.newFixedThreadPool(5);
+
         IMAGE_CACHE_PATH = getExternalCacheDir().getPath();
-        queues = Volley.newRequestQueue(getApplicationContext());
+        queues = Volley.newRequestQueue(mContext);
     }
+
     public static RequestQueue getHttpQueues()
     {
         return queues;
@@ -77,6 +81,7 @@ public class KkanApplication extends Application {
             file.delete();
             return;
         }
+
         //文件夹递归删除
         File[] files = file.listFiles();
         if (null == files) {

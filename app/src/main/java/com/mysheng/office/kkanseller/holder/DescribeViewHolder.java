@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.mysheng.office.kkanseller.KkanApplication;
 import com.mysheng.office.kkanseller.R;
 import com.mysheng.office.kkanseller.entity.DescribeModel;
 import com.mysheng.office.kkanseller.entity.IndexBean;
@@ -33,7 +34,7 @@ public class DescribeViewHolder extends  RecyclerView.ViewHolder{
         if(!ChatTool.isNetUri(imageUrl)){
             imageUrl="file://"+imagePath;
         }
-        Glide.with(imagePath.getContext()).load(imageUrl).into(imagePath);
+        Glide.with(KkanApplication.mContext).load(imageUrl).into(imagePath);
     }
 
 }

@@ -1,11 +1,13 @@
 package com.mysheng.office.kkanseller.holder;
 
+import android.app.Application;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.mysheng.office.kkanseller.KkanApplication;
 import com.mysheng.office.kkanseller.R;
 import com.mysheng.office.kkanseller.entity.Goods;
 
@@ -29,7 +31,7 @@ public class AddImageViewHolder extends  RecyclerView.ViewHolder{
 
     }
     public void bindHolder(String path){
-        Glide.with(resImage.getContext()).load(path).into(resImage);
+        Glide.with(KkanApplication.mContext).load(path).into(resImage);
 
     }
 

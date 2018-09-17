@@ -42,53 +42,58 @@ public class FullyGridLayoutManager extends GridLayoutManager {
         final int heightMode = View.MeasureSpec.getMode(heightSpec);
         final int widthSize = View.MeasureSpec.getSize(widthSpec);
         final int heightSize = View.MeasureSpec.getSize(heightSpec);
+        int index=state.getItemCount();
+        if (index > 0) {
+            int width = 0;
+            int height = 0;
+            int count = getItemCount();
+            int span = getSpanCount();
+            Log.d(TAG,"{onMeasure}count="+count+";span="+span);
+            for (int i = 0; i < count; i++) {
+                measureScrapChild(recycler, i,
+                        View.MeasureSpec.makeMeasureSpec(i, View.MeasureSpec.UNSPECIFIED),
+                        View.MeasureSpec.makeMeasureSpec(i, View.MeasureSpec.UNSPECIFIED),
+                        mMeasuredDimension);
 
-        int width = 0;
-        int height = 0;
-        int count = getItemCount();
-        int span = getSpanCount();
-        Log.d(TAG,"{onMeasure}count="+count+";span="+span);
-        for (int i = 0; i < count; i++) {
-            measureScrapChild(recycler, i,
-                    View.MeasureSpec.makeMeasureSpec(i, View.MeasureSpec.UNSPECIFIED),
-                    View.MeasureSpec.makeMeasureSpec(i, View.MeasureSpec.UNSPECIFIED),
-                    mMeasuredDimension);
-
-            if (getOrientation() == HORIZONTAL) {
-                if (i % span == 0) {
-                    width = width + mMeasuredDimension[0];
-                }
-                if (i == 0) {
-                    height = mMeasuredDimension[1];
-                }
-            } else {
-                if (i % span == 0) {
-                    height = height + mMeasuredDimension[1];
-                }
-                if (i == 0) {
-                    width = mMeasuredDimension[0];
+                if (getOrientation() == HORIZONTAL) {
+                    if (i % span == 0) {
+                        width = width + mMeasuredDimension[0];
+                    }
+                    if (i == 0) {
+                        height = mMeasuredDimension[1];
+                    }
+                } else {
+                    if (i % span == 0) {
+                        height = height + mMeasuredDimension[1];
+                    }
+                    if (i == 0) {
+                        width = mMeasuredDimension[0];
+                    }
                 }
             }
+
+            switch (widthMode) {
+                case View.MeasureSpec.EXACTLY:
+                    width = widthSize;
+                case View.MeasureSpec.AT_MOST:
+                case View.MeasureSpec.UNSPECIFIED:
+            }
+
+            switch (heightMode) {
+                case View.MeasureSpec.EXACTLY:
+                    height = heightSize;
+                case View.MeasureSpec.AT_MOST:
+                case View.MeasureSpec.UNSPECIFIED:
+            }
+            Log.w(TAG,"{onMeasure}width="+width+";height="+height);
+            setMeasuredDimension(width, height);
+            //实现固定recyclerview的父布局的高度值
+            LinearLayout.LayoutParams parmas = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height);
+            mRecyclerViewLayout.setLayoutParams(parmas);
+        }else {
+            super.onMeasure(recycler, state, widthSpec, heightSpec);
         }
 
-        switch (widthMode) {
-            case View.MeasureSpec.EXACTLY:
-                width = widthSize;
-            case View.MeasureSpec.AT_MOST:
-            case View.MeasureSpec.UNSPECIFIED:
-        }
-
-        switch (heightMode) {
-            case View.MeasureSpec.EXACTLY:
-                height = heightSize;
-            case View.MeasureSpec.AT_MOST:
-            case View.MeasureSpec.UNSPECIFIED:
-        }
-        Log.w(TAG,"{onMeasure}width="+width+";height="+height);
-        setMeasuredDimension(width, height);
-        //实现固定recyclerview的父布局的高度值
-        LinearLayout.LayoutParams parmas = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height);
-        mRecyclerViewLayout.setLayoutParams(parmas);
     }
 
     private void measureScrapChild(RecyclerView.Recycler recycler, int position, int widthSpec,
