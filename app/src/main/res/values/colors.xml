@@ -10,6 +10,7 @@
     <color name="background">#FFFFFFFF</color>
     <color name="blue">#419DE4</color>
     <color name="multiple_image_select_primaryDark">#48B7F5</color>
+    <color name="transparent_gray">#90000000</color>
     <!-- 描边颜色 -->
     <color name="border_clo">#ccc</color>
     <color name="text_clo">#333</color>
